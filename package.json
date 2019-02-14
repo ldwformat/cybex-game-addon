@@ -1,0 +1,34 @@
+{
+  "name": "cybex-game-addon",
+  "version": "0.0.1",
+  "description": "A plugin can be integrated into another Cybex dapp",
+  "main": "dist/index.js",
+  "author": "ldwformat@gmail.com",
+  "license": "MIT",
+  "scripts": {
+    "lint": "prettier {src,e2e,cypress}/**/**/**/**/**/**/*.{ts,json,md,scss} --list-different"
+  },
+  "devDependencies": {
+    "@commitlint/config-conventional": "^7.5.0",
+    "@commitlint/format": "^7.5.0",
+    "@types/jest": "^24.0.4",
+    "commitlint": "^7.5.2",
+    "husky": "^1.3.1",
+    "jest": "^24.1.0",
+    "lint-staged": "^8.1.3",
+    "prettier": "^1.16.4"
+  },
+  "dependencies": {},
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged && npm run lint",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "lint-staged": {
+    "{src,e2e,cypress}/**/**/**/**/**/**/*.{ts,json,md,scss}": [
+      "prettier --write",
+      "git add"
+    ]
+  }
+}
