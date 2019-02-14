@@ -1,2 +1,2 @@
-a();
 let a = function() {};
+a();

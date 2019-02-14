@@ -6,7 +6,8 @@
   "author": "ldwformat@gmail.com",
   "license": "MIT",
   "scripts": {
-    "lint": "prettier {src,e2e,cypress}/**/**/**/**/**/**/*.{ts,json,md,scss} --list-different"
+    "tslint-check": "tslint-config-prettier-check ./tslint.json",
+    "lint": "tslint --project tsconfig.json --config tslint.json && prettier {src,e2e,cypress}/**/**/**/**/**/**/*.{ts,json,md,scss} --check"
   },
   "devDependencies": {
     "@commitlint/config-conventional": "^7.5.0",
@@ -16,7 +17,10 @@
     "husky": "^1.3.1",
     "jest": "^24.1.0",
     "lint-staged": "^8.1.3",
-    "prettier": "^1.16.4"
+    "prettier": "^1.16.4",
+    "tslint": "^5.12.1",
+    "tslint-config-prettier": "^1.18.0",
+    "typescript": "^3.3.3"
   },
   "dependencies": {},
   "husky": {
