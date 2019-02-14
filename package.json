@@ -6,7 +6,6 @@
   "author": "ldwformat@gmail.com",
   "license": "MIT",
   "scripts": {
-    "tslint-check": "tslint-config-prettier-check ./tslint.json",
     "lint": "tslint --project tsconfig.json --config tslint.json && prettier {src,e2e,cypress}/**/**/**/**/**/**/*.{ts,json,md,scss} --check"
   },
   "devDependencies": {

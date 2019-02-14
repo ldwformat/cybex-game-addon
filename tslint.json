@@ -1,6 +1,7 @@
 {
   "extends": ["tslint:latest", "tslint-config-prettier"],
   "rules": {
+    "only-arrow-functions": false,
     "arrow-return-shorthand": true,
     "callable-types": true,
     "class-name": true,
