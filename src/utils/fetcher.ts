@@ -1,3 +1,4 @@
+import fetch from "isomorphic-fetch";
 import moment from "moment";
 import { WsConnection } from "./connect";
 
@@ -43,34 +44,40 @@ export const fetchWithRetry: (
   })) as any;
 };
 
-const getAccountFromChain = async (accountName: string) =>
-  fetchWithRetry(CYBEX_API_BASE, "get_account_by_name", accountName);
+const getAccountFromChain = (url: string) => async (accountName: string) =>
+  fetchWithRetry(url, "get_account_by_name", accountName);
 
-const getAccountFromBackend = async (accountName: string) =>
-  fetch(`${FRONT_API_BASE}/api/cybex/account/${accountName}`).then(res =>
-    res.json()
-  );
+const getAccountFromBackend = (url: string) => async (accountName: string) =>
+  fetch(`${url}/api/cybex/account/${accountName}`)
+    .then(res => res.json())
+    .then(res => (res.code ? null : res))
+    .catch(err => {
+      console.error(err);
+      return null;
+    });
 
-const getAssetFromBackend = async (assetName: string) =>
-  fetch(`${FRONT_API_BASE}/api/cybex/asset/${assetName}`).then(res =>
-    res.json()
-  );
+const getAssetFromBackend = (url: string) => async (assetName: string) =>
+  fetch(`${url}/api/cybex/asset/${assetName}`)
+    .then(res => res.json())
+    .then(res => (res.code ? null : res))
+    .catch(err => {
+      console.error(err);
+      return null;
+    });
 
-const getAssetFromChain = async (assetName: string) =>
-  fetchWithRetry(CYBEX_API_BASE, "lookup_asset_symbols", [assetName]).then(
-    res => res[0]
-  );
+const getAssetFromChain = (url: string) => async (assetName: string) =>
+  fetchWithRetry(url, "lookup_asset_symbols", [assetName]).then(res => res[0]);
 
-const combineFetchWithCache = <T>(
-  ...fns: Array<(...args: any[]) => T | Promise<T>>
-) => {
+const combineFetchWithCache: <R>(
+  ...fns: Array<(...args: any[]) => R | Promise<R>>
+) => (...args: any[]) => R | Promise<R> = (...fns) => {
   const cache = {};
-  return async (...args: any[]) => {
+  return async (...args) => {
     let cacheKey = getKey(args);
     if (cacheKey in cache) {
       return cache[cacheKey];
     }
-    let res: T | null = null;
+    let res: any = null;
     for (let fn of fns) {
       try {
         if (res) {
@@ -82,7 +89,7 @@ const combineFetchWithCache = <T>(
         console.error(e);
       }
     }
-    return (res as unknown) as T;
+    return res;
   };
 };
 
@@ -103,11 +110,16 @@ const combineFetch = <T>(...fns: Array<(...args: any[]) => T | Promise<T>>) => {
   };
 };
 
-export const fetchAccount = combineFetchWithCache<Cybex.Account>(
-  getAccountFromChain,
-  getAccountFromBackend
-);
-export const fetchAsset = combineFetchWithCache<Cybex.Asset>(
-  getAssetFromChain,
-  getAssetFromBackend
-);
+export class ChainFetcher {
+  constructor(private wsUrl: string, private proxyServiceUrl: string) {}
+
+  fetchAccount = combineFetchWithCache<Cybex.Account>(
+    getAccountFromChain(this.wsUrl),
+    getAccountFromBackend(this.proxyServiceUrl)
+  );
+
+  fetchAsset = combineFetchWithCache<Cybex.Asset>(
+    getAssetFromChain(this.wsUrl),
+    getAssetFromBackend(this.proxyServiceUrl)
+  );
+}

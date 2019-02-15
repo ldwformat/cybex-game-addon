@@ -9,7 +9,9 @@ import BigNumber from "bignumber.js";
  * @returns 整数形式资产数量
  */
 export function calcAmount(value: number, precision: number): number {
-  return new BigNumber(value).multipliedBy(Math.pow(10, precision)).toNumber();
+  return Math.floor(
+    new BigNumber(value).multipliedBy(Math.pow(10, precision)).toNumber()
+  );
 }
 
 /**

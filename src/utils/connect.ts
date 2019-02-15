@@ -99,14 +99,19 @@ export class WsConnection extends EventEmitter {
       if (this.rws && this.rws.readyState === ReconnectingWebSocket.OPEN) {
         this.rws.send(callStr);
         let ev = WsConnection.getEventNameById(id);
-        let resHandle = (result: any) => {
+        let resHandle: any;
+        let rejectHandle: any;
+
+        resHandle = (result: any) => {
           resolve(result);
           this.removeListener(WsConnection.EVENT_DISCONNECT, rejectHandle);
         };
-        let rejectHandle = (err: any) => {
+
+        rejectHandle = (err: any) => {
           reject(new Error("Connection error, request failed"));
           this.removeListener(ev, resHandle);
         };
+
         this.once(ev, resHandle);
         this.once(WsConnection.EVENT_DISCONNECT, rejectHandle);
       } else {

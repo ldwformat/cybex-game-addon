@@ -1,3 +1,1 @@
-let a = function() {};
-a();
-"asdf";
+console.log("Hello Cybex");

@@ -1,5 +1,5 @@
-import types from "./types";
 import Serializer from "./serializer";
+import types from "./types";
 
 let {
   // id_type,
@@ -58,7 +58,7 @@ export let void_ext = new Serializer("void_ext");
 
 const cybex_ext_vesting = new Serializer("cybex_ext_vesting", {
   vesting_period: uint64,
-  public_key: public_key
+  public_key
 });
 const cybex_ext_transfer_vesting = new Serializer(
   "cybex_ext_transfer_vesting",

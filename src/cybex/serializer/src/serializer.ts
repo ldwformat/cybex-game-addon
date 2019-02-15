@@ -13,7 +13,9 @@ class Serializer<T> {
   constructor(operation_name, types?) {
     this.operation_name = operation_name;
     this.types = types;
-    if (this.types) this.keys = Object.keys(this.types);
+    if (this.types) {
+      this.keys = Object.keys(this.types);
+    }
 
     Serializer.printDebug = true;
   }
@@ -23,7 +25,7 @@ class Serializer<T> {
     var field: any = null;
     try {
       var iterable = this.keys;
-      for (var i = 0, field; i < iterable.length; i++) {
+      for (var i = 0; i < iterable.length; i++) {
         field = iterable[i];
         var type = this.types[field];
         try {
@@ -62,7 +64,7 @@ class Serializer<T> {
     var field: any = null;
     try {
       var iterable = this.keys;
-      for (var i = 0, field; i < iterable.length; i++) {
+      for (var i = 0; i < iterable.length; i++) {
         field = iterable[i];
         var type = this.types[field];
         type.appendByteBuffer(b, object[field]);
@@ -93,7 +95,7 @@ class Serializer<T> {
     var field: any = null;
     try {
       var iterable = this.keys;
-      for (var i = 0, field; i < iterable.length; i++) {
+      for (var i = 0; i < iterable.length; i++) {
         field = iterable[i];
         var type = this.types[field];
         var value = serialized_object[field];
@@ -110,9 +112,9 @@ class Serializer<T> {
   }
 
   /**
-        @arg {boolean} [debug.use_default = false] - more template friendly
-        @arg {boolean} [debug.annotate = false] - add user-friendly information
-    */
+   * @arg {boolean} [debug.use_default = false] - more template friendly
+   * @arg {boolean} [debug.annotate = false] - add user-friendly information
+   */
   toObject(
     serialized_object = {},
     debug = { use_default: false, annotate: false }
@@ -120,10 +122,12 @@ class Serializer<T> {
     var result = {};
     var field: any = null;
     try {
-      if (!this.types) return result;
+      if (!this.types) {
+        return result;
+      }
 
       var iterable = this.keys;
-      for (var i = 0, field; i < iterable.length; i++) {
+      for (var i = 0; i < iterable.length; i++) {
         field = iterable[i];
         var type = this.types[field];
         var object = type.toObject(
@@ -164,10 +168,13 @@ class Serializer<T> {
     let valA = a[first_key];
     let valB = b[first_key];
 
-    if (first_type.compare) return first_type.compare(valA, valB);
+    if (first_type.compare) {
+      return first_type.compare(valA, valB);
+    }
 
-    if (typeof valA === "number" && typeof valB === "number")
+    if (typeof valA === "number" && typeof valB === "number") {
       return valA - valB;
+    }
 
     let encoding;
     if (Buffer.isBuffer(valA) && Buffer.isBuffer(valB)) {
