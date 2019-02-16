@@ -8,7 +8,8 @@
   "scripts": {
     "test": "jest --verbose",
     "test:watch": "jest --watch --verbose",
-    "lint": "tslint --project tsconfig.json --config tslint.json && prettier {src,e2e,cypress}/**/**/**/**/**/**/*.{ts,json,md,scss} --check"
+    "lint": "tslint --project tsconfig.json --config tslint.json && prettier {src,e2e,cypress}/**/**/**/**/**/**/*.{ts,json,md,scss} --check",
+    "format": "prettier {src,e2e,cypress}/**/**/**/**/**/**/*.{ts,json,md,scss} --write"
   },
   "devDependencies": {
     "@commitlint/config-conventional": "^7.5.0",
@@ -17,6 +18,7 @@
     "@types/events": "^3.0.0",
     "@types/isomorphic-fetch": "^0.0.35",
     "@types/jest": "^24.0.4",
+    "@types/redux-logger": "^3.0.7",
     "commitlint": "^7.5.2",
     "husky": "^1.3.1",
     "jest": "^24.1.0",
@@ -28,13 +30,22 @@
     "typescript": "^3.3.3"
   },
   "dependencies": {
+    "@types/node": "^11.9.4",
     "assert": "^1.4.1",
+    "bigi": "^1.4.2",
     "bignumber.js": "^8.0.2",
+    "bs58": "^4.0.1",
+    "buffer": "^5.2.1",
     "bytebuffer": "^5.0.1",
+    "deep-equal": "^1.0.1",
+    "ecurve": "^1.0.6",
     "events": "^3.0.0",
     "isomorphic-fetch": "^2.2.1",
     "moment": "^2.24.0",
-    "reconnecting-websocket": "^4.1.10"
+    "process": "^0.11.10",
+    "reconnecting-websocket": "^4.1.10",
+    "redux": "^4.0.1",
+    "redux-logger": "^3.0.6"
   },
   "husky": {
     "hooks": {

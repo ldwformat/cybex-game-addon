@@ -73,3 +73,6 @@ declare namespace Cybex {
     name: string;
   }
 }
+
+//
+declare const ByteBuffer;
