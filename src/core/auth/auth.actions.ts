@@ -8,21 +8,21 @@ export enum AuthActions {
   Logout = "[Auth] Logout"
 }
 
-class AuthLoginAction implements Action {
+export class AuthLoginAction implements Action {
   readonly type = AuthActions.Login;
   constructor(public payload: IAuthParams) {}
 }
 
-class AuthLoginFailedAction implements Action {
+export class AuthLoginFailedAction implements Action {
   readonly type = AuthActions.LoginFailed;
 }
 
-class AuthLoginSuccessAction implements Action {
+export class AuthLoginSuccessAction implements Action {
   readonly type = AuthActions.LoginSuccess;
   constructor(public payload: IAuthResult) {}
 }
 
-class AuthLogoutAction implements Action {
+export class AuthLogoutAction implements Action {
   readonly type = AuthActions.Logout;
 }
 
@@ -30,16 +30,18 @@ export const authLogout: ActionCreator<AuthLogoutAction> = param => ({
   type: AuthActions.Logout
 });
 
-export const authLogin: ActionCreator<AuthLoginAction> = (
-  param: IAuthParams
-) => ({
+export const authLoginFailed: ActionCreator<AuthLoginFailedAction> = param => ({
+  type: AuthActions.LoginFailed
+});
+
+export const authLogin: (param: IAuthParams) => AuthLoginAction = param => ({
   type: AuthActions.Login,
   payload: param
 });
 
-export const authLoginSuccess: ActionCreator<AuthLoginSuccessAction> = (
+export const authLoginSuccess: (
   param: IAuthResult
-) => ({
+) => AuthLoginSuccessAction = (param: IAuthResult) => ({
   type: AuthActions.LoginSuccess,
   payload: param
 });

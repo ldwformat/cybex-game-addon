@@ -20,7 +20,7 @@ declare namespace RPC {
   type Params = any[];
   type NoticeArray = any[];
   type RPCRequestParams = [ApiID, Method, Params];
-  
+
   interface RPCRequest {
     id: CallID;
     method: "call";
@@ -70,7 +70,84 @@ declare namespace Cybex {
 
   export interface Account {
     id: string;
+    membership_expiration_date: string;
+    registrar: string;
+    referrer: string;
+    lifetime_referrer: string;
+    network_fee_percentage: number;
+    lifetime_referrer_fee_percentage: number;
+    referrer_rewards_percentage: number;
     name: string;
+    owner: AccountAuthority;
+    active: AccountAuthority;
+    options: Options;
+    statistics: string;
+    whitelisting_accounts: string[];
+    blacklisting_accounts: any[];
+    whitelisted_accounts: string[];
+    blacklisted_accounts: any[];
+    cashback_vb: string;
+    owner_special_authority: Array<ActiveSpecialAuthorityClass | number>;
+    active_special_authority: Array<ActiveSpecialAuthorityClass | number>;
+    top_n_control_flags: number;
+  }
+
+  export type AuthorityWithWeight = [string, number];
+
+  export interface AccountAuthority {
+    weight_threshold: number;
+    account_auths: any[];
+    key_auths: Array<AuthorityWithWeight>;
+    address_auths: any[];
+  }
+
+  export interface ActiveSpecialAuthorityClass {}
+
+  export interface Options {
+    memo_key: string;
+    voting_account: string;
+    num_witness: number;
+    num_committee: number;
+    votes: any[];
+    extensions: any[];
+  }
+}
+
+declare interface AddOnConfig {
+  apiUrl: APIURL;
+}
+
+declare interface APIURL {
+  mallBackend: string;
+  cybexWs: string;
+  cybexHttpServer: string;
+}
+
+// MallBackend
+declare namespace MallBackend {
+  export interface Response<R> {
+    returnCode: number;
+    returnMsg: string;
+    data: R;
+  }
+
+  export interface Country {
+    id: number;
+    country: string;
+    countryCode: string;
+    addition: null;
+    deleted: "N";
+  }
+
+  export interface Province {
+    id: number;
+    countryId: number;
+    country: string;
+    countryCode: string;
+    provice: string;
+    provinceCode: string;
+    addition: null;
+    deleted: string;
   }
 }
 

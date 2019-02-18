@@ -1,7 +1,9 @@
+import PrivateKey from "../../../cybex/ecc/src/PrivateKey";
+
 export type AuthRole = "active" | "owner" | "memo";
 
 export class KeyAuth {
-  fullAuth: boolean;
-  privKey: PrivateKey;
-  pubKeyStr: string;
+  fullAuth: boolean | null = null;
+  privKey: PrivateKey | null = null;
+  pubKeyStr: string | null = null;
 }

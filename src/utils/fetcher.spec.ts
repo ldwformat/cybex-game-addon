@@ -1,4 +1,5 @@
-import { ChainFetcher } from "./fetcher";
+import { ChainFetcher, MallFetcher } from "./fetcher";
+import { config } from "../config";
 
 describe("Test class ChainFetcher", () => {
   let fetcher: ChainFetcher;
@@ -31,6 +32,37 @@ describe("Test class ChainFetcher", () => {
   test(`Get asset "CYBNULL", which doesn't exist`, async done => {
     let asset = await fetcher.fetchAsset("CYBNULL");
     expect(asset).toBeNull();
+    done();
+  });
+});
+
+describe("Test class MallFetcher", () => {
+  let fetcher: MallFetcher;
+
+  beforeAll(() => (fetcher = new MallFetcher(config.apiUrl.mallBackend)));
+
+  it("测试获取所有国家列表", async done => {
+    let allCountries = await fetcher.getCountryList();
+    expect(allCountries).toBeInstanceOf(Array);
+    let angola = allCountries[0];
+    expect(angola.id).toBe(1);
+    done();
+  });
+
+  it("测试获取所有国家列表", async done => {
+    let allCountries = await fetcher.getCountryList();
+    expect(allCountries).toBeInstanceOf(Array);
+    let china = (allCountries.find(
+      country => country.country === "中国"
+    ) as unknown) as MallBackend.Country;
+    expect(china).not.toBeUndefined();
+    let provinces = await fetcher.getProvinceList(china.id);
+    expect(provinces).toBeInstanceOf(Array);
+    let beijing = (provinces.find(
+      province => province.id === 192
+    ) as unknown) as MallBackend.Province;
+    expect(beijing).not.toBeUndefined();
+    expect(beijing.provice).toBe("北京市");
     done();
   });
 });

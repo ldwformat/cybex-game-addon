@@ -1,6 +1,7 @@
 import fetch from "isomorphic-fetch";
 import moment from "moment";
 import { WsConnection } from "./connect";
+import { resolvePath } from "./path";
 
 const simpleCache = {};
 const getKey = (...args) => JSON.stringify(args);
@@ -69,8 +70,8 @@ const getAssetFromChain = (url: string) => async (assetName: string) =>
   fetchWithRetry(url, "lookup_asset_symbols", [assetName]).then(res => res[0]);
 
 const combineFetchWithCache: <R>(
-  ...fns: Array<(...args: any[]) => R | Promise<R>>
-) => (...args: any[]) => R | Promise<R> = (...fns) => {
+  ...fns: Array<(...args: any[]) => Promise<R>>
+) => (...args: any[]) => Promise<R> = (...fns) => {
   const cache = {};
   return async (...args) => {
     let cacheKey = getKey(args);
@@ -93,7 +94,7 @@ const combineFetchWithCache: <R>(
   };
 };
 
-const combineFetch = <T>(...fns: Array<(...args: any[]) => T | Promise<T>>) => {
+const combineFetch = <T>(...fns: Array<(...args: any[]) => Promise<T>>) => {
   return async (...args: any[]) => {
     let res: T | null = null;
     for (let fn of fns) {
@@ -122,4 +123,35 @@ export class ChainFetcher {
     getAssetFromChain(this.wsUrl),
     getAssetFromBackend(this.proxyServiceUrl)
   );
+}
+
+export class MallFetcher {
+  constructor(public mallBackend: string) {}
+
+  async fetch<B = any, R = any>(path: string, body?: B): Promise<R> {
+    return fetch(resolvePath(this.mallBackend, path), {
+      headers: {
+        "Content-Type": "application/json"
+      },
+      method: "post",
+      body: JSON.stringify(body)
+    })
+      .then(res => res.json())
+      .then((res: MallBackend.Response<R>) => {
+        if (res.returnCode === 10000) {
+          return res.data as R;
+        }
+        throw new Error(res.returnMsg);
+      });
+  }
+
+  async getCountryList() {
+    return this.fetch<undefined, MallBackend.Country[]>("allCountrys");
+  }
+
+  async getProvinceList(countryID: string | number) {
+    return this.fetch<undefined, MallBackend.Province[]>(
+      `countryAreas/${countryID}`
+    );
+  }
 }

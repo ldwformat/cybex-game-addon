@@ -1,0 +1,7 @@
+{
+  "apiUrl": {
+    "mallBackend": "http://47.52.92.231:9999/",
+    "cybexWs": "wss://shanghai.51nebula.com",
+    "cybexHttpServer": "https://cybexluck.io"
+  }
+}

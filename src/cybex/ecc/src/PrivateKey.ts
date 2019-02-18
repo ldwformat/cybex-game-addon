@@ -15,7 +15,7 @@ const { G, n } = secp256k1;
 
 class PrivateKey {
   d;
-  public_key;
+  public_key: PublicKey | undefined;
   appendByteBuffer;
   /**
    *      @private see static functions
