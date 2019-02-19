@@ -49,7 +49,7 @@ describe("Test class MallFetcher", () => {
     done();
   });
 
-  it("测试获取所有国家列表", async done => {
+  it("测试获取中国省份列表", async done => {
     let allCountries = await fetcher.getCountryList();
     expect(allCountries).toBeInstanceOf(Array);
     let china = (allCountries.find(
@@ -63,6 +63,9 @@ describe("Test class MallFetcher", () => {
     ) as unknown) as MallBackend.Province;
     expect(beijing).not.toBeUndefined();
     expect(beijing.provice).toBe("北京市");
+
+    await expect(fetcher.getProvinceList("wrongparams")).rejects.toThrow("");
+
     done();
   });
 });

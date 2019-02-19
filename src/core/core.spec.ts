@@ -3,6 +3,12 @@ import { Store } from "redux";
 import { IAuthResult, authLoginSuccess, authLogout, authLogin } from "./auth";
 import { KeyStore } from "./auth/keystore/keystore";
 import { delay } from "../utils";
+import { mallLoadCountries, mallLoadProvinces } from "./mall";
+import {
+  selectCountryList,
+  selectMallProvincesMap,
+  selectMallPrvsByCountryID
+} from "./mall/mall.selectors";
 
 describe("核心状态Store", () => {
   it("创建Store", () => {
@@ -65,4 +71,30 @@ describe("认证测试", () => {
     expect(stateAfterLogin.auth.accountName).toStrictEqual(loginAccountName);
     done();
   });
+});
+describe("Mall测试", () => {
+  let store: Store<CoreState>;
+  beforeEach(() => {
+    store = configureStore();
+  });
+  it("测试更新国家列表", async done => {
+    store.dispatch(mallLoadCountries());
+    await delay(1000);
+    let stateAfterCountry = store.getState();
+    expect(selectCountryList(stateAfterCountry)).toBeInstanceOf(Array);
+    expect(selectCountryList(stateAfterCountry).length).toBeGreaterThan(0);
+
+    const COUNTRY_CHINA = 37;
+    store.dispatch(mallLoadProvinces(COUNTRY_CHINA));
+    await delay(1000);
+    let stateAfterState = store.getState();
+    const selectChinaPrvs = selectMallPrvsByCountryID(COUNTRY_CHINA)(
+      stateAfterState
+    );
+    expect(selectChinaPrvs).toBeInstanceOf(Array);
+    expect(selectChinaPrvs.length).toBeGreaterThan(0);
+    expect(selectChinaPrvs[0].id).toBe(192);
+
+    done();
+  }, 6000);
 });
