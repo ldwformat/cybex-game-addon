@@ -6,7 +6,6 @@ import deepEqual from "deep-equal";
 
 /**
  * Addresses are shortened non-reversable hashes of a public key.  The full PublicKey is preferred.
- *  @deprecated
  */
 class Address {
   [p: string]: any;
@@ -22,13 +21,13 @@ class Address {
 
   static fromString(string, address_prefix = "CYB") {
     var prefix = string.slice(0, address_prefix.length);
-    assert.equal(
+    assert.strictEqual(
       address_prefix,
       prefix,
       `Expecting key to begin with ${address_prefix}, instead got ${prefix}`
     );
     var addy = string.slice(address_prefix.length);
-    addy = new Buffer(decode(addy), "binary");
+    addy = Buffer.from(decode(addy), "binary");
     var checksum = addy.slice(-4);
     addy = addy.slice(0, -4);
     var new_checksum = ripemd160(addy);
@@ -54,7 +53,7 @@ class Address {
     // console.debug("Address", "SHA256", sha2);
     var rep = ripemd160(sha2);
     // console.debug("Address", "MD160", rep);
-    var versionBuffer = new Buffer(1);
+    var versionBuffer = Buffer.of(1);
     // console.debug("Address", "VERSION_BUFFER", versionBuffer);
     versionBuffer.writeUInt8(0xff & version, 0);
     // console.debug("Address", "VERSION_BUFFER", versionBuffer);

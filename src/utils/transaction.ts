@@ -8,6 +8,33 @@ import { WsConnection } from "./connect";
 let head_block_time_string: string;
 let committee_min_review: any;
 
+var base_expiration_sec = () => {
+  var head_block_sec = Math.ceil(getHeadBlockDate().getTime() / 1000);
+  var now_sec = Math.ceil(Date.now() / 1000);
+  // The head block time should be updated every 3 seconds.  If it isn't
+  // then help the transaction to expire (use head_block_sec)
+  if (now_sec - head_block_sec > 30) {
+    return head_block_sec;
+  }
+  // If the user's clock is very far behind, use the head block time.
+  return Math.max(now_sec, head_block_sec);
+};
+
+function getHeadBlockDate() {
+  return timeStringToDate(head_block_time_string);
+}
+
+function timeStringToDate(time_string) {
+  if (!time_string) {
+    return new Date("1970-01-01T00:00:00.000Z");
+  }
+  if (!/Z$/.test(time_string)) {
+    // does not end in Z
+    // https://github.com/cryptonomex/graphene/issues/368
+    time_string = time_string + "Z";
+  }
+  return new Date(time_string);
+}
 export class Transaction {
   ref_block_num = 0;
   ref_block_prefix = 0;
@@ -113,7 +140,7 @@ export class Transaction {
         this.expiration = base_expiration_sec() + this.options.expire_in_secs;
       }
       this.ref_block_num = r[0].head_block_number & 0xffff;
-      this.ref_block_prefix = new Buffer(
+      this.ref_block_prefix = Buffer.from(
         r[0].head_block_id,
         "hex"
       ).readUInt32LE(4);
@@ -477,7 +504,7 @@ export class Transaction {
     for (var i = 0; 0 < end ? i < end : i > end; 0 < end ? i++ : i++) {
       var [private_key, public_key] = this.signer_private_keys[i];
       var sig = Signature.signBuffer(
-        Buffer.concat([new Buffer(chain_id, "hex"), this.tr_buffer]),
+        Buffer.concat([Buffer.from(chain_id, "hex"), this.tr_buffer]),
         private_key
         // public_key
       );
@@ -556,34 +583,6 @@ export class Transaction {
       });
     return res;
   }
-}
-
-var base_expiration_sec = () => {
-  var head_block_sec = Math.ceil(getHeadBlockDate().getTime() / 1000);
-  var now_sec = Math.ceil(Date.now() / 1000);
-  // The head block time should be updated every 3 seconds.  If it isn't
-  // then help the transaction to expire (use head_block_sec)
-  if (now_sec - head_block_sec > 30) {
-    return head_block_sec;
-  }
-  // If the user's clock is very far behind, use the head block time.
-  return Math.max(now_sec, head_block_sec);
-};
-
-function getHeadBlockDate() {
-  return timeStringToDate(head_block_time_string);
-}
-
-function timeStringToDate(time_string) {
-  if (!time_string) {
-    return new Date("1970-01-01T00:00:00.000Z");
-  }
-  if (!/Z$/.test(time_string)) {
-    // does not end in Z
-    // https://github.com/cryptonomex/graphene/issues/368
-    time_string = time_string + "Z";
-  }
-  return new Date(time_string);
 }
 
 export default Transaction;

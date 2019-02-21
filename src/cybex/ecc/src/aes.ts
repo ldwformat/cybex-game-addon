@@ -24,7 +24,7 @@ class Aes {
 
   /** @arg {string} hash - A 128 byte hex string, typically one would call {@link fromSeed} instead. */
   static fromSha512(hash) {
-    assert.equal(
+    assert.strictEqual(
       hash.length,
       128,
       `A Sha512 in HEX should be 128 characters long, instead got ${
@@ -38,7 +38,7 @@ class Aes {
 
   static fromBuffer(buf) {
     assert(Buffer.isBuffer(buf), "Expecting Buffer");
-    assert.equal(
+    assert.strictEqual(
       buf.length,
       64,
       `A Sha512 Buffer should be 64 characters long, instead got ${buf.length}`
@@ -66,7 +66,7 @@ class Aes {
       nonce = "";
     }
     if (!Buffer.isBuffer(message)) {
-      message = new Buffer(message, "hex");
+      message = Buffer.from(message, "hex");
     }
 
     var S = private_key.get_shared_secret(public_key, legacy);
@@ -82,8 +82,8 @@ class Aes {
     var aes = Aes.fromSeed(
       Buffer.concat([
         // A null or empty string nonce will not effect the hash
-        new Buffer("" + nonce),
-        new Buffer(S.toString("hex"))
+        Buffer.from("" + nonce),
+        Buffer.from(S.toString("hex"))
       ])
     );
 
@@ -122,7 +122,7 @@ class Aes {
       nonce = "";
     }
     if (!Buffer.isBuffer(message)) {
-      message = new Buffer(message, "binary");
+      message = Buffer.from(message, "binary");
     }
 
     var S = private_key.get_shared_secret(public_key);
@@ -139,8 +139,8 @@ class Aes {
     var aes = Aes.fromSeed(
       Buffer.concat([
         // A null or empty string nonce will not effect the hash
-        new Buffer("" + nonce),
-        new Buffer(S.toString("hex"))
+        Buffer.from("" + nonce),
+        Buffer.from(S.toString("hex"))
       ])
     );
     // DEBUG console.log('... S',S.toString('hex'))
@@ -183,7 +183,7 @@ class Aes {
    */
   decrypt(ciphertext) {
     if (typeof ciphertext === "string") {
-      ciphertext = new Buffer(ciphertext, "binary");
+      ciphertext = Buffer.from(ciphertext, "binary");
     }
     if (!Buffer.isBuffer(ciphertext)) {
       throw new Error("buffer required");
@@ -191,7 +191,7 @@ class Aes {
     assert(ciphertext, "Missing cipher text");
     // hex is the only common format
     var hex = this.decryptHex(ciphertext.toString("hex"));
-    return new Buffer(hex, "hex");
+    return Buffer.from(hex, "hex");
   }
 
   /**
@@ -201,7 +201,7 @@ class Aes {
    */
   encrypt(plaintext) {
     if (typeof plaintext === "string") {
-      plaintext = new Buffer(plaintext, "binary");
+      plaintext = Buffer.from(plaintext, "binary");
     }
     if (!Buffer.isBuffer(plaintext)) {
       throw new Error("buffer required");
@@ -209,7 +209,7 @@ class Aes {
     // assert plaintext, "Missing plain text"
     // hex is the only common format
     var hex = this.encryptHex(plaintext.toString("hex"));
-    return new Buffer(hex, "hex");
+    return Buffer.from(hex, "hex");
   }
 
   /**
@@ -219,7 +219,7 @@ class Aes {
    */
   encryptToHex(plaintext) {
     if (typeof plaintext === "string") {
-      plaintext = new Buffer(plaintext, "binary");
+      plaintext = Buffer.from(plaintext, "binary");
     }
     if (!Buffer.isBuffer(plaintext)) {
       throw new Error("buffer required");
@@ -253,7 +253,7 @@ class Aes {
     var cipher_array = encHex.parse(cipher);
     var plainwords = this._decrypt_word_array(cipher_array);
     var plainhex = encHex.stringify(plainwords);
-    return new Buffer(plainhex, "hex");
+    return Buffer.from(plainhex, "hex");
   }
 
   /**
