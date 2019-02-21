@@ -7,7 +7,8 @@ export enum MallActions {
   LoadProvinces = "[Mall] LoadProvinces",
   LoadProvincesSuccess = "[Mall] LoadProvincesSuccess",
   LoadProvincesFailed = "[Mall] LoadProvincesFailed",
-  Logout = "[Mall] Logout"
+  LoadAddressBook = "[Mall] LoadAddressBook",
+  LoadAddressBookSuccess = "[Mall] LoadAddressBookSuccess"
 }
 
 // Load Countries
@@ -90,4 +91,13 @@ export type MallProvincesAction =
   | MallLoadProvincesFailedAction;
 
 export type MallChoreAction = MallCountriesAction | MallProvincesAction;
+
+// 地址簿有关
+export class MallLoadAddressBookAction implements Action {
+  readonly type = MallActions.LoadAddressBook;
+}
+export class MallLoadAddressBookSuccess implements Action {
+  readonly type = MallActions.LoadAddressBook;
+}
+
 export type MallAction = MallChoreAction;

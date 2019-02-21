@@ -1,5 +1,6 @@
 import PrivateKey from "../../../cybex/ecc/src/PrivateKey";
 import { KeyAuth } from "./keyauth";
+import assert from "assert";
 
 export enum KeyStoreMode {
   Wif,
@@ -54,6 +55,7 @@ export class KeyStore {
    * @memberof KeyStore
    */
   loginAccount(account: Cybex.Account) {
+    assert(account);
     let active = this.keyList.find(
       privKey => !!KeyStore.checkAuth(privKey, account.active)
     );
@@ -84,6 +86,22 @@ export class KeyStore {
     if (active || owner) {
       this.valid = true;
     }
+  }
+
+  /**
+   *
+   *
+   * @param {string} pubKeyStr
+   * @returns {(KeyAuth | null)}
+   * @memberof KeyStore
+   */
+  getPrivByPubStr(pubKeyStr: string): KeyAuth | null {
+    for (let key of Object.values(this.keys)) {
+      if (key.pubKeyStr === pubKeyStr) {
+        return key;
+      }
+    }
+    return null;
   }
 
   refresh() {

@@ -8,17 +8,10 @@ import { sha256, sha512 } from "./hash";
 
 /** Provides symetric encrypt and decrypt via AES. */
 class Aes {
-  /** @private */
-  constructor(iv, key) {
-    (this.iv = iv), (this.key = key);
-  }
-
-  /** This is an excellent way to ensure that all references to Aes can not operate anymore (example: a wallet becomes locked).  An application should ensure there is only one Aes object instance for a given secret `seed`. */
-  clear() {
-    return (this.iv = this.key = undefined);
-  }
-
-  /** @arg {string} seed - secret seed may be used to encrypt or decrypt. */
+  [p: string]: any;
+  /**
+   * @arg {string} seed - secret seed may be used to encrypt or decrypt.
+   */
   static fromSeed(seed) {
     if (seed === undefined) {
       throw new Error("seed is required");
@@ -53,13 +46,13 @@ class Aes {
     return Aes.fromSha512(buf.toString("hex"));
   }
   /**
-        @throws {Error} - "Invalid Key, ..."
-        @arg {PrivateKey} private_key - required and used for decryption
-        @arg {PublicKey} public_key - required and used to calcualte the shared secret
-        @arg {string} [nonce = ""] optional but should always be provided and be unique when re-using the same private/public keys more than once.  This nonce is not a secret.
-        @arg {string|Buffer} message - Encrypted message containing a checksum
-        @return {Buffer}
-    */
+   *   @throws {Error} - "Invalid Key, ..."
+   *   @arg {PrivateKey} private_key - required and used for decryption
+   *   @arg {PublicKey} public_key - required and used to calcualte the shared secret
+   *   @arg {string} [nonce = ""] optional but should always be provided and be unique when re-using the same private/public keys more than once.  This nonce is not a secret.
+   *   @arg {string|Buffer} message - Encrypted message containing a checksum
+   *   @return {Buffer}
+   */
   static decrypt_with_checksum(
     private_key,
     public_key,
@@ -68,10 +61,10 @@ class Aes {
     legacy = false
   ) {
     // Warning: Do not put `nonce = ""` in the arguments, in es6 this will not convert "null" into an emtpy string
-    if (nonce == null)
+    if (nonce == null) {
       // null or undefined
       nonce = "";
-
+    }
     if (!Buffer.isBuffer(message)) {
       message = new Buffer(message, "hex");
     }
@@ -117,16 +110,17 @@ class Aes {
     return plaintext;
   }
 
-  /** Identical to {@link decrypt_with_checksum} but used to encrypt.  Should not throw an error.
-        @return {Buffer} message - Encrypted message which includes a checksum
-    */
+  /**
+   * Identical to {@link decrypt_with_checksum} but used to encrypt.  Should not throw an error.
+   *    @return {Buffer} message - Encrypted message which includes a checksum
+   */
   static encrypt_with_checksum(private_key, public_key, nonce, message) {
     // Warning: Do not put `nonce = ""` in the arguments, in es6 this will not convert "null" into an emtpy string
 
-    if (nonce == null)
+    if (nonce == null) {
       // null or undefined
       nonce = "";
-
+    }
     if (!Buffer.isBuffer(message)) {
       message = new Buffer(message, "binary");
     }
@@ -157,6 +151,16 @@ class Aes {
   }
 
   /** @private */
+  constructor(iv, key) {
+    (this.iv = iv), (this.key = key);
+  }
+
+  /** This is an excellent way to ensure that all references to Aes can not operate anymore (example: a wallet becomes locked).  An application should ensure there is only one Aes object instance for a given secret `seed`. */
+  clear() {
+    return (this.iv = this.key = undefined);
+  }
+
+  /** @private */
   _decrypt_word_array(cipher) {
     // https://code.google.com/p/crypto-js/#Custom_Key_and_IV
     // see wallet_records.cpp master_key::decrypt_key
@@ -167,15 +171,16 @@ class Aes {
 
   /** @private */
   _encrypt_word_array(plaintext) {
-    //https://code.google.com/p/crypto-js/issues/detail?id=85
+    // https://code.google.com/p/crypto-js/issues/detail?id=85
     var cipher = AES.encrypt(plaintext, this.key, { iv: this.iv });
     return encBase64.parse(cipher.toString());
   }
 
-  /** This method does not use a checksum, the returned data must be validated some other way.
-        @arg {string} ciphertext
-        @return {Buffer} binary
-    */
+  /**
+   * This method does not use a checksum, the returned data must be validated some other way.
+   *    @arg {string} ciphertext
+   *   @return {Buffer} binary
+   */
   decrypt(ciphertext) {
     if (typeof ciphertext === "string") {
       ciphertext = new Buffer(ciphertext, "binary");
@@ -189,10 +194,11 @@ class Aes {
     return new Buffer(hex, "hex");
   }
 
-  /** This method does not use a checksum, the returned data must be validated some other way.
-        @arg {string} plaintext
-        @return {Buffer} binary
-    */
+  /**
+   * This method does not use a checksum, the returned data must be validated some other way.
+   *     @arg {string} plaintext
+   *     @return {Buffer} binary
+   */
   encrypt(plaintext) {
     if (typeof plaintext === "string") {
       plaintext = new Buffer(plaintext, "binary");
@@ -200,16 +206,17 @@ class Aes {
     if (!Buffer.isBuffer(plaintext)) {
       throw new Error("buffer required");
     }
-    //assert plaintext, "Missing plain text"
+    // assert plaintext, "Missing plain text"
     // hex is the only common format
     var hex = this.encryptHex(plaintext.toString("hex"));
     return new Buffer(hex, "hex");
   }
 
-  /** This method does not use a checksum, the returned data must be validated some other way.
-        @arg {string|Buffer} plaintext
-        @return {string} hex
-    */
+  /**
+   * This method does not use a checksum, the returned data must be validated some other way.
+   *    @arg {string|Buffer} plaintext
+   *   @return {string} hex
+   */
   encryptToHex(plaintext) {
     if (typeof plaintext === "string") {
       plaintext = new Buffer(plaintext, "binary");
@@ -217,15 +224,16 @@ class Aes {
     if (!Buffer.isBuffer(plaintext)) {
       throw new Error("buffer required");
     }
-    //assert plaintext, "Missing plain text"
+    // assert plaintext, "Missing plain text"
     // hex is the only common format
     return this.encryptHex(plaintext.toString("hex"));
   }
 
-  /** This method does not use a checksum, the returned data must be validated some other way.
-        @arg {string} cipher - hex
-        @return {string} binary (could easily be readable text)
-    */
+  /**
+   * This method does not use a checksum, the returned data must be validated some other way.
+   *     @arg {string} cipher - hex
+   *     @return {string} binary (could easily be readable text)
+   */
   decryptHex(cipher) {
     assert(cipher, "Missing cipher text");
     // Convert data into word arrays (used by Crypto)
@@ -234,10 +242,11 @@ class Aes {
     return encHex.stringify(plainwords);
   }
 
-  /** This method does not use a checksum, the returned data must be validated some other way.
-        @arg {string} cipher - hex
-        @return {Buffer} encoded as specified by the parameter
-    */
+  /**
+   * This method does not use a checksum, the returned data must be validated some other way.
+   *    @arg {string} cipher - hex
+   *    @return {Buffer} encoded as specified by the parameter
+   */
   decryptHexToBuffer(cipher) {
     assert(cipher, "Missing cipher text");
     // Convert data into word arrays (used by Crypto)
@@ -247,19 +256,21 @@ class Aes {
     return new Buffer(plainhex, "hex");
   }
 
-  /** This method does not use a checksum, the returned data must be validated some other way.
-        @arg {string} cipher - hex
-        @arg {string} [encoding = 'binary'] - a valid Buffer encoding
-        @return {String} encoded as specified by the parameter
-    */
+  /**
+   * This method does not use a checksum, the returned data must be validated some other way.
+   *     @arg {string} cipher - hex
+   *     @arg {string} [encoding = 'binary'] - a valid Buffer encoding
+   *     @return {String} encoded as specified by the parameter
+   */
   decryptHexToText(cipher, encoding = "binary") {
     return this.decryptHexToBuffer(cipher).toString(encoding);
   }
 
-  /** This method does not use a checksum, the returned data must be validated some other way.
-        @arg {string} plainhex - hex format
-        @return {String} hex
-    */
+  /**
+   * This method does not use a checksum, the returned data must be validated some other way.
+   *     @arg {string} plainhex - hex format
+   *    @return {String} hex
+   */
   encryptHex(plainhex) {
     var plain_array = encHex.parse(plainhex);
     var cipher_array = this._encrypt_word_array(plain_array);

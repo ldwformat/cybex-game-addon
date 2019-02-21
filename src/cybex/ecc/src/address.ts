@@ -4,10 +4,12 @@ import { sha256, sha512, ripemd160 } from "./hash";
 import { encode, decode } from "bs58";
 import deepEqual from "deep-equal";
 
-/** Addresses are shortened non-reversable hashes of a public key.  The full PublicKey is preferred.
-    @deprecated
-*/
+/**
+ * Addresses are shortened non-reversable hashes of a public key.  The full PublicKey is preferred.
+ *  @deprecated
+ */
 class Address {
+  [p: string]: any;
   constructor(addy) {
     this.addy = addy;
   }
@@ -31,7 +33,7 @@ class Address {
     addy = addy.slice(0, -4);
     var new_checksum = ripemd160(addy);
     new_checksum = new_checksum.slice(0, 4);
-    var isEqual = deepEqual(checksum, new_checksum); //, 'Invalid checksum'
+    var isEqual = deepEqual(checksum, new_checksum); // 'Invalid checksum'
     if (!isEqual) {
       throw new Error("Checksum did not match");
     }
@@ -65,7 +67,11 @@ class Address {
     var buffer = Buffer.concat([addr, check.slice(0, 4)]);
     // console.debug("Address", "BUFFER", buffer);
     // console.debug("Address", "FINAL", new Address(ripemd160(buffer)));
-    console.debug("Address", "FINALSTRING", new Address(ripemd160(buffer)).toString("CYB"));
+    console.debug(
+      "Address",
+      "FINALSTRING",
+      new Address(ripemd160(buffer)).toString("CYB")
+    );
     return new Address(ripemd160(buffer));
   }
 

@@ -1,2 +1,6 @@
 export const resolvePath = (...paths: string[]) =>
-  paths.map(path => path.replace(/\/$/, "")).join("/");
+  paths
+    .slice(0, -1)
+    .map(path => path.replace(/\/$/, ""))
+    .concat(paths.slice(-1))
+    .join("/");

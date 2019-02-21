@@ -1,7 +1,12 @@
 import { createStore, applyMiddleware, combineReducers, Reducer } from "redux";
 import { createLogger } from "redux-logger";
 import { createEpicMiddleware, combineEpics } from "redux-observable";
-import { ChainFetcher, MallFetcher } from "../utils/fetcher";
+import {
+  ChainFetcher,
+  MallFetcher,
+  BackendFetcher,
+  ReferFetcher
+} from "../utils/fetcher";
 import { config } from "../config";
 import { AuthState, auth, loginEpic } from "./auth";
 import { MallState, mall, loadCountriesEpic, loadProvincesEpic } from "./mall";
@@ -21,12 +26,20 @@ const rootReducer: Reducer<CoreState> = combineReducers({
 });
 
 export function configureStore(preloadState?) {
-  let { cybexWs, cybexHttpServer, mallBackend } = config.apiUrl;
+  let {
+    cybexWs,
+    cybexHttpServer,
+    mallBackend,
+    referBackend,
+    backend
+  } = config.apiUrl;
 
   const epicMiddleware = createEpicMiddleware({
     dependencies: {
       fetcher: new ChainFetcher(cybexWs, cybexHttpServer),
-      mallFetcher: new MallFetcher(mallBackend)
+      mallFetcher: new MallFetcher(mallBackend),
+      addressFetcher: new BackendFetcher(backend),
+      referFetcher: new ReferFetcher(referBackend)
     }
   });
 

@@ -1235,18 +1235,64 @@ export const fund_query = new Serializer("fund_query", {
 //     to: optional( public_key ),
 //     encrypted_memo: stealth_memo_data
 // })
-export const loginOp = new Serializer<{
-  accountName: string;
-  // deferExpiration?: number;
-  expiration?: number;
-}>("loginOp", {
-  accountName: string,
-  // deferExpiration: optional(uint32),
-  expiration: optional(time_point_sec)
+
+// 地址簿查询
+export type RequestWithExpire = {
+  expiration: number;
+};
+export type BackendRequestMethod = "query" | "create";
+export type BackendRequest<BackendRequestMethod> = {
+  signature: string;
+  method: BackendRequestMethod;
+};
+
+export type SetAddress = {
+  loginName: string; // cybex帐户名
+  receiverName: string; // 收货人姓名，使用UTF-8编码方式进行序列化
+  email: string; // 收货人邮箱地址
+  qqNo: string; // 收货人qq号码
+  wechatNo: string; // 收货人微信号
+  proviceId: number; // 收货人地区编号，对应于电商后台countryAreas/{countryId}接口的查询结果
+  homeAddress: string; // 收货人地址，使用UTF-8编码方式进行序列化
+};
+export type SetAddressWithExpire = SetAddress & RequestWithExpire;
+export type SetAddressRequest = SetAddressWithExpire & BackendRequest<"create">;
+
+export type GetAddress = {
+  loginName: string; // cybex帐户名
+};
+export type GetAddressWithExpire = GetAddress & RequestWithExpire;
+export type GetAddressRequest = GetAddressWithExpire & BackendRequest<"query">;
+
+export type SetRefer = {
+  action: string; // 活动名称
+  referrer: string; // 引荐人
+  account: string; // 注册人
+};
+export type SetReferRequest = GetAddressWithExpire & RequestWithExpire;
+
+export const set_refer = new Serializer<SetReferRequest>("set_refer", {
+  account: string,
+  action: string, // 活动名称
+  referrer: string, // 引荐人
+  expiration: int64
 });
-// var stealth_confirmation = new Serializer(
-//     "stealth_confirmation", {
-//     one_time_key: public_key,
-//     to: optional( public_key ),
-//     encrypted_memo: stealth_memo_data
-// })
+
+export const query_address = new Serializer<GetAddressWithExpire>(
+  "query_address",
+  {
+    loginName: string,
+    expiration: int64
+  }
+);
+
+export const set_address = new Serializer<SetAddressWithExpire>("set_address", {
+  loginName: string,
+  receiverName: string,
+  email: string,
+  qqNo: string,
+  wechatNo: string,
+  proviceId: int64,
+  homeAddress: string,
+  expiration: int64
+});

@@ -39,6 +39,7 @@
     "bytebuffer": "^5.0.1",
     "create-hash": "^1.2.0",
     "create-hmac": "^1.1.7",
+    "crypto-js": "^3.1.9-1",
     "deep-equal": "^1.0.1",
     "ecurve": "^1.0.6",
     "events": "^3.0.0",
@@ -47,10 +48,12 @@
     "process": "^0.11.10",
     "reconnecting-websocket": "^4.1.10",
     "redux": "^4.0.1",
+    "redux-form": "^8.1.0",
     "redux-logger": "^3.0.6",
     "redux-observable": "^1.0.0",
     "reselect": "^4.0.0",
-    "rxjs": "^6.4.0"
+    "rxjs": "^6.4.0",
+    "secure-random": "^1.1.1"
   },
   "husky": {
     "hooks": {

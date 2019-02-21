@@ -1,6 +1,9 @@
 {
   "apiUrl": {
     "mallBackend": "http://47.52.92.231:9999/",
+    "referBackend": "http://10.18.120.241:8000",
+    "backend": "http://10.18.120.241:29999",
+    "gateway": "https://gateway.cybex.io",
     "cybexWs": "wss://shanghai.51nebula.com",
     "cybexHttpServer": "https://cybexluck.io"
   }

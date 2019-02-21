@@ -2,6 +2,20 @@ import fetch from "isomorphic-fetch";
 import moment from "moment";
 import { WsConnection } from "./connect";
 import { resolvePath } from "./path";
+import PrivateKey from "../../src/cybex/ecc/src/PrivateKey";
+import Serializer from "../../src/cybex/serializer/src/serializer";
+import Signature from "../../src/cybex/ecc/src/signature";
+import {
+  query_address,
+  GetAddressRequest,
+  SetAddressRequest,
+  GetAddress,
+  SetAddress,
+  set_address,
+  SetRefer,
+  SetReferRequest,
+  set_refer
+} from "../../src/cybex/serializer/src/operations";
 
 const simpleCache = {};
 const getKey = (...args) => JSON.stringify(args);
@@ -18,7 +32,7 @@ export const fetchWithRetry: (
   }
   if (!ws) {
     let wss = new WsConnection({
-      url: "wss://shanghai.51nebula.com"
+      url
     });
     await wss.connect();
     ws = wss;
@@ -153,5 +167,187 @@ export class MallFetcher {
     return this.fetch<undefined, MallBackend.Province[]>(
       `countryAreas/${countryID}`
     );
+  }
+}
+
+export class BackendFetcher {
+  static signOperation<I, R>(
+    originOp: I,
+    serializer: Serializer<any>,
+    key: PrivateKey,
+    expiration = 30 * 1000
+  ): R {
+    let op: any = {
+      ...originOp,
+      expiration:
+        originOp["expiration"] || Math.ceil((Date.now() + expiration) / 1000)
+    };
+    let opToBuffer = serializer.fromObject(op);
+    let buffer = serializer.toBuffer(opToBuffer);
+    let signature = Signature.signBuffer(buffer, key).toHex();
+    op.signature = signature;
+    return op as R;
+  }
+
+  constructor(public backendUrl: string) {}
+
+  async fetch<R = any, B = GetAddressRequest | SetAddressRequest>(
+    path: string,
+    body: B
+  ): Promise<R> {
+    return fetch(resolvePath(this.backendUrl, path), {
+      headers: {
+        "Content-Type": "application/json"
+      },
+      method: "post",
+      body: JSON.stringify(body)
+    })
+      .then(res => res.json())
+      .then((res: Backend.Response<R>) => {
+        console.debug("Fetch Res: ", res);
+        if (res.success) {
+          return res.data as R;
+        }
+        throw new Error(res.reason);
+      });
+  }
+
+  async queryAddress(loginName: string, key: PrivateKey) {
+    let op = BackendFetcher.signOperation<GetAddress, GetAddressRequest>(
+      {
+        loginName
+      },
+      query_address,
+      key
+    );
+    op.method = "query";
+    return this.fetch<Backend.AddressInfo>("user/", op);
+  }
+
+  async addAddress(addressConfig: SetAddress, key: PrivateKey) {
+    let op = BackendFetcher.signOperation<SetAddress, SetAddressRequest>(
+      addressConfig,
+      set_address,
+      key
+    );
+    op.method = "create";
+    return this.fetch("user/", op);
+  }
+}
+export class ReferFetcher {
+  static signOperation<I, R>(
+    originOp: I,
+    serializer: Serializer<any>,
+    key: PrivateKey,
+    expiration = 300 * 1000
+  ): R {
+    let op: any = {
+      ...originOp,
+      expiration:
+        originOp["expiration"] || Math.ceil((Date.now() + expiration) / 1000)
+    };
+    let opToBuffer = serializer.fromObject(op);
+    let buffer = serializer.toBuffer(opToBuffer);
+    let signature = Signature.signBuffer(buffer, key).toHex();
+    op.signature = signature;
+    return op as R;
+  }
+
+  constructor(public referBackendUrl: string) {}
+
+  async post<R = any, B = GetAddressRequest | SetAddressRequest>(
+    path: string,
+    body: B
+  ): Promise<R> {
+    return fetch(resolvePath(this.referBackendUrl, path), {
+      headers: {
+        "Content-Type": "application/json"
+      },
+      method: "post",
+      body: JSON.stringify(body)
+    })
+      .then(res => res.json())
+      .then((res: Backend.Response<R>) => {
+        console.debug("Fetch Res: ", res, "Request: ", JSON.stringify(body));
+        if (res.success) {
+          return res.data as R;
+        }
+        throw new Error(res.reason);
+      });
+  }
+  async fetch<R = any>(path: string): Promise<R> {
+    return fetch(resolvePath(this.referBackendUrl, path))
+      .then(res => res.json())
+      .then((res: Backend.FetchResponse<R>) => {
+        if (res.success) {
+          return res.result as R;
+        }
+        throw new Error(res.reason);
+      });
+  }
+
+  async setRefer(
+    account: string,
+    referrer: string,
+    action: string,
+    key: PrivateKey
+  ) {
+    let op = ReferFetcher.signOperation<SetRefer, SetReferRequest>(
+      { account, action, referrer },
+      set_refer,
+      key
+    );
+    return this.post("refer/", op);
+  }
+
+  async setRegisterRefer(
+    account: string,
+    referrer: string,
+    action: string,
+    key: PrivateKey
+  ) {
+    let op = ReferFetcher.signOperation<SetRefer, SetReferRequest>(
+      { account, action: "register|" + action, referrer },
+      set_refer,
+      key
+    );
+    return this.post("refer/", op);
+  }
+
+  async getRefer(account: string) {
+    return this.fetch<Backend.ReferResult>(
+      `refer/?account=${account}&&action=all`
+    );
+  }
+}
+export class GatewayFetcher {
+  constructor(public gatewayUrl: string) {}
+
+  async fetch<R = any>(path: string, body: any): Promise<R> {
+    return fetch(resolvePath(this.gatewayUrl, path), {
+      headers: {
+        "Content-Type": "application/json"
+      },
+      method: "post",
+      body: JSON.stringify(body)
+    })
+      .then(res => res.json())
+      .then((res: CybexGateway.Response<R>) => {
+        if (res.data) {
+          return res.data as R;
+        }
+        throw new Error("Fetch Gateway Error");
+      });
+  }
+
+  async getDepositInto(accountName: string, coinType: string) {
+    let body = {
+      operationName: "GetAddress",
+      variables: { accountName, asset: coinType },
+      query:
+        "query GetAddress($accountName: String!, $asset: String!) {\n  getDepositAddress(accountName: $accountName, asset: $asset) {\n    address\n    accountName\n    asset\n    type\n    createAt\n    projectInfo {\n      projectName\n      logoUrl\n      contractAddress\n      contractExplorerUrl\n      __typename\n    }\n    __typename\n  }\n}\n"
+    };
+
+    return this.fetch<CybexGateway.GetDepositAddressRes>("gateway", body);
   }
 }

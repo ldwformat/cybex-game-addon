@@ -72,6 +72,7 @@ describe("认证测试", () => {
     done();
   });
 });
+
 describe("Mall测试", () => {
   let store: Store<CoreState>;
   beforeEach(() => {

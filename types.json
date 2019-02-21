@@ -1,40 +1,20 @@
 {
-  "id": "1.2.139",
-  "membership_expiration_date": "1969-12-31T23:59:59",
-  "registrar": "1.2.139",
-  "referrer": "1.2.139",
-  "lifetime_referrer": "1.2.139",
-  "network_fee_percentage": 2000,
-  "lifetime_referrer_fee_percentage": 8000,
-  "referrer_rewards_percentage": 0,
-  "name": "ldw-format",
-  "owner": {
-    "weight_threshold": 1,
-    "account_auths": [],
-    "key_auths": [["CYB8HyiLPpUtZAssxoKZud9eMHc2vENWbMAKGEJzr8Xu6jKmoitQc", 1]],
-    "address_auths": []
-  },
-  "active": {
-    "weight_threshold": 1,
-    "account_auths": [],
-    "key_auths": [["CYB7ofbQsPrg1tF9jgACzASydYLpSyvKPzVCx7AsftcpQXrTXMWbi", 1]],
-    "address_auths": []
-  },
-  "options": {
-    "memo_key": "CYB8HyiLPpUtZAssxoKZud9eMHc2vENWbMAKGEJzr8Xu6jKmoitQc",
-    "voting_account": "1.2.5",
-    "num_witness": 0,
-    "num_committee": 0,
-    "votes": [],
-    "extensions": []
-  },
-  "statistics": "2.6.139",
-  "whitelisting_accounts": ["1.2.139"],
-  "blacklisting_accounts": [],
-  "whitelisted_accounts": ["1.2.139"],
-  "blacklisted_accounts": [],
-  "cashback_vb": "1.13.36",
-  "owner_special_authority": [0, {}],
-  "active_special_authority": [0, {}],
-  "top_n_control_flags": 0
+  "referrers": [
+      {"action": "register", "referrer": "cobb"}
+  ], 
+  "referrals": [
+      {
+          "action": "register",
+          "referral": [
+              {
+                  "ts": "1549003024",
+                  "referral": "tom"
+              },
+              {
+                  "ts": "1549003024",
+                  "referral": "jeff"
+              }
+          ]
+      }
+  ]
 }

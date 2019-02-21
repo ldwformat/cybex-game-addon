@@ -14,6 +14,11 @@ declare namespace RPC {
     jsonrpc: "2.0";
     result: any;
   }
+  interface RPCRejectResult {
+    id: number;
+    jsonrpc: "2.0";
+    error: any;
+  }
   type CallID = number;
   type ApiID = number;
   type Method = string;
@@ -119,6 +124,9 @@ declare interface AddOnConfig {
 
 declare interface APIURL {
   mallBackend: string;
+  referBackend: string;
+  backend: string;
+  gateway: string;
   cybexWs: string;
   cybexHttpServer: string;
 }
@@ -148,6 +156,87 @@ declare namespace MallBackend {
     provinceCode: string;
     addition: null;
     deleted: string;
+  }
+}
+declare namespace Backend {
+  export interface Response<R> {
+    success: boolean;
+    reason: string;
+    data: R;
+  }
+  export interface FetchResponse<R> {
+    success: boolean;
+    reason: string;
+    result: R;
+  }
+
+  export type AddressInfo = {
+    id: number;
+    email: string;
+    wechatNo: string;
+    mobile: null;
+    homeAddress: string;
+    userId: number;
+    provinceCode: string;
+    countryCode: string;
+    countryId: null;
+    receverName: string;
+    updatedTime: number;
+    operator: null;
+    proviceId: null;
+    addition: null;
+    createdTime: number;
+    provice: string;
+    deleted: string;
+    country: string;
+    qqNo: string;
+    freightFee: null;
+    defaultAddress: string;
+  };
+
+  export interface ReferResult {
+    referrers: Referrer[];
+    referrals: TypesReferral[];
+  }
+
+  export interface TypesReferral {
+    action: string;
+    referral: ReferralReferral[];
+  }
+
+  export interface ReferralReferral {
+    ts: string;
+    referral: string;
+  }
+
+  export interface Referrer {
+    action: string;
+    referrer: string;
+  }
+}
+declare namespace CybexGateway {
+  export interface Response<R> {
+    data: R;
+  }
+
+  export interface GetDepositAddressRes {
+    getDepositAddress: GetDepositAddress | null;
+  }
+
+  export interface GetDepositAddress {
+    address: string;
+    accountName: string;
+    asset: string;
+    type: string;
+    createAt: string;
+    projectInfo: ProjectInfo;
+  }
+
+  export interface ProjectInfo {
+    projectName: string;
+    logoUrl: string;
+    contractAddress: null;
+    contractExplorerUrl: null;
   }
 }
 
