@@ -6,13 +6,21 @@ import {
   mallLoadCountriesSuccess,
   MallLoadProvincesAction,
   mallLoadProvincesSuccess,
-  mallLoadProvincesFailed
+  mallLoadProvincesFailed,
+  MallLoadAddressBookAction,
+  mallLoadAddressBookSuccess,
+  mallLoadAddressBookFailed,
+  MallAddAddressAction,
+  mallAddAddressSuccess,
+  mallAddAddressFailed
 } from "./mall.actions";
 import { switchMap, catchError, map } from "rxjs/operators";
 import { of, from, never, NEVER } from "rxjs";
 import { IEffectDeps } from "../modes";
 import { CoreState } from "..";
 import { selectMallPrvsByCountryID } from "./mall.selectors";
+import { selectAuthSet } from "../auth/auth.selectors";
+import { authUnauthed } from "../auth";
 
 export const loadCountriesEpic: Epic<any, any, any, IEffectDeps> = (
   action$,
@@ -54,5 +62,57 @@ export const loadProvincesEpic: Epic<any, any, CoreState, IEffectDeps> = (
     catchError(err => {
       console.error(err);
       return of(mallLoadProvincesFailed());
+    })
+  );
+
+export const loadAddressBookEpic: Epic<any, any, CoreState, IEffectDeps> = (
+  action$,
+  state$,
+  { backendFetcher }
+) =>
+  action$.pipe(
+    ofType<MallLoadAddressBookAction>(MallActions.LoadAddressBook),
+    switchMap(() =>
+      state$.pipe(
+        switchMap(state => {
+          let authSet = selectAuthSet(state);
+          if (!authSet) {
+            return of(authUnauthed());
+          }
+          return from(
+            backendFetcher.queryAddress(authSet.account, authSet.key)
+          ).pipe(map(mallLoadAddressBookSuccess));
+        })
+      )
+    ),
+    catchError(err => {
+      console.error(err);
+      return of(mallLoadAddressBookFailed());
+    })
+  );
+
+export const addAddressEpic: Epic<any, any, CoreState, IEffectDeps> = (
+  action$,
+  state$,
+  { backendFetcher }
+) =>
+  action$.pipe(
+    ofType<MallAddAddressAction>(MallActions.AddAddress),
+    switchMap(action =>
+      state$.pipe(
+        switchMap(state => {
+          let authSet = selectAuthSet(state);
+          if (!authSet) {
+            return of(authUnauthed());
+          }
+          return from(
+            backendFetcher.addAddress(action.payload, authSet.key)
+          ).pipe(map(mallAddAddressSuccess));
+        })
+      )
+    ),
+    catchError(err => {
+      console.error(err);
+      return of(mallAddAddressFailed());
     })
   );

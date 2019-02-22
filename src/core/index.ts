@@ -1,4 +1,10 @@
-import { createStore, applyMiddleware, combineReducers, Reducer } from "redux";
+import {
+  createStore,
+  applyMiddleware,
+  combineReducers,
+  Reducer,
+  DeepPartial
+} from "redux";
 import { createLogger } from "redux-logger";
 import { createEpicMiddleware, combineEpics } from "redux-observable";
 import {
@@ -10,22 +16,40 @@ import {
 import { config } from "../config";
 import { AuthState, auth, loginEpic } from "./auth";
 import { MallState, mall, loadCountriesEpic, loadProvincesEpic } from "./mall";
+import {
+  ReferState,
+  refer,
+  loadReferInfoEpic,
+  addReferEpic,
+  addReferAfterLoginEpic
+} from "./refer";
 const loggerMiddleware = createLogger();
 
 // RootState
 export class CoreState {
+  constructor(public game: string) {}
   public auth = new AuthState();
   public mall = new MallState();
+  public refer = new ReferState();
 }
 
-const rootEpic = combineEpics(loginEpic, loadCountriesEpic, loadProvincesEpic);
+const rootEpic = combineEpics(
+  loginEpic,
+  loadCountriesEpic,
+  loadProvincesEpic,
+  loadReferInfoEpic,
+  addReferEpic,
+  addReferAfterLoginEpic
+);
 
 const rootReducer: Reducer<CoreState> = combineReducers({
   auth,
-  mall
+  mall,
+  refer,
+  game: (state = "", action) => state
 });
 
-export function configureStore(preloadState?) {
+export function configureStore(preloadState?: DeepPartial<CoreState>) {
   let {
     cybexWs,
     cybexHttpServer,

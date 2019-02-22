@@ -31,10 +31,12 @@ export const loginEpic: Epic<
           let keyStore = authCheckFromSeed(action.payload, account);
           assert(keyStore, "登录验证失败");
           if (keyStore) {
+            console.debug("LoginSuccess: ", action.payload.refer);
             return authLoginSuccess({
               accountName: action.payload.accountName,
               account,
-              keyStore
+              keyStore,
+              refer: action.payload.refer
             });
           }
           return authLoginFailed();

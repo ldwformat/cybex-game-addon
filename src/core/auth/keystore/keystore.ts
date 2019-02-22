@@ -14,6 +14,14 @@ export class KeyStore {
   valid = false;
   keys: { [role: string]: KeyAuth } = {};
 
+  get activeKey() {
+    return this.keys["active"];
+  }
+
+  get ownerKey() {
+    return this.keys["owner"];
+  }
+
   static checkAuth(
     privKey: PrivateKey,
     authToCheck: Cybex.AccountAuthority | string

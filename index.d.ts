@@ -170,6 +170,16 @@ declare namespace Backend {
     result: R;
   }
 
+  export type AddressFormFields = {
+    loginName: string;
+    receiverName: string;
+    email: string;
+    qqNo: string;
+    wechatNo: string;
+    proviceId: number;
+    homeAddress: string;
+  };
+
   export type AddressInfo = {
     id: number;
     email: string;
@@ -203,6 +213,13 @@ declare namespace Backend {
     action: string;
     referral: ReferralReferral[];
   }
+
+  export type SetReferForm = {
+    action: string; // 活动名称
+    referrer: string; // 引荐人
+    account: string; // 注册人
+    isRegister?: boolean; // 是否为注册引荐人
+  };
 
   export interface ReferralReferral {
     ts: string;

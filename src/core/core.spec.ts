@@ -6,7 +6,6 @@ import { delay } from "../utils";
 import { mallLoadCountries, mallLoadProvinces } from "./mall";
 import {
   selectCountryList,
-  selectMallProvincesMap,
   selectMallPrvsByCountryID
 } from "./mall/mall.selectors";
 
@@ -98,4 +97,39 @@ describe("Mall测试", () => {
 
     done();
   }, 6000);
+});
+
+describe("LoginRefer引荐人测试", () => {
+  let store: Store<CoreState>;
+  const loginAccountName = "create-test2";
+  const loginAccountPassword = "qwer1234qwer1234";
+  beforeAll(() => {
+    store = configureStore({ game: "cybexbet" });
+  });
+  it(
+    "测试登录增加引荐人",
+    async done => {
+      let currentState = store.getState();
+      store.dispatch(
+        authLogin({
+          accountName: loginAccountName,
+          password: loginAccountPassword,
+          refer: {
+            action: currentState.game,
+            referrer: "harley",
+            isRegister: false
+          }
+        })
+      );
+      await delay(5000);
+      let stateAfterLogin = store.getState();
+      expect(stateAfterLogin.refer).toMatchObject({
+        referrals: [],
+        referrers: [{ action: "cybexbet", referrer: "harley" }]
+      });
+
+      done();
+    },
+    10 * 1000
+  );
 });

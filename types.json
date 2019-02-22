@@ -1,20 +1,9 @@
 {
-  "referrers": [
-      {"action": "register", "referrer": "cobb"}
-  ], 
-  "referrals": [
-      {
-          "action": "register",
-          "referral": [
-              {
-                  "ts": "1549003024",
-                  "referral": "tom"
-              },
-              {
-                  "ts": "1549003024",
-                  "referral": "jeff"
-              }
-          ]
-      }
-  ]
+  "loginName": "accountName", // cybex帐户名
+  "receiverName": "爱谁谁", // 收货人姓名，使用UTF-8编码方式进行序列化
+  "email": "example@domain.com", // 收货人邮箱地址
+  "qqNo": "example@domain.com", // 收货人qq号码
+  "wechatNo": "example@wechat1415", // 收货人微信号
+  "proviceId": 192, // 北京
+  "homeAddress": "某市某区某镇某乡某县某街道XXX号" // 收货人地址，使用UTF-8编码方式进行序列化
 }

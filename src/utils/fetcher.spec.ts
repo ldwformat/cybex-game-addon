@@ -96,7 +96,7 @@ describe("Test class BackendFetcher", () => {
     };
     let addRes = await fetcher.addAddress(fakeAddress, privKey);
     expect(addRes).toBe("");
-    let queryRes = await fetcher.queryAddress(accountName, privKey);
+    let queryRes = await fetcher.queryAddress(accountName, privKey)[0];
     expect(queryRes.country).toBe("中国");
     expect(queryRes.provice).toBe("北京市");
     done();

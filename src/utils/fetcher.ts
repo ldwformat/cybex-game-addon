@@ -221,7 +221,7 @@ export class BackendFetcher {
       key
     );
     op.method = "query";
-    return this.fetch<Backend.AddressInfo>("user/", op);
+    return [await this.fetch<Backend.AddressInfo>("user/", op)];
   }
 
   async addAddress(addressConfig: SetAddress, key: PrivateKey) {
@@ -286,39 +286,39 @@ export class ReferFetcher {
       });
   }
 
-  async setRefer(
+  setRefer = async (
     account: string,
     referrer: string,
     action: string,
     key: PrivateKey
-  ) {
+  ) => {
     let op = ReferFetcher.signOperation<SetRefer, SetReferRequest>(
       { account, action, referrer },
       set_refer,
       key
     );
     return this.post("refer/", op);
-  }
+  };
 
-  async setRegisterRefer(
+  setRegisterRefer = async (
     account: string,
     referrer: string,
     action: string,
     key: PrivateKey
-  ) {
+  ) => {
     let op = ReferFetcher.signOperation<SetRefer, SetReferRequest>(
       { account, action: "register|" + action, referrer },
       set_refer,
       key
     );
     return this.post("refer/", op);
-  }
+  };
 
-  async getRefer(account: string) {
+  getRefer = async (account: string) => {
     return this.fetch<Backend.ReferResult>(
       `refer/?account=${account}&&action=all`
     );
-  }
+  };
 }
 export class GatewayFetcher {
   constructor(public gatewayUrl: string) {}

@@ -5,7 +5,8 @@ export enum AuthActions {
   Login = "[Auth] Login",
   LoginSuccess = "[Auth] Login Success",
   LoginFailed = "[Auth] Login Failed",
-  Logout = "[Auth] Logout"
+  Logout = "[Auth] Logout",
+  Unauthed = "[Auth] Unauthed"
 }
 
 export class AuthLoginAction implements Action {
@@ -25,6 +26,9 @@ export class AuthLoginSuccessAction implements Action {
 export class AuthLogoutAction implements Action {
   readonly type = AuthActions.Logout;
 }
+export class AuthUnauthedAction implements Action {
+  readonly type = AuthActions.Unauthed;
+}
 
 export const authLogout: ActionCreator<AuthLogoutAction> = param => ({
   type: AuthActions.Logout
@@ -39,6 +43,10 @@ export const authLogin: (param: IAuthParams) => AuthLoginAction = param => ({
   payload: param
 });
 
+export const authUnauthed: () => AuthUnauthedAction = () => ({
+  type: AuthActions.Unauthed
+});
+
 export const authLoginSuccess: (
   param: IAuthResult
 ) => AuthLoginSuccessAction = (param: IAuthResult) => ({
@@ -50,4 +58,5 @@ export type AuthAction =
   | AuthLogoutAction
   | AuthLoginAction
   | AuthLoginFailedAction
-  | AuthLoginSuccessAction;
+  | AuthLoginSuccessAction
+  | AuthUnauthedAction;
