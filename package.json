@@ -6,6 +6,7 @@
   "author": "ldwformat@gmail.com",
   "license": "MIT",
   "scripts": {
+    "build": "webpack",
     "test": "jest --verbose",
     "test:watch": "jest --watch --verbose",
     "lint": "tslint --project tsconfig.json --config tslint.json && prettier {src,e2e,cypress}/**/**/**/**/**/**/*.{ts,json,md,scss} --check",
@@ -18,7 +19,10 @@
     "@types/events": "^3.0.0",
     "@types/isomorphic-fetch": "^0.0.35",
     "@types/jest": "^24.0.4",
+    "@types/react": "^16.8.4",
+    "@types/react-dom": "^16.8.2",
     "@types/redux-logger": "^3.0.7",
+    "awesome-typescript-loader": "^5.2.1",
     "commitlint": "^7.5.2",
     "husky": "^1.3.1",
     "jest": "^24.1.0",
@@ -27,7 +31,9 @@
     "ts-jest": "^23.10.5",
     "tslint": "^5.12.1",
     "tslint-config-prettier": "^1.18.0",
-    "typescript": "^3.3.3"
+    "typescript": "^3.3.3",
+    "webpack": "^4.29.5",
+    "webpack-cli": "^3.2.3"
   },
   "dependencies": {
     "@types/node": "^11.9.4",
@@ -46,6 +52,8 @@
     "isomorphic-fetch": "^2.2.1",
     "moment": "^2.24.0",
     "process": "^0.11.10",
+    "react": "^16.8.3",
+    "react-dom": "^16.8.3",
     "reconnecting-websocket": "^4.1.10",
     "redux": "^4.0.1",
     "redux-form": "^8.1.0",

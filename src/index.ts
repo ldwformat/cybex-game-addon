@@ -10,3 +10,6 @@ if (typeof window !== undefined) {
   window["process"] = process;
   window["Buffer"] = Buffer;
 }
+export * from "./core/index";
+export * from "./pages/index";
+export * from "./utils/index";
