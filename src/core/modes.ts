@@ -6,6 +6,7 @@ import {
   ReferFetcher
 } from "../utils/fetcher";
 import { CybexAssistant } from "src/utils/cybex-assistant";
+import { EventEmitter } from "events";
 
 export interface IEffectDeps {
   fetcher: ChainFetcher;
@@ -14,4 +15,7 @@ export interface IEffectDeps {
   referFetcher: ReferFetcher;
   gatewayFetcher: GatewayFetcher;
   mallFetcher: MallFetcher;
+  notifier: EventEmitter;
 }
+
+export const EVENT_ACTION = "EVENT_ACTION";

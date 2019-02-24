@@ -9,11 +9,14 @@ import {
   selectMallPrvsByCountryID
 } from "./mall/mall.selectors";
 
+import { config } from "./../config";
+
 describe("核心状态Store", () => {
-  it("创建Store", () => {
-    const store = configureStore();
+  it("创建Store", async done => {
+    const store = await configureStore(config)();
     const state = store.getState();
     expect(state.auth.isAuthed).toStrictEqual(false);
+    done();
   });
 });
 
@@ -27,8 +30,9 @@ describe("认证测试", () => {
   };
 
   let store: Store<CoreState>;
-  beforeEach(() => {
-    store = configureStore();
+  beforeEach(async done => {
+    store = await configureStore(config)();
+    done();
   });
 
   it("Login登录, Logout登出", () => {
@@ -74,8 +78,9 @@ describe("认证测试", () => {
 
 describe("Mall测试", () => {
   let store: Store<CoreState>;
-  beforeEach(() => {
-    store = configureStore();
+  beforeEach(async done => {
+    store = await configureStore(config)();
+    done();
   });
   it("测试更新国家列表", async done => {
     store.dispatch(mallLoadCountries());
@@ -103,8 +108,9 @@ describe("LoginRefer引荐人测试", () => {
   let store: Store<CoreState>;
   const loginAccountName = "create-test2";
   const loginAccountPassword = "qwer1234qwer1234";
-  beforeAll(() => {
-    store = configureStore({ game: "cybexbet" });
+  beforeAll(async done => {
+    store = await configureStore(config)({ game: "cybexbet" });
+    done();
   });
   it(
     "测试登录增加引荐人",

@@ -14,7 +14,7 @@ import {
   mallAddAddressSuccess,
   mallAddAddressFailed
 } from "./mall.actions";
-import { switchMap, catchError, map } from "rxjs/operators";
+import { switchMap, catchError, map, take } from "rxjs/operators";
 import { of, from, never, NEVER } from "rxjs";
 import { IEffectDeps } from "../modes";
 import { CoreState } from "..";
@@ -47,6 +47,7 @@ export const loadProvincesEpic: Epic<any, any, CoreState, IEffectDeps> = (
     ofType<MallLoadProvincesAction>(MallActions.LoadProvinces),
     switchMap(({ payload: countryID }) =>
       state$.pipe(
+        take(1),
         switchMap(state => {
           let prvs = selectMallPrvsByCountryID(countryID)(state);
           if (prvs) {
@@ -74,6 +75,7 @@ export const loadAddressBookEpic: Epic<any, any, CoreState, IEffectDeps> = (
     ofType<MallLoadAddressBookAction>(MallActions.LoadAddressBook),
     switchMap(() =>
       state$.pipe(
+        take(1),
         switchMap(state => {
           let authSet = selectAuthSet(state);
           if (!authSet) {
@@ -100,6 +102,7 @@ export const addAddressEpic: Epic<any, any, CoreState, IEffectDeps> = (
     ofType<MallAddAddressAction>(MallActions.AddAddress),
     switchMap(action =>
       state$.pipe(
+        take(1),
         switchMap(state => {
           let authSet = selectAuthSet(state);
           if (!authSet) {

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Cybex Addon</title>
+  </head>
+  <body>
+    <div id="root0">
+      Here is a placeholder
+    </div>
+    <div id="root1">
+      Here is a placeholder
+    </div>
+    <div id="root2">
+      Here is a placeholder
+    </div>
+    <button id="loginPage0" data-ref="root0">登录页</button>
+    <button id="loginPage1" data-ref="root1">登录页2</button>
+    <script>
+      {
+        let count = 0;
+        document
+          .getElementById("loginPage0")
+          .addEventListener("click", async e => {
+            let addon = await new CybexAddon.CybexAddon().init();
+            let some = await addon.loginPage(
+              document.getElementById(`root0`)
+            );
+            console.debug("Then0: ", addon);
+          });
+        document
+          .getElementById("loginPage1")
+          .addEventListener("click", async e => {
+            let addon = await new CybexAddon.CybexAddon().init();
+            let some = await addon.loginPage(
+              document.getElementById(`root1`)
+            );
+            console.debug("Then1: ", addon);
+          });
+      }
+    </script>
+  </body>
+</html>

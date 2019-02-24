@@ -1,4 +1,5 @@
 "use strict";
+const HTMLWebpackPlugin = require("html-webpack-plugin");
 
 const path = require("path");
 
@@ -8,7 +9,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, "dist"),
     filename: "index.js",
-    library: 'CybexAddon',
+    library: "CybexAddon",
     libraryTarget: "umd"
   },
   module: {
@@ -19,9 +20,20 @@ module.exports = {
       }
     ]
   },
+  devServer: {
+    contentBase: "./dist",
+    compress: true,
+    port: 5560,
+    hot: true
+  },
   resolve: {
     extensions: [".js", "jsx", ".ts", ".tsx", ".json"]
   },
-  devtool: "source-map",
-  plugins: []
+  // devtool: "source-map",
+  plugins: [
+    new HTMLWebpackPlugin({
+      title: "CAddOn",
+      template: "./examples/index.html"
+    })
+  ]
 };

@@ -6,5 +6,6 @@
     "gateway": "https://gateway.cybex.io",
     "cybexWs": "wss://shanghai.51nebula.com",
     "cybexHttpServer": "https://cybexluck.io"
-  }
+  },
+  "game": "cybexbet"
 }

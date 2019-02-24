@@ -118,8 +118,9 @@ declare namespace Cybex {
   }
 }
 
-declare interface AddOnConfig {
+declare interface CybexAddonConfig {
   apiUrl: APIURL;
+  game: string;
 }
 
 declare interface APIURL {
@@ -254,6 +255,12 @@ declare namespace CybexGateway {
     logoUrl: string;
     contractAddress: null;
     contractExplorerUrl: null;
+  }
+
+  export interface CoinInfo {
+    asset: string;
+    currency: string;
+    isDisabled: boolean;
   }
 }
 

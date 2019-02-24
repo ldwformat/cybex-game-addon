@@ -340,6 +340,12 @@ export class GatewayFetcher {
       });
   }
 
+  async getCoinList() {
+    return fetch(
+      "https://gateway-query.cybex.io/public/coin-info?currency=1&isDisabled=1&asset=1"
+    ).then(res => res.json());
+  }
+
   async getDepositInto(accountName: string, coinType: string) {
     let body = {
       operationName: "GetAddress",

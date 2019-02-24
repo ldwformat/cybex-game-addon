@@ -1,5 +1,5 @@
 /* tslint:disable */
-console.log("Hello Cybex");
+console.info("Hello Cybex");
 
 // For some crypto lib
 import * as process from "process";
@@ -10,6 +10,46 @@ if (typeof window !== undefined) {
   window["process"] = process;
   window["Buffer"] = Buffer;
 }
-export * from "./core/index";
-export * from "./pages/index";
-export * from "./utils/index";
+// export * from "./core/index";
+// export * from "./pages/index";
+
+import * as Utils from "./utils";
+
+import {
+  authLogin,
+  authLoginSuccess,
+  authLoginFailed,
+  authLogout,
+  authUnauthed
+} from "./core/auth";
+
+import {
+  mallLoadAddressBook,
+  mallLoadProvinces,
+  mallLoadCountries,
+  mallAddAddress
+} from "./core/mall";
+import {
+  gatewayLoadGatewayInfo,
+  gatewaySelectAsset,
+  gatewayLoadDepositInfo
+} from "./core/gateway";
+
+import { referLoadReferInfo, referAdd } from "./core/refer";
+import { CybexAddon } from "./cybex-addon";
+export const Actions = {
+  authLogin,
+  authLogout,
+  mallLoadAddressBook,
+  mallLoadProvinces,
+  mallLoadCountries,
+  mallAddAddress,
+  gatewayLoadGatewayInfo,
+  gatewaySelectAsset,
+  gatewayLoadDepositInfo,
+  referLoadReferInfo,
+  referAdd
+};
+
+export { CybexAddon, Utils };
+export default CybexAddon;

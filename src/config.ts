@@ -1,1 +1,1 @@
-export const config: AddOnConfig = require("../config/config.dev.json");
+export const config: CybexAddonConfig = require("../config/config.dev.json");

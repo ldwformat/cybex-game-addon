@@ -9,7 +9,14 @@ import {
   referAddFailed,
   ReferAddSuccessAction
 } from "./refer.actions";
-import { switchMap, catchError, map, filter } from "rxjs/operators";
+import {
+  switchMap,
+  catchError,
+  map,
+  filter,
+  takeLast,
+  take
+} from "rxjs/operators";
 import { of, from } from "rxjs";
 import { IEffectDeps } from "../modes";
 import { CoreState } from "..";
@@ -36,6 +43,7 @@ export const loadReferInfoEpic: Epic<any, any, CoreState, IEffectDeps> = (
     ),
     switchMap(() =>
       state$.pipe(
+        take(1),
         switchMap(state => {
           let authSet = selectAuthSet(state);
           if (!authSet) {
@@ -62,6 +70,7 @@ export const addReferEpic: Epic<any, any, CoreState, IEffectDeps> = (
     ofType<ReferAddAction>(ReferActions.Add),
     switchMap(reduxAction =>
       state$.pipe(
+        take(1),
         switchMap(state => {
           let authSet = selectAuthSet(state);
           if (!authSet) {
@@ -105,11 +114,13 @@ export const addReferAfterLoginEpic: Epic<any, any, CoreState, IEffectDeps> = (
               )
           )
         ),
-        map(_referral => action)
+        map(_referral => action),
+        take(1)
       )
     ),
     switchMap(reduxAction =>
       state$.pipe(
+        take(1),
         switchMap(state => {
           let authSet = selectAuthSet(state);
           if (!authSet) {

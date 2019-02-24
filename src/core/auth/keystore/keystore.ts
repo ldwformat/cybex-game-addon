@@ -81,11 +81,11 @@ export class KeyStore {
     }
 
     if (owner) {
-      this.keys.active = KeyStore.checkAuth(owner, account.owner) as KeyAuth;
+      this.keys.owner = KeyStore.checkAuth(owner, account.owner) as KeyAuth;
     }
 
     if (memo) {
-      this.keys.active = KeyStore.checkAuth(
+      this.keys.memo = KeyStore.checkAuth(
         memo,
         account.options.memo_key
       ) as KeyAuth;

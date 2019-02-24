@@ -6,14 +6,14 @@ import {
   DeepPartial
 } from "redux";
 import { createLogger } from "redux-logger";
-import { createEpicMiddleware, combineEpics } from "redux-observable";
+import { createEpicMiddleware, combineEpics, Epic } from "redux-observable";
 import {
   ChainFetcher,
   MallFetcher,
   BackendFetcher,
-  ReferFetcher
+  ReferFetcher,
+  GatewayFetcher
 } from "../utils/fetcher";
-import { config } from "../config";
 import { AuthState, auth, loginEpic } from "./auth";
 import { MallState, mall, loadCountriesEpic, loadProvincesEpic } from "./mall";
 import {
@@ -23,6 +23,18 @@ import {
   addReferEpic,
   addReferAfterLoginEpic
 } from "./refer";
+import {
+  GatewayState,
+  gateway,
+  loadDepsoitInfoEpic,
+  loadDpstAfterSelAssetEpic,
+  loadGatewayInfoEpic
+} from "./gateway";
+import { IEffectDeps } from "./modes";
+import { CybexAssistant } from "../utils/cybex-assistant";
+import { WsConnection } from "../utils/connect";
+import { EventEmitter } from "events";
+import { notifierEpic } from "./core.effects";
 const loggerMiddleware = createLogger();
 
 // RootState
@@ -31,6 +43,7 @@ export class CoreState {
   public auth = new AuthState();
   public mall = new MallState();
   public refer = new ReferState();
+  public gateway = new GatewayState();
 }
 
 const rootEpic = combineEpics(
@@ -38,32 +51,45 @@ const rootEpic = combineEpics(
   loadCountriesEpic,
   loadProvincesEpic,
   loadReferInfoEpic,
+  loadDepsoitInfoEpic,
+  loadDpstAfterSelAssetEpic,
+  loadGatewayInfoEpic,
   addReferEpic,
-  addReferAfterLoginEpic
+  addReferAfterLoginEpic,
+  notifierEpic
 );
 
 const rootReducer: Reducer<CoreState> = combineReducers({
   auth,
   mall,
   refer,
+  gateway,
   game: (state = "", action) => state
 });
 
-export function configureStore(preloadState?: DeepPartial<CoreState>) {
+export const configureStore = (config: CybexAddonConfig) => async (
+  preloadState?: DeepPartial<CoreState>
+) => {
   let {
     cybexWs,
     cybexHttpServer,
     mallBackend,
     referBackend,
+    gateway,
     backend
   } = config.apiUrl;
-
+  let wsConnect = new WsConnection({ url: cybexWs });
+  let notifier = new EventEmitter();
+  await wsConnect.connect();
   const epicMiddleware = createEpicMiddleware({
     dependencies: {
       fetcher: new ChainFetcher(cybexWs, cybexHttpServer),
       mallFetcher: new MallFetcher(mallBackend),
-      addressFetcher: new BackendFetcher(backend),
-      referFetcher: new ReferFetcher(referBackend)
+      gatewayFetcher: new GatewayFetcher(gateway),
+      backendFetcher: new BackendFetcher(backend),
+      referFetcher: new ReferFetcher(referBackend),
+      chainAssisant: new CybexAssistant(wsConnect),
+      notifier
     }
   });
 
@@ -75,5 +101,5 @@ export function configureStore(preloadState?: DeepPartial<CoreState>) {
   );
 
   epicMiddleware.run(rootEpic);
-  return store;
-}
+  return { store, notifier };
+};
