@@ -10,6 +10,8 @@ import { CoreState } from "../core";
 import { AuthState, authLogin } from "../core/auth";
 import { gatewayLoadGatewayInfo, gatewaySelectAsset } from "../core/gateway";
 
+import { Button } from "@material-ui/core";
+
 const mapStateToProps: MapStateToPropsParam<
   { auth: AuthState },
   {},
@@ -47,7 +49,7 @@ class LoginClass extends React.Component<{
       <>
         <code>{JSON.stringify(auth.account)}</code>
         <h1>Login Page Works!</h1>
-        <button
+        <Button
           onClick={() =>
             login({
               accountName: "create-test12",
@@ -56,7 +58,7 @@ class LoginClass extends React.Component<{
           }
         >
           登录
-        </button>
+        </Button>
         <button onClick={loadGatewayInfo}>刷新列表</button>
         <button onClick={selectAsset.bind(this, "JADE.ETH")}>
           读取JADE.ETH充值信息

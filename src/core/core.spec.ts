@@ -13,7 +13,7 @@ import { config } from "./../config";
 
 describe("核心状态Store", () => {
   it("创建Store", async done => {
-    const store = await configureStore(config)();
+    const { store } = await configureStore(config)();
     const state = store.getState();
     expect(state.auth.isAuthed).toStrictEqual(false);
     done();
@@ -31,7 +31,7 @@ describe("认证测试", () => {
 
   let store: Store<CoreState>;
   beforeEach(async done => {
-    store = await configureStore(config)();
+    store = (await configureStore(config)()).store;
     done();
   });
 
@@ -79,7 +79,7 @@ describe("认证测试", () => {
 describe("Mall测试", () => {
   let store: Store<CoreState>;
   beforeEach(async done => {
-    store = await configureStore(config)();
+    store = (await configureStore(config)()).store;
     done();
   });
   it("测试更新国家列表", async done => {
@@ -109,7 +109,7 @@ describe("LoginRefer引荐人测试", () => {
   const loginAccountName = "create-test2";
   const loginAccountPassword = "qwer1234qwer1234";
   beforeAll(async done => {
-    store = await configureStore(config)({ game: "cybexbet" });
+    store = (await configureStore(config)({ game: "cybexbet" })).store;
     done();
   });
   it(
