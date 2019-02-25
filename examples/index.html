@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Cybex Addon</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
+
   </head>
   <body>
     <div id="root0">
@@ -21,23 +23,17 @@
     <script>
       {
         let count = 0;
+        let addon;
+        window.addEventListener("load", async function() {
+          addon = await new CybexAddon.CybexAddon().init();
+          console.info("Load Done");
+        });
+
         document
           .getElementById("loginPage0")
           .addEventListener("click", async e => {
-            let addon = await new CybexAddon.CybexAddon().init();
-            let some = await addon.loginPage(
-              document.getElementById(`root0`)
-            );
+            let some = await addon.loginPage(document.getElementById(`root0`));
             console.debug("Then0: ", addon);
-          });
-        document
-          .getElementById("loginPage1")
-          .addEventListener("click", async e => {
-            let addon = await new CybexAddon.CybexAddon().init();
-            let some = await addon.loginPage(
-              document.getElementById(`root1`)
-            );
-            console.debug("Then1: ", addon);
           });
       }
     </script>

@@ -7,6 +7,7 @@ import {
 } from "redux";
 import { createLogger } from "redux-logger";
 import { createEpicMiddleware, combineEpics, Epic } from "redux-observable";
+import { reducer as formReducer, FormReducer, FormStateMap } from "redux-form";
 import {
   ChainFetcher,
   MallFetcher,
@@ -14,7 +15,7 @@ import {
   ReferFetcher,
   GatewayFetcher
 } from "../utils/fetcher";
-import { AuthState, auth, loginEpic } from "./auth";
+import { AuthState, auth, loginEpic, loginCloseEpic } from "./auth";
 import { MallState, mall, loadCountriesEpic, loadProvincesEpic } from "./mall";
 import {
   ReferState,
@@ -35,19 +36,14 @@ import { CybexAssistant } from "../utils/cybex-assistant";
 import { WsConnection } from "../utils/connect";
 import { EventEmitter } from "events";
 import { notifierEpic } from "./core.effects";
+import { rootReducer } from "./core.reducers";
+import { CoreState } from "./core.models";
+export * from "./core.models";
 const loggerMiddleware = createLogger();
-
-// RootState
-export class CoreState {
-  constructor(public game: string) {}
-  public auth = new AuthState();
-  public mall = new MallState();
-  public refer = new ReferState();
-  public gateway = new GatewayState();
-}
 
 const rootEpic = combineEpics(
   loginEpic,
+  loginCloseEpic,
   loadCountriesEpic,
   loadProvincesEpic,
   loadReferInfoEpic,
@@ -58,14 +54,6 @@ const rootEpic = combineEpics(
   addReferAfterLoginEpic,
   notifierEpic
 );
-
-const rootReducer: Reducer<CoreState> = combineReducers({
-  auth,
-  mall,
-  refer,
-  gateway,
-  game: (state = "", action) => state
-});
 
 export const configureStore = (config: CybexAddonConfig) => async (
   preloadState?: DeepPartial<CoreState>

@@ -17,7 +17,7 @@ import {
 import { switchMap, catchError, map, take } from "rxjs/operators";
 import { of, from, never, NEVER } from "rxjs";
 import { IEffectDeps } from "../modes";
-import { CoreState } from "..";
+import { CoreState } from "../core.models";
 import { selectMallPrvsByCountryID } from "./mall.selectors";
 import { selectAuthSet } from "../auth/auth.selectors";
 import { authUnauthed } from "../auth";

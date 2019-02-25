@@ -1,5 +1,5 @@
 import { Epic } from "redux-observable";
-import { CoreState } from ".";
+import { CoreState } from "./core.models";
 import { IEffectDeps, EVENT_ACTION } from "./modes";
 import { switchMap } from "rxjs/operators";
 import { NEVER } from "rxjs";

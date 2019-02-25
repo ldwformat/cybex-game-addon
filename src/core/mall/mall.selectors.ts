@@ -1,5 +1,5 @@
 import { Selector, createSelector } from "reselect";
-import { CoreState } from "..";
+import { CoreState } from "../core.models";
 import { MallState } from "./mall.models";
 
 export const selectMall: Selector<CoreState, MallState> = state => state.mall;

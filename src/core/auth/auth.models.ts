@@ -2,6 +2,7 @@ import { KeyStore } from "./keystore/keystore";
 
 export class AuthState {
   isAuthed = false;
+  showModal = false;
   accountName: string | null = null;
   keyStore: null | KeyStore = null;
   account: Cybex.Account | null = null;

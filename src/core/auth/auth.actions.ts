@@ -2,11 +2,20 @@ import { Action, ActionCreator } from "redux";
 import { IAuthParams, IAuthResult } from "./auth.models";
 
 export enum AuthActions {
+  LoginModalShow = "[Auth] LoginModalShow",
+  LoginModalClose = "[Auth] LoginModalClose",
   Login = "[Auth] Login",
   LoginSuccess = "[Auth] Login Success",
   LoginFailed = "[Auth] Login Failed",
   Logout = "[Auth] Logout",
   Unauthed = "[Auth] Unauthed"
+}
+
+export class AuthLoginModalShowAction implements Action {
+  readonly type = AuthActions.LoginModalShow;
+}
+export class AuthLoginModalCloseAction implements Action {
+  readonly type = AuthActions.LoginModalClose;
 }
 
 export class AuthLoginAction implements Action {
@@ -30,6 +39,16 @@ export class AuthUnauthedAction implements Action {
   readonly type = AuthActions.Unauthed;
 }
 
+export const authShowModal: ActionCreator<
+  AuthLoginModalShowAction
+> = param => ({
+  type: AuthActions.LoginModalShow
+});
+export const authCloseModal: ActionCreator<
+  AuthLoginModalCloseAction
+> = param => ({
+  type: AuthActions.LoginModalClose
+});
 export const authLogout: ActionCreator<AuthLogoutAction> = param => ({
   type: AuthActions.Logout
 });
@@ -55,6 +74,8 @@ export const authLoginSuccess: (
 });
 
 export type AuthAction =
+  | AuthLoginModalShowAction
+  | AuthLoginModalCloseAction
   | AuthLogoutAction
   | AuthLoginAction
   | AuthLoginFailedAction

@@ -6,11 +6,12 @@ import {
   authLoginSuccess,
   authLoginFailed,
   AuthLoginSuccessAction,
-  AuthLoginFailedAction
+  AuthLoginFailedAction,
+  authCloseModal
 } from "./auth.actions";
 import { Observable, of, from } from "rxjs";
 import { KeyStore } from "./keystore/keystore";
-import { CoreState } from "..";
+import { CoreState } from "../core.models";
 import { ChainFetcher } from "../../utils/fetcher";
 import assert from "assert";
 import { authCheckFromSeed } from "../../utils/auth";
@@ -27,6 +28,7 @@ export const loginEpic: Epic<
     switchMap(action => {
       return from(fetcher.fetchAccount(action.payload.accountName)).pipe(
         map(account => {
+          console.debug("Login Action: ", account);
           assert(account, "没找到相应账户信息");
           let keyStore = authCheckFromSeed(action.payload, account);
           assert(keyStore, "登录验证失败");
@@ -40,11 +42,21 @@ export const loginEpic: Epic<
             });
           }
           return authLoginFailed();
+        }),
+        catchError(err => {
+          console.error("[Login Effect] Login Failed", err.message);
+          return of(authLoginFailed());
         })
       );
-    }),
-    catchError(err => {
-      console.error("[Login Effect] Login Failed", err);
-      return of(authLoginFailed());
     })
+  );
+
+export const loginCloseEpic: Epic<any, any, any, IEffectDeps> = (
+  action$,
+  state$,
+  { fetcher }
+) =>
+  action$.pipe(
+    ofType<AuthLoginSuccessAction>(AuthActions.LoginSuccess),
+    map(action => authCloseModal())
   );

@@ -13,6 +13,16 @@ export const auth: Reducer<AuthState, AuthAction> = (
         isAuthed: true,
         ...action.payload
       };
+    case AuthActions.LoginModalShow:
+      return {
+        ...state,
+        showModal: true
+      };
+    case AuthActions.LoginModalClose:
+      return {
+        ...state,
+        showModal: false
+      };
     case AuthActions.Logout:
       return new AuthState();
     default:

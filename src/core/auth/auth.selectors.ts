@@ -1,5 +1,5 @@
 import { createSelector } from "reselect";
-import { CoreState } from "..";
+import { CoreState } from "../core.models";
 
 export const selectAuth = (state: CoreState) => state.auth;
 export const selectCurrentAccountInfo = createSelector(
@@ -18,6 +18,12 @@ export const selectAuthStatus = createSelector(
   selectAuth,
   auth => auth.isAuthed
 );
+
+export const selectAuthModal = createSelector(
+  selectAuth,
+  auth => auth.showModal
+);
+
 export const selectAuthSet = createSelector(
   selectAuthStatus,
   selectCurrentAccount,
