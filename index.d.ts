@@ -73,6 +73,11 @@ declare namespace Cybex {
     dynamic_asset_data_id: string;
   }
 
+  export interface AccountBalance {
+    amount: number;
+    asset_id: string;
+  }
+
   export interface Account {
     id: string;
     membership_expiration_date: string;

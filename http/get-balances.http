@@ -1,0 +1,4 @@
+POST https://hongkong.cybex.io/rpc HTTP/1.1
+Content-Type: application/json
+
+{"method": "call", "params": [0, "get_named_account_balances", ["nulls-account", []]], "id": 1}

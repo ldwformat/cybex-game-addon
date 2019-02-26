@@ -13,6 +13,11 @@ export const auth: Reducer<AuthState, AuthAction> = (
         isAuthed: true,
         ...action.payload
       };
+    case AuthActions.UpdateBalanceSuccess:
+      return {
+        ...state,
+        balances: action.payload
+      };
     case AuthActions.LoginModalShow:
       return {
         ...state,

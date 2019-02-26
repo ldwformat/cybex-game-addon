@@ -11,7 +11,8 @@ import {
   AuthState,
   authLogin,
   authShowModal,
-  authCloseModal
+  authCloseModal,
+  authLogout
 } from "../core/auth";
 import { gatewayLoadGatewayInfo, gatewaySelectAsset } from "../core/gateway";
 
@@ -43,7 +44,8 @@ import { corePushNoti } from "../core/core.actions";
 
 type LoginPropsDispatch = {
   login: typeof authLogin;
-  alert: typeof corePushNoti,
+  logout: typeof authLogout;
+  alert: typeof corePushNoti;
   showModal: typeof authShowModal;
   closeModal: typeof authCloseModal;
   loadGatewayInfo: typeof gatewayLoadGatewayInfo;
@@ -66,7 +68,8 @@ const mapStateToProps: MapStateToPropsParam<
 
 const mapDispatch: MapDispatchToProps<LoginPropsDispatch, {}> = {
   login: authLogin,
-  alert: corePushNoti,  
+  logout: authLogout,
+  alert: corePushNoti,
   closeModal: authCloseModal,
   showModal: authShowModal,
   loadGatewayInfo: gatewayLoadGatewayInfo,
@@ -117,10 +120,23 @@ const LoginForm = reduxForm({
   const { handleSubmit, pristine, reset, submitting, invalid } = props;
   console.debug("Props: ", props);
   return (
-    <form onSubmit={e => {e.preventDefault(); (props as any).onSubmit()}}>
-      <DialogContent style={{ width: "80vw", padding: 0, margin: "10px 16px" }}>
+    <form
+      onSubmit={e => {
+        e.preventDefault();
+        (props as any).onSubmit();
+      }}
+    >
+      <DialogContent
+        style={{
+          width: "80%",
+          minWidth: "60vw",
+          padding: 0,
+          margin: "10px 16px"
+        }}
+      >
         <div style={{ marginBottom: "1em" }}>
           <Field
+            autoFocus
             style={{ width: "100%" }}
             name="accountName"
             component={renderTextField}
@@ -167,6 +183,7 @@ let LoginClass = withStyles(styles)(
         classes,
         auth,
         login,
+        logout,
         selectAsset,
         loadGatewayInfo,
         closeModal,
@@ -186,9 +203,9 @@ let LoginClass = withStyles(styles)(
               <CloseIcon />
             </IconButton>
           </div>
-          <LoginForm onSubmit={() => alert("SOME NOTI")} />
+          <LoginForm onSubmit={() => alert("SOME NOTI", {})} />
 
-          {/* <Button
+          <Button
             onClick={() =>
               login({
                 accountName: "create-test12",
@@ -198,13 +215,18 @@ let LoginClass = withStyles(styles)(
           >
             登录
           </Button>
+          <Button
+            onClick={logout}
+          >
+            登出
+          </Button>
           <button onClick={loadGatewayInfo}>刷新列表</button>
           <button onClick={selectAsset.bind(this, "JADE.ETH")}>
             读取JADE.ETH充值信息
           </button>
           <button onClick={selectAsset.bind(this, "JADE.BTC")}>
             读取JADE.BTC
-          </button> */}
+          </button>
         </Dialog>
       );
     }

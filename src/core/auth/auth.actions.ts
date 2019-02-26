@@ -1,5 +1,5 @@
 import { Action, ActionCreator } from "redux";
-import { IAuthParams, IAuthResult } from "./auth.models";
+import { IAuthParams, IAuthResult, BalanceObj } from "./auth.models";
 
 export enum AuthActions {
   LoginModalShow = "[Auth] LoginModalShow",
@@ -7,6 +7,8 @@ export enum AuthActions {
   Login = "[Auth] Login",
   LoginSuccess = "[Auth] Login Success",
   LoginFailed = "[Auth] Login Failed",
+  UpdateBalance = "[Auth] UpdateBalance",
+  UpdateBalanceSuccess = "[Auth] UpdateBalanceSuccess",
   Logout = "[Auth] Logout",
   Unauthed = "[Auth] Unauthed"
 }
@@ -38,6 +40,13 @@ export class AuthLogoutAction implements Action {
 export class AuthUnauthedAction implements Action {
   readonly type = AuthActions.Unauthed;
 }
+export class AuthUpdateBalanceAction implements Action {
+  readonly type = AuthActions.UpdateBalance;
+}
+export class AuthUpdateBalanceSuccessAction implements Action {
+  readonly type = AuthActions.UpdateBalanceSuccess;
+  constructor(public payload: BalanceObj) {}
+}
 
 export const authShowModal: ActionCreator<
   AuthLoginModalShowAction
@@ -65,12 +74,21 @@ export const authLogin: (param: IAuthParams) => AuthLoginAction = param => ({
 export const authUnauthed: () => AuthUnauthedAction = () => ({
   type: AuthActions.Unauthed
 });
+export const authUpdateBalance: () => AuthUpdateBalanceAction = () => ({
+  type: AuthActions.UpdateBalance
+});
 
 export const authLoginSuccess: (
   param: IAuthResult
 ) => AuthLoginSuccessAction = (param: IAuthResult) => ({
   type: AuthActions.LoginSuccess,
   payload: param
+});
+export const authUpdateBalanceSuccess: (
+  balanceObj: BalanceObj
+) => AuthUpdateBalanceSuccessAction = balanceObj => ({
+  type: AuthActions.UpdateBalanceSuccess,
+  payload: balanceObj
 });
 
 export type AuthAction =
@@ -80,4 +98,6 @@ export type AuthAction =
   | AuthLoginAction
   | AuthLoginFailedAction
   | AuthLoginSuccessAction
+  | AuthUpdateBalanceAction
+  | AuthUpdateBalanceSuccessAction
   | AuthUnauthedAction;

@@ -15,7 +15,15 @@ import {
   ReferFetcher,
   GatewayFetcher
 } from "../utils/fetcher";
-import { AuthState, auth, loginEpic, loginCloseEpic } from "./auth";
+import {
+  AuthState,
+  auth,
+  loginEpic,
+  loginCloseEpic,
+  loginFailedEpic,
+  updateBalanceEpic,
+  authUpdateBalanceEpic
+} from "./auth";
 import { MallState, mall, loadCountriesEpic, loadProvincesEpic } from "./mall";
 import {
   ReferState,
@@ -44,11 +52,14 @@ const loggerMiddleware = createLogger();
 const rootEpic = combineEpics(
   loginEpic,
   loginCloseEpic,
+  loginFailedEpic,
   loadCountriesEpic,
   loadProvincesEpic,
   loadReferInfoEpic,
   loadDepsoitInfoEpic,
   loadDpstAfterSelAssetEpic,
+  authUpdateBalanceEpic,
+  updateBalanceEpic,
   loadGatewayInfoEpic,
   addReferEpic,
   addReferAfterLoginEpic,

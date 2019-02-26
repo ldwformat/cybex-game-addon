@@ -16,7 +16,7 @@ export class ActionCoreRemoveNoti implements Action {
   constructor(public payload: string) {}
 }
 
-export const corePushNoti = (noti: string, options = {}) =>
+export const corePushNoti = (noti: string, options: OptionsObject = {}) =>
   ({
     type: CoreActions.PushNoti,
     payload: { ...new Noti(noti, options) }
