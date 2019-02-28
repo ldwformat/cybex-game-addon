@@ -58,7 +58,7 @@ const rootEpic = combineEpics(
   loadReferInfoEpic,
   loadDepsoitInfoEpic,
   loadDpstAfterSelAssetEpic,
-  authUpdateBalanceEpic,
+  // authUpdateBalanceEpic,
   updateBalanceEpic,
   loadGatewayInfoEpic,
   addReferEpic,
@@ -80,16 +80,17 @@ export const configureStore = (config: CybexAddonConfig) => async (
   let wsConnect = new WsConnection({ url: cybexWs });
   let notifier = new EventEmitter();
   await wsConnect.connect();
+  const toolset = {
+    fetcher: new ChainFetcher(cybexWs, cybexHttpServer),
+    mallFetcher: new MallFetcher(mallBackend),
+    gatewayFetcher: new GatewayFetcher(gateway),
+    backendFetcher: new BackendFetcher(backend),
+    referFetcher: new ReferFetcher(referBackend),
+    chainAssisant: new CybexAssistant(wsConnect),
+    notifier
+  };
   const epicMiddleware = createEpicMiddleware({
-    dependencies: {
-      fetcher: new ChainFetcher(cybexWs, cybexHttpServer),
-      mallFetcher: new MallFetcher(mallBackend),
-      gatewayFetcher: new GatewayFetcher(gateway),
-      backendFetcher: new BackendFetcher(backend),
-      referFetcher: new ReferFetcher(referBackend),
-      chainAssisant: new CybexAssistant(wsConnect),
-      notifier
-    }
+    dependencies: toolset
   });
 
   let store = createStore(
@@ -100,5 +101,5 @@ export const configureStore = (config: CybexAddonConfig) => async (
   );
 
   epicMiddleware.run(rootEpic);
-  return { store, notifier };
+  return { store, notifier, toolset };
 };

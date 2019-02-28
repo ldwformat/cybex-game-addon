@@ -10,6 +10,7 @@ export type BalanceObj = {
 
 export class AuthState {
   isAuthed = false;
+  isLogging = false;
   showModal = false;
   accountName: string | null = null;
   keyStore: null | KeyStore = null;

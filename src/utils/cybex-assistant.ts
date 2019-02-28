@@ -101,6 +101,7 @@ export class CybexAssistant {
     { from, to, asset, value, memo }: TransferParams,
     keyStore: KeyStore
   ) {
+    assert(keyStore, "No Login");
     let [fromAccount, toAccount] = await this.getAccounts(from, to).then(
       accounts => {
         assert(accounts.every(acc => !!acc));

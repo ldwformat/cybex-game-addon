@@ -3,7 +3,7 @@ import types from "src/cybex/serializer/src/types";
 
 export class GatewayState {
   info: CybexGateway.CoinInfo[] = [];
-  currentAsset: string | null = null;
+  currentAsset: string | undefined = undefined;
   depositInfoList: CybexGateway.GetDepositAddress[] = [];
 }
 

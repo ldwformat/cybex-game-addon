@@ -17,12 +17,25 @@ module.exports = {
       {
         test: /\.tsx?$/,
         loader: "awesome-typescript-loader"
+      },
+      {
+        test: /\.(png|jpg|gif)$/,
+        use: [
+          {
+            loader: "file-loader",
+            options: {
+              name: "[path][name].[ext]"
+            }
+          }
+        ]
       }
     ]
   },
   devServer: {
     contentBase: "./dist",
     compress: true,
+    disableHostCheck: true,
+    host: "0.0.0.0",
     port: 5560,
     hot: true
   },

@@ -7,9 +7,20 @@ export const auth: Reducer<AuthState, AuthAction> = (
   action
 ) => {
   switch (action.type) {
+    case AuthActions.Login:
+      return {
+        ...state,
+        isLogging: true
+      };
+    case AuthActions.LoginFailed:
+      return {
+        ...state,
+        isLogging: false
+      };
     case AuthActions.LoginSuccess:
       return {
         ...state,
+        isLogging: false,
         isAuthed: true,
         ...action.payload
       };

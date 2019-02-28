@@ -8,7 +8,16 @@ export const selectGateway: Selector<CoreState, GatewayState> = state =>
 
 export const selectGatewayCoinList = createSelector(
   selectGateway,
-  gateway => gateway.info.filter(info => !info.isDisabled)
+  gateway =>
+    gateway.info
+      .filter(info => !info.isDisabled)
+      .sort((prev, next) =>
+        prev.currency > next.currency
+          ? 1
+          : prev.currency < next.currency
+          ? -1
+          : 0
+      )
 );
 export const selectGatewayCurrentAsset = createSelector(
   selectGateway,

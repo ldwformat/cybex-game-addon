@@ -6,7 +6,8 @@ import {
   catchError,
   takeUntil,
   take,
-  filter
+  filter,
+  debounceTime
 } from "rxjs/operators";
 import {
   AuthActions,
@@ -41,6 +42,7 @@ export const loginEpic: Epic<
 > = (action$, state$, { fetcher }) =>
   action$.pipe(
     ofType<AuthLoginAction>(AuthActions.Login),
+    debounceTime(500),
     switchMap(action => {
       return from(fetcher.fetchAccount(action.payload.accountName)).pipe(
         map(account => {
@@ -144,7 +146,7 @@ export const loginFailedEpic: Epic<
 > = (action$, state$, { fetcher }) =>
   action$.pipe(
     ofType<AuthLoginFailedAction>(AuthActions.LoginFailed),
-    map(_ => corePushNoti("请检查用户名密码是否正确"))
+    map(_ => corePushNoti("请检查用户名密码是否正确", { variant: "error" }))
   );
 
 export const loginCloseEpic: Epic<any, any, any, IEffectDeps> = (

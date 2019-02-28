@@ -5,7 +5,11 @@ import {
   MapStateToProps,
   MapDispatchToProps
 } from "react-redux";
-import { selectAuth, selectAuthModal } from "../core/auth/auth.selectors";
+import {
+  selectAuth,
+  selectAuthModal,
+  selectAuthIsLogging
+} from "../core/auth/auth.selectors";
 import { CoreState } from "../core/core.models";
 import {
   AuthState,
@@ -21,26 +25,20 @@ import {
   Dialog,
   withStyles,
   StyledComponentProps,
-  TextField,
-  Radio,
   DialogContent,
   DialogActions,
-  DialogTitle,
   IconButton
 } from "@material-ui/core";
 import { Close as CloseIcon } from "@material-ui/icons";
-import { PositionProperty } from "csstype";
-import { ValidateCallback, Field, reduxForm } from "redux-form";
+import { Field, reduxForm } from "redux-form";
 import { delay } from "../utils";
 import {
   renderTextField,
-  renderCheckbox,
-  renderSelectField,
-  radioButton,
   PrimaryButton
 } from "../components/form-utils";
-import { Colors } from "../components/colors";
 import { corePushNoti } from "../core/core.actions";
+import { Subject } from "rxjs";
+import { take } from "rxjs/operators";
 
 type LoginPropsDispatch = {
   login: typeof authLogin;
@@ -54,6 +52,7 @@ type LoginPropsDispatch = {
 
 type LoginPropsState = {
   auth: AuthState;
+  isLogging: boolean;
   isModalShowing: boolean;
 };
 
@@ -63,6 +62,7 @@ const mapStateToProps: MapStateToPropsParam<
   CoreState
 > = state => ({
   auth: selectAuth(state),
+  isLogging: selectAuthIsLogging(state),
   isModalShowing: selectAuthModal(state)
 });
 
@@ -120,12 +120,7 @@ const LoginForm = reduxForm({
   const { handleSubmit, pristine, reset, submitting, invalid } = props;
   console.debug("Props: ", props);
   return (
-    <form
-      onSubmit={e => {
-        e.preventDefault();
-        (props as any).onSubmit();
-      }}
-    >
+    <form onSubmit={handleSubmit}>
       <DialogContent
         style={{
           width: "80%",
@@ -173,10 +168,26 @@ let LoginClass = withStyles(styles)(
   class extends React.Component<
     StyledComponentProps<"paper"> & LoginPropsDispatch & LoginPropsState
   > {
+    logging$ = new Subject();
+    componentDidUpdate = (prevProps, prevState) => {
+      if (prevProps.isLogging && !this.props.isLogging) {
+        this.logging$.next(false);
+      }
+    };
+
     constructor(props) {
       super(props);
       console.debug("New Login: ", props);
     }
+
+    onSubmit = data => {
+      return new Promise((resolve, reject) => {
+        this.props.login(data);
+        this.logging$
+          .pipe(take(1))
+          .subscribe(() => setTimeout(resolve, 2000), reject);
+      });
+    };
 
     render() {
       let {
@@ -203,23 +214,10 @@ let LoginClass = withStyles(styles)(
               <CloseIcon />
             </IconButton>
           </div>
-          <LoginForm onSubmit={() => alert("SOME NOTI", {})} />
+          <LoginForm onSubmit={this.onSubmit} />
 
-          <Button
-            onClick={() =>
-              login({
-                accountName: "create-test12",
-                password: "qwer1234qwer1234"
-              })
-            }
-          >
-            登录
-          </Button>
-          <Button
-            onClick={logout}
-          >
-            登出
-          </Button>
+          <Button onClick={this.onSubmit}>登录</Button>
+          <Button onClick={logout}>登出</Button>
           <button onClick={loadGatewayInfo}>刷新列表</button>
           <button onClick={selectAsset.bind(this, "JADE.ETH")}>
             读取JADE.ETH充值信息

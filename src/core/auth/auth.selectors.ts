@@ -18,6 +18,10 @@ export const selectAuthStatus = createSelector(
   selectAuth,
   auth => auth.isAuthed
 );
+export const selectAuthIsLogging = createSelector(
+  selectAuth,
+  auth => auth.isLogging
+);
 
 export const selectAuthModal = createSelector(
   selectAuth,
