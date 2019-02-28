@@ -58,7 +58,7 @@ const rootEpic = combineEpics(
   loadReferInfoEpic,
   loadDepsoitInfoEpic,
   loadDpstAfterSelAssetEpic,
-  // authUpdateBalanceEpic,
+  authUpdateBalanceEpic,
   updateBalanceEpic,
   loadGatewayInfoEpic,
   addReferEpic,
