@@ -13,3 +13,4 @@ export declare const selectAuthSet: import("reselect").OutputSelector<CoreState,
     account: string;
     key: import("../../cybex/ecc/src/PrivateKey").default;
 }>;
+export declare const selectBalances: import("reselect").OutputSelector<CoreState, import("./auth.models").BalanceObj, (res: import("./auth.models").AuthState) => import("./auth.models").BalanceObj>;
