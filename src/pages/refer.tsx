@@ -85,18 +85,58 @@ const referCodeStyle: StyleRulesCallback = theme => ({
 });
 
 export const ReferCode = withStyles(referCodeStyle)(
-  ({ code, classes }: { code?: string } & StyledComponentProps<"root">) => (
-    <>
-      <svg style={{ position: "fixed", zIndex: -1 }}>
-        <defs>
-          <clipPath id="mask" viewBox="0 0 279 160">
-            <path d={`M 0 0 V 70 A 10 10 0 1 1 0 90 V 160 H 279 V 90 a 10 10 0 0 1 0 -20 V 0 z`} />
-          </clipPath>
-        </defs>
-      </svg>
-      <div className={classes && (classes.root as string)}>{code && code}</div>
-    </>
-  )
+  class extends React.Component<
+    { code?: string } & StyledComponentProps<"root">
+  > {
+    wrapper: HTMLDivElement | null = null;
+    state = {
+      width: 279
+    };
+
+    componentDidMount() {
+      this.fixWidth();
+    }
+
+    componentDidCatch() {
+      this.fixWidth();
+    }
+
+    fixWidth = () => {
+      if (
+        this.wrapper &&
+        this.wrapper.getBoundingClientRect().width !== this.state.width
+      ) {
+        this.setState({
+          width: this.wrapper.getBoundingClientRect().width
+        });
+      }
+    };
+
+    render() {
+      let { classes, code } = this.props;
+      return (
+        <>
+          <svg style={{ position: "fixed", zIndex: -1 }}>
+            <defs>
+              <clipPath id="mask" viewBox="0 0 279 160">
+                <path
+                  d={`M 0 0 V 70 A 10 10 0 1 1 0 90 V 160 H ${
+                    this.state.width
+                  } V 90 a 10 10 0 0 1 0 -20 V 0 z`}
+                />
+              </clipPath>
+            </defs>
+          </svg>
+          <div
+            ref={wrapper => (this.wrapper = wrapper)}
+            className={classes && (classes.root as string)}
+          >
+            {code && code}
+          </div>
+        </>
+      );
+    }
+  }
 );
 
 export const Refer = connect(mapStateToProps)(

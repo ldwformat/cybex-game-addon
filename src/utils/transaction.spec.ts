@@ -1,6 +1,5 @@
 import { WsConnection } from "./connect";
 import { PrivateKey } from "../cybex/ecc";
-import { transaction } from "src/cybex/serializer/src/operations";
 import Transaction from "./transaction";
 
 const NORMAL_TIMEOUT = 30 * 1000;

@@ -5,7 +5,7 @@ import {
   GatewayFetcher,
   ReferFetcher
 } from "../utils/fetcher";
-import { CybexAssistant } from "src/utils/cybex-assistant";
+import { CybexAssistant } from "../utils/cybex-assistant";
 import { EventEmitter } from "events";
 
 export interface IEffectDeps {
