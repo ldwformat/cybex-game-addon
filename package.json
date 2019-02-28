@@ -7,7 +7,8 @@
   "license": "MIT",
   "scripts": {
     "dev": "webpack-dev-server --disable-host-check",
-    "build": "webpack",
+    "clean": "rm -rf lib dist",
+    "build": "npm run clean && tsc && webpack",
     "test": "jest --verbose",
     "test:watch": "jest --watch --verbose",
     "lint": "tslint --project tsconfig.json --config tslint.json && prettier {src,e2e,cypress}/**/**/**/**/**/**/*.{ts,json,md,scss} --check",
@@ -79,7 +80,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged && npm run lint",
+      "pre-commit": "npm run build && lint-staged && npm run lint",
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
   },

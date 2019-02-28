@@ -10,8 +10,6 @@ if (typeof window !== undefined) {
   window["process"] = process;
   window["Buffer"] = Buffer;
 }
-// export * from "./core/index";
-// export * from "./pages/index";
 
 import * as Utils from "./utils";
 
@@ -20,7 +18,14 @@ import {
   authLoginSuccess,
   authLoginFailed,
   authLogout,
-  authUnauthed
+  authUnauthed,
+  selectAuth,
+  selectAuthSet,
+  selectCurrentAccount,
+  selectCurrentKeystore,
+  selectAuthStatus,
+  selectCurrentAccountInfo,
+  selectBalances
 } from "./core/auth";
 
 import {
@@ -51,5 +56,14 @@ export const Actions = {
   referAdd
 };
 
+export const Selectors = {
+  selectAuth,
+  selectAuthSet,
+  selectCurrentAccount,
+  selectCurrentKeystore,
+  selectAuthStatus,
+  selectCurrentAccountInfo,
+  selectBalances
+};
 export { CybexAddon, Utils };
 export default CybexAddon;

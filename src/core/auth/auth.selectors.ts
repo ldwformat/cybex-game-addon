@@ -42,3 +42,8 @@ export const selectAuthSet = createSelector(
       key: keyStore.activeKey.privKey
     }
 );
+
+export const selectBalances = createSelector(
+  selectAuth,
+  auth => auth.balances
+);
