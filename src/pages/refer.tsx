@@ -74,21 +74,23 @@ const styles: StyleRulesCallback = theme => ({
 const referCodeStyle: StyleRulesCallback = theme => ({
   root: {
     margin: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 5}px`,
+    height: 160,
     borderRadius: `${theme.spacing.unit}px`,
     boxShadow: `0 ${(theme.spacing.unit * 3) / 4}px ${(theme.spacing.unit * 3) /
       4}px rgba(0,0,0,0.15)`,
     backgroundImage: `url(${ReferBg})`,
-    backgroundSize: "cover"
+    backgroundSize: "cover",
+    clipPath: "url(#mask)"
   }
 });
 
 export const ReferCode = withStyles(referCodeStyle)(
   ({ code, classes }: { code?: string } & StyledComponentProps<"root">) => (
     <>
-      <svg>
+      <svg style={{ position: "fixed", zIndex: -1 }}>
         <defs>
-          <clipPath id="mask">
-            <path d="M 0 0 L 0 66.1416025 A 9.448819 9.448819 0 0 0.25 9.4487305 75.5903325 A 9.448819 9.448819 0 0 0.25 0 85.03955 L 0 151.1811525 L 283.46435 151.1811525 L 283.46435 85.03955 A 9.448819 9.448819 0 0 0.25 274.015625 75.5903325 A 9.448819 9.448819 0 0 0.25 283.46435 66.1416025 L 283.46435 0 L 0 0 z " />
+          <clipPath id="mask" viewBox="0 0 279 160">
+            <path d={`M 0 0 V 70 A 10 10 0 1 1 0 90 V 160 H 279 V 90 a 10 10 0 0 1 0 -20 V 0 z`} />
           </clipPath>
         </defs>
       </svg>
