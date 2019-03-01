@@ -13,6 +13,7 @@ import {
   withStyles
 } from "@material-ui/core";
 import { Colors } from "./colors";
+import { ButtonProps } from "@material-ui/core/Button";
 export const renderTextField = ({
   label,
   input,
@@ -109,7 +110,7 @@ const ButtonStyles = theme => ({
 });
 
 export const PrimaryButton = withStyles(ButtonStyles)(
-  class extends React.Component<any> {
+  class extends React.Component<ButtonProps> {
     render() {
       return <Button classes={this.props.classes} {...this.props} />;
     }

@@ -15,6 +15,7 @@ import { SnackbarProvider } from "notistack";
 import { Deposit } from "./pages/deposit";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core";
 import { Refer } from "./pages/refer";
+import { ReferRule } from "./pages/refer-rule";
 
 export class CybexAddon {
   static EVENT_ACTION = EVENT_ACTION;
@@ -29,7 +30,7 @@ export class CybexAddon {
         main: "rgb(255,98,165)",
       },
       secondary: {
-        main: "rgb(255,137,96)"
+        main: "rgb(255,155,85)"
       }
     }
   });
@@ -40,7 +41,8 @@ export class CybexAddon {
 
   async init() {
     let { store, notifier, toolset } = await configureStore(this.config)({
-      game: this.config.game
+      game: this.config.game,
+      referUrl: this.config.referUrl
     });
     this.toolset = toolset;
     this.notifier = notifier;
@@ -96,5 +98,8 @@ export class CybexAddon {
   }
   async referPage(root: HTMLElement) {
     return new Promise(resolve => this.bootstrap(Refer)(root, resolve));
+  }
+  async referRulePage(root: HTMLElement) {
+    return new Promise(resolve => this.bootstrap(ReferRule)(root, resolve));
   }
 }

@@ -8,3 +8,5 @@ export const selectNoties = createSelector(
   app => app.noties
 );
 export const selectGame: Selector<CoreState, string> = state => state.game;
+export const selectReferUrl: Selector<CoreState, string> = state =>
+  state.referUrl;

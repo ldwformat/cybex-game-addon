@@ -32,10 +32,7 @@ import {
 import { Close as CloseIcon } from "@material-ui/icons";
 import { Field, reduxForm } from "redux-form";
 import { delay } from "../utils";
-import {
-  renderTextField,
-  PrimaryButton
-} from "../components/form-utils";
+import { renderTextField, PrimaryButton } from "../components/form-utils";
 import { corePushNoti } from "../core/core.actions";
 import { Subject } from "rxjs";
 import { take } from "rxjs/operators";
@@ -215,16 +212,7 @@ let LoginClass = withStyles(styles)(
             </IconButton>
           </div>
           <LoginForm onSubmit={this.onSubmit} />
-
-          <Button onClick={this.onSubmit}>登录</Button>
           <Button onClick={logout}>登出</Button>
-          <button onClick={loadGatewayInfo}>刷新列表</button>
-          <button onClick={selectAsset.bind(this, "JADE.ETH")}>
-            读取JADE.ETH充值信息
-          </button>
-          <button onClick={selectAsset.bind(this, "JADE.BTC")}>
-            读取JADE.BTC
-          </button>
         </Dialog>
       );
     }

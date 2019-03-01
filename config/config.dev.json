@@ -7,5 +7,6 @@
     "cybexWs": "wss://hongkong.cybex.io",
     "cybexHttpServer": "https://cybexluck.io"
   },
-  "game": "cybexbet"
+  "game": "cybexbet",
+  "referUrl": "http://localhost:5560"
 }

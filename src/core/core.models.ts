@@ -16,7 +16,7 @@ export class AppState {
 }
 // RootState
 export class CoreState {
-  constructor(public game: string) {}
+  constructor(public game: string, public referUrl: string) {}
   public auth = new AuthState();
   public mall = new MallState();
   public refer = new ReferState();

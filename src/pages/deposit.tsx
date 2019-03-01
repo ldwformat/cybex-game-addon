@@ -130,7 +130,7 @@ export const Deposit = connect(
                   alignItems="center"
                 >
                   <QRCodeDisplay
-                    text={currentDeposit.address}
+                    text={currentDeposit.address.trim()}
                     filename={`${currentDeposit &&
                       [
                         currentDeposit.accountName,

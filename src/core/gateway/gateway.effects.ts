@@ -85,6 +85,10 @@ export const loadDpstAfterSelAssetEpic: Epic<
             return NEVER;
           }
           return of(gatewayLoadDepositInfo(coinInfo.asset));
+        }),
+        catchError(err => {
+          console.error(err);
+          return of(gatewayLoadGatewayInfoFailed());
         })
       )
     ),

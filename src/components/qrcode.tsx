@@ -1,6 +1,6 @@
 import * as React from "react";
 import QRCode from "qrcode.react";
-import { Button } from "@material-ui/core";
+import { Button, Grid } from "@material-ui/core";
 import { CloudDownload } from "@material-ui/icons";
 
 export class QRCodeDisplay extends React.Component<{
@@ -32,12 +32,11 @@ export class QRCodeDisplay extends React.Component<{
       a.dispatchEvent(new MouseEvent("click"));
     });
   };
-  
+
   render() {
     let { text, filename } = this.props;
     return (
-      <>
-        {" "}
+      <Grid container direction="column" alignContent="center">
         <div ref={qrcode => (this.qrcode = qrcode)}>
           <QRCode value={text} />
         </div>
@@ -45,7 +44,7 @@ export class QRCodeDisplay extends React.Component<{
           保存二维码
           <CloudDownload style={{ marginLeft: "4px" }} fontSize="small" />
         </Button>
-      </>
+      </Grid>
     );
   }
 }

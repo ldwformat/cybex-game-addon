@@ -34,5 +34,6 @@ export const rootReducer: Reducer<CoreState> = combineReducers({
   gateway,
   form: formReducer,
   app,
-  game: (state = "", action) => state
+  game: (state = "", action) => state,
+  referUrl: (state = "", action) => state
 });
