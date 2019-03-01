@@ -1,4 +1,3 @@
-/// <reference types="react" />
 /// <reference types="node" />
 import { EventEmitter } from "events";
 import ReconnectingWebSocket, { Options as RsOptions } from "reconnecting-websocket";
@@ -15,8 +14,8 @@ export declare class WsConnection extends EventEmitter {
     apiIds: {
         [ApiType: string]: any;
     };
-    static getEventNameById: (id: import("react").ReactText) => string;
-    static getRejectEventNameById: (id: import("react").ReactText) => string;
+    static getEventNameById: (id: string | number) => string;
+    static getRejectEventNameById: (id: string | number) => string;
     connect(): Promise<void>;
     msgHandler: (e: {
         data: string;

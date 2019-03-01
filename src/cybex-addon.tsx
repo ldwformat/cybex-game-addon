@@ -21,6 +21,9 @@ export class CybexAddon {
   static OVERLAY_CONTAINER_ID = "$OVERLAY_CONTAINER_ID";
 
   theme = createMuiTheme({
+    typography: {
+      useNextVariants: true,
+    },
     palette: {
       primary: {
         main: "rgb(255,98,165)",

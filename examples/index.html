@@ -23,16 +23,6 @@
     <button id="loginPage0" data-ref="root0">登录页</button>
     <button id="deposit" data-ref="root1">充值页</button>
     <button id="refer" data-ref="root2">邀请页</button>
-    <svg xmlns="http://www.w3.org/2000/svg">
-      <path
-        style="fill: blue"
-        fill-rule="evenodd"
-        d="M 0 0 L 0 66.1416025 A 9.448819 9.448819 0 0 0.25 9.4487305 75.5903325 A 9.448819 9.448819 0 0 0.25 0 85.03955 L 0 151.1811525 L 283.46435 151.1811525 L 283.46435 85.03955 A 9.448819 9.448819 0 0 0.25 274.015625 75.5903325 A 9.448819 9.448819 0 0 0.25 283.46435 66.1416025 L 283.46435 0 L 0 0 z "
-      />
-    </svg>
-    <svg viewBox="0 0 279 160">
-        <path style="fill: red" d="M 0 0 V 70 A 10 10 0 1 1 0 90 V 160 H 279 V 90 a 10 10 0 0 1 0 -20 V 0 z" />
-    </svg>
     <script>
       {
         let count = 0;
@@ -41,8 +31,8 @@
           window.addon = addon = await new CybexAddon.CybexAddon().init();
           addon.store.dispatch(
             CybexAddon.Actions.authLogin({
-              accountName: "create-test12",
-              password: "qwer1234qwer1234"
+              accountName: "ldw-format",
+              password: "ldwformat991844"
             })
           );
           console.info("Load Done");

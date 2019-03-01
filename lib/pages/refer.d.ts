@@ -13,8 +13,5 @@ declare type DepositDispatchProps = {
     selectAsset: typeof gatewaySelectAsset;
     pushNoti: typeof corePushNoti;
 };
-export declare const ReferCode: React.ComponentType<Pick<{
-    code?: string | undefined;
-} & StyledComponentProps<"root">, "innerRef" | "code"> & StyledComponentProps<string>>;
-export declare const Refer: import("react-redux").ConnectedComponentClass<React.ComponentType<Pick<StyledComponentProps<"root" | "copyCard" | "innerWrapper"> & DepositStateProps & DepositDispatchProps, "innerRef" | "selectAsset" | "pushNoti" | "accountName" | "myRegisterReferrer" | "myRegisterReferral" | "myGameReferrer" | "myGameReferral"> & StyledComponentProps<string>>, Pick<Pick<StyledComponentProps<"root" | "copyCard" | "innerWrapper"> & DepositStateProps & DepositDispatchProps, "innerRef" | "selectAsset" | "pushNoti" | "accountName" | "myRegisterReferrer" | "myRegisterReferral" | "myGameReferrer" | "myGameReferral"> & StyledComponentProps<string>, "classes" | "innerRef" | "selectAsset" | "pushNoti">>;
+export declare const Refer: import("react-redux").ConnectedComponentClass<React.ComponentType<Pick<StyledComponentProps<"root" | "copyCard" | "innerWrapper" | "textRight"> & DepositStateProps & DepositDispatchProps, "innerRef" | "selectAsset" | "pushNoti" | "accountName" | "myRegisterReferrer" | "myRegisterReferral" | "myGameReferrer" | "myGameReferral"> & StyledComponentProps<string>>, Pick<Pick<StyledComponentProps<"root" | "copyCard" | "innerWrapper" | "textRight"> & DepositStateProps & DepositDispatchProps, "innerRef" | "selectAsset" | "pushNoti" | "accountName" | "myRegisterReferrer" | "myRegisterReferral" | "myGameReferrer" | "myGameReferral"> & StyledComponentProps<string>, "classes" | "innerRef" | "selectAsset" | "pushNoti">>;
 export {};

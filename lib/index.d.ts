@@ -13,7 +13,7 @@ export declare const Actions: {
     referLoadReferInfo: () => import("./core/refer").ReferLoadReferInfoAction;
     referAdd: (form: Backend.SetReferForm) => import("./core/refer").ReferAddAction;
 };
-export declare const Selectors: {
+declare const Selectors: {
     selectAuth: (state: import("./core").CoreState) => import("./core/auth").AuthState;
     selectAuthSet: import("reselect").OutputSelector<import("./core").CoreState, false | {
         account: string;
@@ -28,5 +28,5 @@ export declare const Selectors: {
     selectCurrentAccountInfo: import("reselect").OutputSelector<import("./core").CoreState, Cybex.Account | null, (res: import("./core/auth").AuthState) => Cybex.Account | null>;
     selectBalances: import("reselect").OutputSelector<import("./core").CoreState, import("./core/auth").BalanceObj, (res: import("./core/auth").AuthState) => import("./core/auth").BalanceObj>;
 };
-export { CybexAddon, Utils };
+export { CybexAddon, Utils, Selectors };
 export default CybexAddon;

@@ -1,7 +1,7 @@
 import * as React from "react";
 import { MapStateToProps, connect, MapDispatchToProps } from "react-redux";
 import { CoreState } from "../core";
-import { gateway, GatewayState, gatewaySelectAsset } from "../core/gateway";
+import { gatewaySelectAsset } from "../core/gateway";
 import {
   selectMyRegisterReferrer,
   selectMyGameReferral,
@@ -13,22 +13,24 @@ import {
   StyledComponentProps,
   StyleRulesCallback,
   Paper,
-  Select,
-  MenuItem,
-  FormControl,
-  Grid,
-  Card,
-  Button,
-  Typography,
+  List,
+  ListItem,
+  ListItemText,
+  Collapse,
   Divider
 } from "@material-ui/core";
 import CopyToClipboard from "react-copy-to-clipboard";
 import { corePushNoti } from "../core/core.actions";
-import { FileCopy, CloudDownload } from "@material-ui/icons";
+import {
+  FileCopy,
+  CloudDownload,
+  ExpandLess,
+  ExpandMore
+} from "@material-ui/icons";
 import { QRCodeDisplay } from "../components/qrcode";
 import { selectCurrentAccount } from "../core/auth/auth.selectors";
-
-const ReferBg = require("../assets/images/refer-bg.jpg");
+import { ReferCode } from "../components/refer-code";
+import { formatTime } from "../utils/datetime";
 
 type DepositStateProps = {
   accountName: string | null;
@@ -69,90 +71,124 @@ const styles: StyleRulesCallback = theme => ({
   copyCard: {
     background: "rgb(243,243,243)",
     width: "100%"
+  },
+  textRight: {
+    textAlign: "right"
   }
 });
-const referCodeStyle: StyleRulesCallback = theme => ({
-  root: {
-    margin: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 5}px`,
-    height: 160,
-    borderRadius: `${theme.spacing.unit}px`,
-    boxShadow: `0 ${(theme.spacing.unit * 3) / 4}px ${(theme.spacing.unit * 3) /
-      4}px rgba(0,0,0,0.15)`,
-    backgroundImage: `url(${ReferBg})`,
-    backgroundSize: "cover",
-    clipPath: "url(#mask)"
-  }
-});
-
-export const ReferCode = withStyles(referCodeStyle)(
-  class extends React.Component<
-    { code?: string } & StyledComponentProps<"root">
-  > {
-    wrapper: HTMLDivElement | null = null;
-    state = {
-      width: 279
-    };
-
-    componentDidMount() {
-      this.fixWidth();
-    }
-
-    componentDidCatch() {
-      this.fixWidth();
-    }
-
-    fixWidth = () => {
-      if (
-        this.wrapper &&
-        this.wrapper.getBoundingClientRect().width !== this.state.width
-      ) {
-        this.setState({
-          width: this.wrapper.getBoundingClientRect().width
-        });
-      }
-    };
-
-    render() {
-      let { classes, code } = this.props;
-      return (
-        <>
-          <svg style={{ position: "fixed", zIndex: -1 }}>
-            <defs>
-              <clipPath id="mask" viewBox="0 0 279 160">
-                <path
-                  d={`M 0 0 V 70 A 10 10 0 1 1 0 90 V 160 H ${
-                    this.state.width
-                  } V 90 a 10 10 0 0 1 0 -20 V 0 z`}
-                />
-              </clipPath>
-            </defs>
-          </svg>
-          <div
-            ref={wrapper => (this.wrapper = wrapper)}
-            className={classes && (classes.root as string)}
-          >
-            {code && code}
-          </div>
-        </>
-      );
-    }
-  }
-);
 
 export const Refer = connect(mapStateToProps)(
   withStyles(styles)(
-    class extends React.Component<
-      StyledComponentProps<"root" | "copyCard" | "innerWrapper"> &
+    class Refer extends React.Component<
+      StyledComponentProps<"root" | "copyCard" | "innerWrapper" | "textRight"> &
         DepositStateProps &
         DepositDispatchProps
     > {
+      static Panels = {
+        RegisterRef: "RegisterRef",
+        GameRegisterRef: "GameRegisterRef"
+      };
+
+      state = {
+        [Refer.Panels.RegisterRef]: false,
+        [Refer.Panels.GameRegisterRef]: false
+      };
+
+      handleExpand = (panel: string) => {
+        this.setState(prev => ({
+          [panel]: !prev[panel]
+        }));
+      };
+
       render() {
-        let { accountName } = this.props;
+        let {
+          accountName,
+          myGameReferrer,
+          myGameReferral,
+          myRegisterReferrer,
+          myRegisterReferral
+        } = this.props;
         let classes = this.props.classes || {};
 
         return (
           <Paper classes={{ root: classes.root }} square elevation={0}>
             <ReferCode code={accountName as string} />
+            <List>
+              <ListItem divider>
+                <ListItemText primary="我的注册推荐人" />
+                {(myRegisterReferrer && myRegisterReferrer.referrer) || "-"}
+              </ListItem>
+              <ListItem divider>
+                <ListItemText primary="我的游戏推荐人" />
+                {(myGameReferrer && myGameReferrer.referrer) || "-"}
+              </ListItem>
+              <Divider />
+              <ListItem
+                button
+                onClick={this.handleExpand.bind(this, Refer.Panels.RegisterRef)}
+              >
+                <ListItemText primary="我的注册推荐" />
+                {(myRegisterReferral &&
+                  myRegisterReferral.referrals.length.toString()) ||
+                  0}
+                人{" "}
+                {this.state[Refer.Panels.RegisterRef] ? (
+                  <ExpandLess />
+                ) : (
+                  <ExpandMore />
+                )}
+              </ListItem>
+              <Collapse
+                in={this.state[Refer.Panels.RegisterRef]}
+                timeout="auto"
+                unmountOnExit
+              >
+                <List style={{ opacity: 0.5 }} disablePadding>
+                  {myRegisterReferral &&
+                    myRegisterReferral.referrals.map(refer => (
+                      <ListItem key={refer.referral} divider>
+                        <ListItemText primary={refer.referral} />
+                        {formatTime(refer.ts)}
+                      </ListItem>
+                    ))}
+                </List>
+              </Collapse>
+              <Divider />
+              <ListItem
+                button
+                divider
+                onClick={this.handleExpand.bind(
+                  this,
+                  Refer.Panels.GameRegisterRef
+                )}
+              >
+                <ListItemText primary="我的游戏推荐" />
+                {(myGameReferral &&
+                  myGameReferral.referrals.length.toString()) ||
+                  0}
+                人{" "}
+                {this.state[Refer.Panels.GameRegisterRef] ? (
+                  <ExpandLess />
+                ) : (
+                  <ExpandMore />
+                )}
+              </ListItem>
+              <Collapse
+                in={this.state[Refer.Panels.GameRegisterRef]}
+                timeout="auto"
+                unmountOnExit
+              >
+                <List style={{ opacity: 0.5 }} disablePadding>
+                  {myGameReferral &&
+                    myGameReferral.referrals.map(refer => (
+                      <ListItem divider key={refer.referral}>
+                        <ListItemText primary={refer.referral} />
+                        {formatTime(refer.ts)}
+                      </ListItem>
+                    ))}
+                </List>
+              </Collapse>
+            </List>
           </Paper>
         );
       }

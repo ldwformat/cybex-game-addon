@@ -56,7 +56,7 @@ export const Actions = {
   referAdd
 };
 
-export const Selectors = {
+const Selectors = {
   selectAuth,
   selectAuthSet,
   selectCurrentAccount,
@@ -65,5 +65,5 @@ export const Selectors = {
   selectCurrentAccountInfo,
   selectBalances
 };
-export { CybexAddon, Utils };
+export { CybexAddon, Utils, Selectors };
 export default CybexAddon;

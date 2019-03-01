@@ -217,7 +217,7 @@ declare namespace Backend {
 
   export interface TypesReferral {
     action: string;
-    referral: ReferralReferral[];
+    referrals: Referral[];
   }
 
   export type SetReferForm = {
@@ -227,7 +227,7 @@ declare namespace Backend {
     isRegister?: boolean; // 是否为注册引荐人
   };
 
-  export interface ReferralReferral {
+  export interface Referral {
     ts: string;
     referral: string;
   }

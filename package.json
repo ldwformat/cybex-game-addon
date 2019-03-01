@@ -61,6 +61,7 @@
     "ecurve": "^1.0.6",
     "events": "^3.0.0",
     "isomorphic-fetch": "^2.2.1",
+    "lodash": "^4.17.11",
     "moment": "^2.24.0",
     "notistack": "^0.4.3",
     "process": "^0.11.10",
