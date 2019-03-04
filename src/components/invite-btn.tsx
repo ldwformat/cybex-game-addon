@@ -81,8 +81,11 @@ export class InviteBtn extends React.Component<any> {
               left,
               right
             } = this.overlay.getBoundingClientRect();
-            this.wrapper.style.left = x - deltaX + "px";
-            console.debug("POS: ", x, y);
+            let { height, width } = this.wrapper.getBoundingClientRect();
+            this.wrapper.style.left =
+              Math.min(Math.max(left, x - deltaX), right - width) + "px";
+            this.wrapper.style.top =
+              Math.min(Math.max(top, y - deltaY), bottom - height) + "px";
           }
         });
     }

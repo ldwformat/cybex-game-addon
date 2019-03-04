@@ -6,6 +6,10 @@ export declare type BalanceObj = {
         value: number;
     };
 };
+export declare enum LoginPanel {
+    Login = 0,
+    Register = 1
+}
 export declare class AuthState {
     isAuthed: boolean;
     isLogging: boolean;
@@ -38,10 +42,6 @@ export declare type FaucetCaptcha = {
     data: string;
     id: string;
 };
-export declare enum LoginPanel {
-    Login = 0,
-    Register = 1
-}
 export interface IRegistInfo {
     cap: ICap;
     account: IRegAccount;
