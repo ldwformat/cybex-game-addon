@@ -72,8 +72,8 @@
             );
           });
         document.getElementById("invite").addEventListener("click", async e => {
-          let referPage = await addon.showInviteBtn(
-            document.getElementById(`root4`)
+          let referPage = await addon.showInviteBtn(e =>
+            console.debug("E: ", e)
           );
         });
       }

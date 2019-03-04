@@ -48,7 +48,6 @@ function getObservables(domItem) {
 }
 
 export class InviteBtn extends React.Component<any> {
-  overlay: HTMLDivElement | null = null;
   wrapper: HTMLDivElement | null = null;
   subscription: Subscription | null = null;
   componentDidMount() {
@@ -74,18 +73,14 @@ export class InviteBtn extends React.Component<any> {
           })
         )
         .subscribe(({ x, y, deltaX, deltaY }) => {
-          if (this.wrapper && this.overlay) {
-            let {
-              top,
-              bottom,
-              left,
-              right
-            } = this.overlay.getBoundingClientRect();
+          if (this.wrapper) {
             let { height, width } = this.wrapper.getBoundingClientRect();
             this.wrapper.style.left =
-              Math.min(Math.max(left, x - deltaX), right - width) + "px";
+              Math.min(Math.max(0, x - deltaX), window.innerWidth - width) +
+              "px";
             this.wrapper.style.top =
-              Math.min(Math.max(top, y - deltaY), bottom - height) + "px";
+              Math.min(Math.max(0, y - deltaY), window.innerHeight - height) +
+              "px";
           }
         });
     }
@@ -100,26 +95,17 @@ export class InviteBtn extends React.Component<any> {
   render() {
     return (
       <div
-        ref={overlay => (this.overlay = overlay)}
+        ref={wrapper => (this.wrapper = wrapper)}
+        onClick={this.props.onClick}
         style={{
-          position: "fixed",
-          zIndex: -1,
-          left: 0,
-          top: 0,
-          width: "100vw",
-          height: "100vh"
+          width: 46,
+          height: 46,
+          borderRadius: "46px",
+          opacity: 0.8,
+          background: "lightsteelblue",
+          position: "fixed"
         }}
-      >
-        <div
-          ref={wrapper => (this.wrapper = wrapper)}
-          style={{
-            width: 20,
-            height: 20,
-            background: "red",
-            position: "fixed"
-          }}
-        />
-      </div>
+      />
     );
   }
 }

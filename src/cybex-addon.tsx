@@ -22,6 +22,7 @@ import { InviteBtn } from "./components/invite-btn";
 export class CybexAddon {
   static EVENT_ACTION = EVENT_ACTION;
   static OVERLAY_CONTAINER_ID = "$OVERLAY_CONTAINER_ID";
+  static INVATION_OVERLAY_CONTAINER_ID = "$INVATION_OVERLAY_CONTAINER_ID";
 
   theme = createMuiTheme({
     typography: {
@@ -55,11 +56,9 @@ export class CybexAddon {
 
   patchPage = async (
     Page: any,
-    resolve: (...args: any[]) => any = () => void 0
+    resolve: (...args: any[]) => any = () => void 0,
+    rootContainer = document.getElementById(CybexAddon.OVERLAY_CONTAINER_ID)
   ) => {
-    let rootContainer = document.getElementById(
-      CybexAddon.OVERLAY_CONTAINER_ID
-    );
     if (!rootContainer) {
       rootContainer = document.createElement("div");
       rootContainer.id = CybexAddon.OVERLAY_CONTAINER_ID;
@@ -68,7 +67,7 @@ export class CybexAddon {
     return this.bootstrap(Page)(rootContainer, resolve);
   };
 
-  bootstrap = (Page: any) => async (
+  bootstrap = (Page: any, props: any = {}) => async (
     rootElement: HTMLElement,
     resolve: (...args: any[]) => any = () => void 0
   ) =>
@@ -83,7 +82,7 @@ export class CybexAddon {
             <Notifier />
           </SnackbarProvider>
           <ToolsetContext.Provider value={{ toolset: this.toolset }}>
-            <Page />
+            <Page {...props} />
           </ToolsetContext.Provider>
         </MuiThemeProvider>
       </Provider>,
@@ -98,8 +97,18 @@ export class CybexAddon {
     return new Promise(resolve => this.patchPage(Login, resolve));
   }
 
-  async showInviteBtn(root: HTMLElement) {
-    return new Promise(resolve => this.bootstrap(InviteBtn)(root, resolve));
+  async showInviteBtn(onClick: (e) => any) {
+    let rootContainer = document.getElementById(
+      CybexAddon.INVATION_OVERLAY_CONTAINER_ID
+    );
+    if (!rootContainer) {
+      rootContainer = document.createElement("div");
+      rootContainer.id = CybexAddon.INVATION_OVERLAY_CONTAINER_ID;
+      document.body.appendChild(rootContainer);
+    }
+    return new Promise(resolve =>
+      this.bootstrap(InviteBtn, { onClick })(rootContainer as any, resolve)
+    );
   }
   async depositPage(root: HTMLElement) {
     return new Promise(resolve => this.bootstrap(Deposit)(root, resolve));
