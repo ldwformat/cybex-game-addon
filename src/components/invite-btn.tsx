@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Subscription } from "indefinite-observable";
-import { fromEvent, merge, NEVER } from "rxjs";
+import { fromEvent, merge, NEVER, zip } from "rxjs";
 import { map, takeUntil, switchMap } from "rxjs/operators";
 
 function getObservables(domItem) {
@@ -53,6 +53,18 @@ export class InviteBtn extends React.Component<any> {
   componentDidMount() {
     if (this.wrapper) {
       let { starts$, moves$, ends$ } = getObservables(this.wrapper);
+      let { height, width } = this.wrapper.getBoundingClientRect();
+      this.wrapper.style.left = window.innerWidth - width + "px";
+      this.wrapper.style.top =
+        Math.floor((window.innerHeight - height) * 0.75) + "px";
+
+      zip(starts$, ends$).subscribe(([start, end]) => {
+        if (Math.pow(start.x - end.x, 2) + Math.pow(start.y - end.y, 2) < 16) {
+          if (this.props.onClick) {
+            this.props.onClick();
+          }
+        }
+      });
       this.subscription = starts$
         .pipe(
           switchMap(startE => {
@@ -64,6 +76,8 @@ export class InviteBtn extends React.Component<any> {
                 takeUntil(ends$),
                 map(origin => ({
                   ...origin,
+                  startX: left,
+                  startY: top,
                   deltaX,
                   deltaY
                 }))

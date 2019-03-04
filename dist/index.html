@@ -72,9 +72,10 @@
             );
           });
         document.getElementById("invite").addEventListener("click", async e => {
-          let referPage = await addon.showInviteBtn(e =>
-            console.debug("E: ", e)
-          );
+          let referPage = await addon.showInviteBtn(e => {
+            console.debug("E: ", e);
+            alert("Hello");
+          });
         });
       }
     </script>
