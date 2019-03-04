@@ -1,5 +1,6 @@
 "use strict";
 const HTMLWebpackPlugin = require("html-webpack-plugin");
+const CompressionPlugin = require("compression-webpack-plugin");
 
 const path = require("path");
 
@@ -44,6 +45,9 @@ module.exports = {
   },
   // devtool: "source-map",
   plugins: [
+    new CompressionPlugin({
+      compressionOptions: { level: 7 }
+    }),
     new HTMLWebpackPlugin({
       title: "CAddOn",
       template: "./examples/index.html"

@@ -47,3 +47,12 @@ export const selectBalances = createSelector(
   selectAuth,
   auth => auth.balances
 );
+
+export const selectLoginPanel = createSelector(
+  selectAuth,
+  auth => auth.loginPanel
+);
+export const selectRegCaptcha = createSelector(
+  selectAuth,
+  auth => auth.captcha
+);

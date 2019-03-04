@@ -23,10 +23,7 @@ import {
   authUpdateBalance,
   authUpdateBalanceSuccess
 } from "./auth.actions";
-import { Observable, of, from, interval } from "rxjs";
-import { KeyStore } from "./keystore/keystore";
-import { CoreState, Noti } from "../core.models";
-import { ChainFetcher } from "../../utils/fetcher";
+import { of, from, interval } from "rxjs";
 import assert from "assert";
 import { authCheckFromSeed } from "../../utils/auth";
 import { IEffectDeps } from "../modes";
@@ -89,7 +86,6 @@ export const authUpdateBalanceEpic: Epic<
 export const updateBalanceEpic: Epic<
   AuthUpdateBalanceSuccessAction | AuthUpdateBalanceAction,
   AuthUpdateBalanceSuccessAction,
-  // any,
   any,
   IEffectDeps
 > = (action$, state$, { chainAssisant, fetcher }) =>

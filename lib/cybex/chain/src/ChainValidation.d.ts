@@ -9,4 +9,5 @@ declare var chainValidation: {
     /** @see is_valid_symbol graphene/libraries/chain/protocol/asset_ops.cpp */
     is_valid_symbol_error: (value: any) => string | null;
 };
+export { chainValidation };
 export default chainValidation;

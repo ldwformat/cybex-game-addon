@@ -1,6 +1,6 @@
 /// <reference types="node" />
 import { DeepPartial } from "redux";
-import { ChainFetcher, MallFetcher, BackendFetcher, ReferFetcher, GatewayFetcher } from "../utils/fetcher";
+import { ChainFetcher, MallFetcher, BackendFetcher, ReferFetcher, GatewayFetcher, FaucetFetcher } from "../utils/fetcher";
 import { CybexAssistant } from "../utils/cybex-assistant";
 import { EventEmitter } from "events";
 import { CoreState } from "./core.models";
@@ -12,6 +12,7 @@ export declare const configureStore: (config: CybexAddonConfig) => (preloadState
     notifier: EventEmitter;
     toolset: {
         fetcher: ChainFetcher;
+        faucet: FaucetFetcher;
         mallFetcher: MallFetcher;
         gatewayFetcher: GatewayFetcher;
         backendFetcher: BackendFetcher;

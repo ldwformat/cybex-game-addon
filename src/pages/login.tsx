@@ -8,7 +8,8 @@ import {
 import {
   selectAuth,
   selectAuthModal,
-  selectAuthIsLogging
+  selectAuthIsLogging,
+  selectLoginPanel
 } from "../core/auth/auth.selectors";
 import { CoreState } from "../core/core.models";
 import {
@@ -16,7 +17,10 @@ import {
   authLogin,
   authShowModal,
   authCloseModal,
-  authLogout
+  authLogout,
+  LoginPanel,
+  FaucetCaptcha,
+  authModalSwitchPanel
 } from "../core/auth";
 import { gatewayLoadGatewayInfo, gatewaySelectAsset } from "../core/gateway";
 
@@ -25,23 +29,22 @@ import {
   Dialog,
   withStyles,
   StyledComponentProps,
-  DialogContent,
-  DialogActions,
-  IconButton
+  IconButton,
+  Typography
 } from "@material-ui/core";
 import { Close as CloseIcon } from "@material-ui/icons";
-import { Field, reduxForm } from "redux-form";
-import { delay } from "../utils";
-import { renderTextField, PrimaryButton } from "../components/form-utils";
 import { corePushNoti } from "../core/core.actions";
 import { Subject } from "rxjs";
 import { take } from "rxjs/operators";
+import { LoginForm } from "../components/login-form";
+import { RegForm } from "../components/reg-form";
 
 type LoginPropsDispatch = {
   login: typeof authLogin;
   logout: typeof authLogout;
   alert: typeof corePushNoti;
   showModal: typeof authShowModal;
+  switchPanel: typeof authModalSwitchPanel;
   closeModal: typeof authCloseModal;
   loadGatewayInfo: typeof gatewayLoadGatewayInfo;
   selectAsset: typeof gatewaySelectAsset;
@@ -51,6 +54,8 @@ type LoginPropsState = {
   auth: AuthState;
   isLogging: boolean;
   isModalShowing: boolean;
+  currentPanel: LoginPanel;
+  captcha: FaucetCaptcha;
 };
 
 const mapStateToProps: MapStateToPropsParam<
@@ -59,6 +64,7 @@ const mapStateToProps: MapStateToPropsParam<
   CoreState
 > = state => ({
   auth: selectAuth(state),
+  currentPanel: selectLoginPanel(state),
   isLogging: selectAuthIsLogging(state),
   isModalShowing: selectAuthModal(state)
 });
@@ -66,6 +72,7 @@ const mapStateToProps: MapStateToPropsParam<
 const mapDispatch: MapDispatchToProps<LoginPropsDispatch, {}> = {
   login: authLogin,
   logout: authLogout,
+  switchPanel: authModalSwitchPanel,
   alert: corePushNoti,
   closeModal: authCloseModal,
   showModal: authShowModal,
@@ -80,92 +87,19 @@ const styles = theme => ({
   }
 });
 
-const validate = values => {
-  const errors: any = {};
-  const requiredFields = ["accountName", "password"];
-  requiredFields.forEach(field => {
-    if (!values[field]) {
-      errors[field] = "Required";
-    }
-  });
-  if (
-    values.email &&
-    !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
-  ) {
-    errors.email = "Invalid email address";
-  }
-  return errors;
+type LoginProps = {
+  onRegister: () => any;
 };
-const asyncValidate = (values /*, dispatch */) => {
-  return delay(1000).then(() => {
-    // simulate server latency
-    if (["foo@foo.com", "bar@bar.com"].includes(values.email)) {
-      // eslint-disable-next-line no-throw-literal
-      throw { email: "Email already Exists" };
-    }
-  });
-};
-
-const formStyles = {
-  root: {}
-};
-const LoginForm = reduxForm({
-  form: "LoginForm", // a unique identifier for this form
-  validate,
-  asyncValidate
-})(props => {
-  const { handleSubmit, pristine, reset, submitting, invalid } = props;
-  console.debug("Props: ", props);
-  return (
-    <form onSubmit={handleSubmit}>
-      <DialogContent
-        style={{
-          width: "80%",
-          minWidth: "60vw",
-          padding: 0,
-          margin: "10px 16px"
-        }}
-      >
-        <div style={{ marginBottom: "1em" }}>
-          <Field
-            autoFocus
-            style={{ width: "100%" }}
-            name="accountName"
-            component={renderTextField}
-            label="用户名"
-            helperText="请输入您的云钱包账户名"
-          />
-        </div>
-        <div style={{ marginBottom: "1em" }}>
-          <Field
-            style={{ width: "100%" }}
-            component={renderTextField}
-            name="password"
-            type="password"
-            label="密码"
-            helperText="请输入您的云钱包密码"
-          />
-        </div>
-      </DialogContent>
-      <DialogActions style={{ margin: "8px 12px" }}>
-        <PrimaryButton
-          color="primary"
-          fullWidth
-          type="submit"
-          disabled={pristine || submitting || invalid}
-        >
-          登录
-        </PrimaryButton>
-      </DialogActions>
-    </form>
-  );
-});
 
 let LoginClass = withStyles(styles)(
-  class extends React.Component<
-    StyledComponentProps<"paper"> & LoginPropsDispatch & LoginPropsState
+  class Login extends React.Component<
+    StyledComponentProps<"paper"> &
+      LoginPropsDispatch &
+      LoginPropsState &
+      LoginProps
   > {
     logging$ = new Subject();
+
     componentDidUpdate = (prevProps, prevState) => {
       if (prevProps.isLogging && !this.props.isLogging) {
         this.logging$.next(false);
@@ -189,14 +123,11 @@ let LoginClass = withStyles(styles)(
     render() {
       let {
         classes,
-        auth,
-        login,
         logout,
-        selectAsset,
-        loadGatewayInfo,
         closeModal,
-        alert,
-        isModalShowing
+        isModalShowing,
+        currentPanel,
+        switchPanel
       } = this.props;
       return (
         <Dialog
@@ -211,7 +142,35 @@ let LoginClass = withStyles(styles)(
               <CloseIcon />
             </IconButton>
           </div>
-          <LoginForm onSubmit={this.onSubmit} />
+          {currentPanel === LoginPanel.Login ? (
+            <LoginForm onSubmit={this.onSubmit}>
+              <div style={{ textAlign: "right" }}>
+                <a
+                  href="javascript:;"
+                  style={{ textDecoration: "none" }}
+                  onClick={switchPanel}
+                >
+                  <Typography component="span" color="secondary">
+                    注册新账户
+                  </Typography>
+                </a>
+              </div>
+            </LoginForm>
+          ) : (
+            <RegForm onSubmit={this.onSubmit}>
+              <div style={{ textAlign: "right" }}>
+                <a
+                  href="javascript:;"
+                  style={{ textDecoration: "none" }}
+                  onClick={switchPanel}
+                >
+                  <Typography component="span" color="secondary">
+                    返回登录
+                  </Typography>
+                </a>
+              </div>
+            </RegForm>
+          )}
           <Button onClick={logout}>登出</Button>
         </Dialog>
       );

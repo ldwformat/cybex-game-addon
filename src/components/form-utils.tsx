@@ -17,7 +17,7 @@ import { ButtonProps } from "@material-ui/core/Button";
 export const renderTextField = ({
   label,
   input,
-  meta: { touched, invalid, error },
+  meta: { asyncValidating, touched, invalid, error },
   ...custom
 }) => (
   <TextField

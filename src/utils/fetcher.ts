@@ -16,6 +16,7 @@ import {
   SetReferRequest,
   set_refer
 } from "../../src/cybex/serializer/src/operations";
+import { IRegistInfo, IRegistRes } from "../core/auth";
 
 const simpleCache = {};
 const getKey = (...args) => JSON.stringify(args);
@@ -320,6 +321,7 @@ export class ReferFetcher {
     );
   };
 }
+
 export class GatewayFetcher {
   constructor(public gatewayUrl: string) {}
 
@@ -355,5 +357,36 @@ export class GatewayFetcher {
     };
 
     return this.fetch<CybexGateway.GetDepositAddressRes>("gateway", body);
+  }
+}
+export class FaucetFetcher {
+  constructor(public faucetUrl: string) {}
+
+  async fetch<R = any>(path: string, body: any): Promise<R> {
+    return fetch(resolvePath(this.faucetUrl, path), {
+      headers: {
+        "Content-Type": "application/json"
+      },
+      method: "post",
+      body: JSON.stringify(body)
+    })
+      .then(res => res.json())
+      .then((res: CybexGateway.Response<R>) => {
+        if (res.data) {
+          return res.data as R;
+        }
+        throw new Error("Fetch Gateway Error");
+      });
+  }
+
+  async getCaptcha() {
+    return fetch(resolvePath(this.faucetUrl, "captcha")).then(res =>
+      res.json()
+    );
+  }
+
+  async postRegistInfo(regInfo: IRegistInfo) {
+    let body = regInfo;
+    return this.fetch<IRegistRes>("register", body);
   }
 }

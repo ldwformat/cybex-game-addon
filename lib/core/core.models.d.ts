@@ -15,7 +15,8 @@ export declare class AppState {
 }
 export declare class CoreState {
     game: string;
-    constructor(game: string);
+    referUrl: string;
+    constructor(game: string, referUrl: string);
     auth: AuthState;
     mall: MallState;
     refer: ReferState;

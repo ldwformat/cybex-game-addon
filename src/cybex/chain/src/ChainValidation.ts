@@ -140,4 +140,5 @@ var chainValidation = {
   }
 };
 
+export { chainValidation };
 export default chainValidation;

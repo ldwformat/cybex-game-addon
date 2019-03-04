@@ -3,13 +3,15 @@ import {
   MallFetcher,
   BackendFetcher,
   GatewayFetcher,
-  ReferFetcher
+  ReferFetcher,
+  FaucetFetcher
 } from "../utils/fetcher";
 import { CybexAssistant } from "../utils/cybex-assistant";
 import { EventEmitter } from "events";
 
 export interface IEffectDeps {
   fetcher: ChainFetcher;
+  faucet: FaucetFetcher;
   chainAssisant: CybexAssistant;
   backendFetcher: BackendFetcher;
   referFetcher: ReferFetcher;

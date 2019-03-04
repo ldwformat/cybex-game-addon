@@ -5,5 +5,3 @@ export class ReferState {
   referrers: Backend.Referrer[] = [];
   referrals: Backend.TypesReferral[] = [];
 }
-
-// 地址簿

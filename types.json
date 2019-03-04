@@ -1,0 +1,54 @@
+{
+  "account": {
+    "id": "06f48f7f2430ba2ed90dd66d13ddcf0fcc676036",
+    "block_num": 1946622,
+    "trx_num": 0,
+    "trx": {
+      "ref_block_num": 46077,
+      "ref_block_prefix": 4000186219,
+      "expiration": "2019-03-04T02:12:16",
+      "operations": [
+        [
+          5,
+          {
+            "fee": { "amount": 514, "asset_id": "1.3.0" },
+            "registrar": "1.2.18",
+            "referrer": "1.2.18",
+            "referrer_percent": 0,
+            "name": "create-test1",
+            "owner": {
+              "weight_threshold": 1,
+              "account_auths": [],
+              "key_auths": [
+                ["CYB6dHKh4KjDkWohSfDQhbsAJyBqSMAxvR92fp95ze8i7ZjDzFiji", 1]
+              ],
+              "address_auths": []
+            },
+            "active": {
+              "weight_threshold": 1,
+              "account_auths": [],
+              "key_auths": [
+                ["CYB7k4sRLZN5e6ZqX8xQU1su7Rmrt5YAmoDnp2T3tvR8kDfZcWEbW", 1]
+              ],
+              "address_auths": []
+            },
+            "options": {
+              "memo_key": "CYB7k4sRLZN5e6ZqX8xQU1su7Rmrt5YAmoDnp2T3tvR8kDfZcWEbW",
+              "voting_account": "1.2.5",
+              "num_witness": 0,
+              "num_committee": 0,
+              "votes": [],
+              "extensions": []
+            },
+            "extensions": {}
+          }
+        ]
+      ],
+      "extensions": [],
+      "signatures": [
+        "1f0d7c2a41d0f1dcb57d9810d9b3dfb813ddeec873c8a0d9949bd3a450b921d24410e227303c6dcd23ecac94a95990a56cf3cdb77e247b4668e02ca313fcbc6602"
+      ],
+      "operation_results": [[1, "1.2.1362"]]
+    }
+  }
+}

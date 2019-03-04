@@ -13,7 +13,8 @@ import {
   MallFetcher,
   BackendFetcher,
   ReferFetcher,
-  GatewayFetcher
+  GatewayFetcher,
+  FaucetFetcher
 } from "../utils/fetcher";
 import {
   AuthState,
@@ -74,6 +75,7 @@ export const configureStore = (config: CybexAddonConfig) => async (
     cybexHttpServer,
     mallBackend,
     referBackend,
+    faucet,
     gateway,
     backend
   } = config.apiUrl;
@@ -82,6 +84,7 @@ export const configureStore = (config: CybexAddonConfig) => async (
   await wsConnect.connect();
   const toolset = {
     fetcher: new ChainFetcher(cybexWs, cybexHttpServer),
+    faucet: new FaucetFetcher(faucet),
     mallFetcher: new MallFetcher(mallBackend),
     gatewayFetcher: new GatewayFetcher(gateway),
     backendFetcher: new BackendFetcher(backend),
@@ -96,7 +99,6 @@ export const configureStore = (config: CybexAddonConfig) => async (
   let store = createStore(
     rootReducer,
     preloadState,
-    // applyMiddleware(epicMiddleware)
     applyMiddleware(loggerMiddleware, epicMiddleware)
   );
 

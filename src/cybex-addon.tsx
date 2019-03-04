@@ -16,6 +16,8 @@ import { Deposit } from "./pages/deposit";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core";
 import { Refer } from "./pages/refer";
 import { ReferRule } from "./pages/refer-rule";
+import { ToolsetContext } from "./providers/toolset";
+import { InviteBtn } from "./components/invite-btn";
 
 export class CybexAddon {
   static EVENT_ACTION = EVENT_ACTION;
@@ -23,11 +25,11 @@ export class CybexAddon {
 
   theme = createMuiTheme({
     typography: {
-      useNextVariants: true,
+      useNextVariants: true
     },
     palette: {
       primary: {
-        main: "rgb(255,98,165)",
+        main: "rgb(255,98,165)"
       },
       secondary: {
         main: "rgb(255,155,85)"
@@ -80,7 +82,9 @@ export class CybexAddon {
           <SnackbarProvider maxSnack={3}>
             <Notifier />
           </SnackbarProvider>
-          <Page />
+          <ToolsetContext.Provider value={{ toolset: this.toolset }}>
+            <Page />
+          </ToolsetContext.Provider>
         </MuiThemeProvider>
       </Provider>,
       rootElement,
@@ -92,6 +96,10 @@ export class CybexAddon {
       this.store.dispatch(authShowModal());
     }
     return new Promise(resolve => this.patchPage(Login, resolve));
+  }
+
+  async showInviteBtn(root: HTMLElement) {
+    return new Promise(resolve => this.bootstrap(InviteBtn)(root, resolve));
   }
   async depositPage(root: HTMLElement) {
     return new Promise(resolve => this.bootstrap(Deposit)(root, resolve));

@@ -41,6 +41,7 @@ export const loadGatewayInfoEpic: Epic<any, any, CoreState, IEffectDeps> = (
     ),
     switchMap(() =>
       state$.pipe(
+        filter(state => !!selectAuthSet(state)),
         take(1),
         switchMap(state => {
           let authSet = selectAuthSet(state);
@@ -50,6 +51,10 @@ export const loadGatewayInfoEpic: Epic<any, any, CoreState, IEffectDeps> = (
           return from(gatewayFetcher.getCoinList()).pipe(
             map(gatewayLoadGatewayInfoSuccess)
           );
+        }),
+        catchError(err => {
+          console.error(err);
+          return of(gatewayLoadGatewayInfoFailed());
         })
       )
     ),

@@ -132,6 +132,7 @@ declare interface CybexAddonConfig {
 declare interface APIURL {
   mallBackend: string;
   referBackend: string;
+  faucet: string;
   backend: string;
   gateway: string;
   cybexWs: string;
@@ -171,6 +172,7 @@ declare namespace Backend {
     reason: string;
     data: R;
   }
+
   export interface FetchResponse<R> {
     success: boolean;
     reason: string;

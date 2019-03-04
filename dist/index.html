@@ -12,17 +12,25 @@
   </head>
   <body>
     <div id="root0">
-      Here is a placeholder
+      Here is a 登录
     </div>
     <div id="root1">
-      Here is a placeholder
+      Here is a 充值
     </div>
     <div id="root2">
-      Here is a placeholder
+      Here is a 邀请
+    </div>
+    <div id="root3">
+      Here is a 邀请规则
+    </div>
+    <div id="root4">
+      Here is a 邀请按钮
     </div>
     <button id="loginPage0" data-ref="root0">登录页</button>
     <button id="deposit" data-ref="root1">充值页</button>
     <button id="refer" data-ref="root2">邀请页</button>
+    <button id="referRule" data-ref="root3">邀请规则页</button>
+    <button id="invite" data-ref="root4">邀请按钮</button>
     <script>
       {
         let count = 0;
@@ -31,8 +39,8 @@
           window.addon = addon = await new CybexAddon.CybexAddon().init();
           addon.store.dispatch(
             CybexAddon.Actions.authLogin({
-              accountName: "ldw-format",
-              password: "ldwformat991844"
+              accountName: "create-test12",
+              password: "qwer1234qwer1234"
             })
           );
           console.info("Load Done");
@@ -54,6 +62,18 @@
         document.getElementById("refer").addEventListener("click", async e => {
           let referPage = await addon.referPage(
             document.getElementById(`root2`)
+          );
+        });
+        document
+          .getElementById("referRule")
+          .addEventListener("click", async e => {
+            let referPage = await addon.referRulePage(
+              document.getElementById(`root3`)
+            );
+          });
+        document.getElementById("invite").addEventListener("click", async e => {
+          let referPage = await addon.showInviteBtn(
+            document.getElementById(`root4`)
           );
         });
       }

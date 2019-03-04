@@ -1,4 +1,4 @@
-import { AuthState } from "./auth.models";
+import { AuthState, LoginPanel } from "./auth.models";
 import { AuthAction, AuthActions } from "./auth.actions";
 import { Reducer } from "redux";
 
@@ -41,6 +41,19 @@ export const auth: Reducer<AuthState, AuthAction> = (
       };
     case AuthActions.Logout:
       return new AuthState();
+    case AuthActions.RegGetCaptchaSuccess:
+      return {
+        ...state,
+        captcha: action.payload
+      };
+    case AuthActions.LoginModalSwitchPanel:
+      return {
+        ...state,
+        loginPanel:
+          state.loginPanel === LoginPanel.Register
+            ? LoginPanel.Login
+            : LoginPanel.Register
+      };
     default:
       return state;
   }

@@ -16,6 +16,8 @@ export declare class CybexAddon {
     patchPage: (Page: any, resolve?: (...args: any[]) => any) => Promise<void>;
     bootstrap: (Page: any) => (rootElement: HTMLElement, resolve?: (...args: any[]) => any) => Promise<void>;
     loginPage(): Promise<{}>;
+    showInviteBtn(root: HTMLElement): Promise<{}>;
     depositPage(root: HTMLElement): Promise<{}>;
     referPage(root: HTMLElement): Promise<{}>;
+    referRulePage(root: HTMLElement): Promise<{}>;
 }

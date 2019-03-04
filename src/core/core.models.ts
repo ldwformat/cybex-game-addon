@@ -14,6 +14,7 @@ export class Noti {
 export class AppState {
   public noties: Noti[] = [];
 }
+
 // RootState
 export class CoreState {
   constructor(public game: string, public referUrl: string) {}
