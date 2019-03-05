@@ -13,12 +13,50 @@ import { CoreState } from "./core/core.models";
 import { Notifier } from "./components/notifier";
 import { SnackbarProvider } from "notistack";
 import { Deposit } from "./pages/deposit";
-import { createMuiTheme, MuiThemeProvider } from "@material-ui/core";
+import {
+  createMuiTheme,
+  MuiThemeProvider,
+  createGenerateClassName
+} from "@material-ui/core";
+import JssProvider from "react-jss/lib/JssProvider";
+import { SheetsRegistry } from "jss";
 import { Refer } from "./pages/refer";
 import { ReferRule } from "./pages/refer-rule";
 import { ToolsetContext } from "./providers/toolset";
 import { InviteBtn } from "./components/invite-btn";
 import { merge } from "lodash";
+
+declare const process: any;
+declare const global: any;
+function createPageContext() {
+  return {
+    // This is needed in order to deduplicate the injection of CSS in the page.
+    sheetsManager: new Map(),
+    // This is needed in order to inject the critical CSS.
+    sheetsRegistry: new SheetsRegistry(),
+    // The standard class name generator.
+    generateClassName: createGenerateClassName()
+  };
+}
+
+export function getPageContext() {
+  // Make sure to create a new context for every server-side request so that data
+  // isn't shared between connections (which would be bad).
+  if (!process.browser) {
+    try {
+      return createPageContext();
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  // Reuse context on the client-side.
+  if (!global.__INIT_MATERIAL_UI__) {
+    global.__INIT_MATERIAL_UI__ = createPageContext();
+  }
+
+  return global.__INIT_MATERIAL_UI__;
+}
 
 export class CybexAddon {
   static EVENT_ACTION = EVENT_ACTION;
@@ -42,7 +80,10 @@ export class CybexAddon {
   notifier: EventEmitter | null = null;
   toolset: IEffectDeps | null = null;
   config: CybexAddonConfig;
-  constructor(config: CybexAddonConfig = defaultConfig) {
+  constructor(
+    config: CybexAddonConfig = defaultConfig,
+    public pageContext = getPageContext()
+  ) {
     this.config = merge({}, defaultConfig, config);
   }
 
@@ -81,14 +122,22 @@ export class CybexAddon {
           this.store || (await this.init().then(res => res.store as Store))
         }
       >
-        <MuiThemeProvider theme={this.theme}>
-          <SnackbarProvider maxSnack={3}>
-            <Notifier />
-          </SnackbarProvider>
-          <ToolsetContext.Provider value={{ toolset: this.toolset }}>
-            <Page {...props} />
-          </ToolsetContext.Provider>
-        </MuiThemeProvider>
+        <JssProvider
+          registry={this.pageContext.sheetsRegistry}
+          generateClassName={this.pageContext.generateClassName}
+        >
+          <MuiThemeProvider
+            theme={this.theme}
+            // sheetsManager={this.pageContext.sheetsManager}
+          >
+            <SnackbarProvider maxSnack={3}>
+              <Notifier />
+            </SnackbarProvider>
+            <ToolsetContext.Provider value={{ toolset: this.toolset }}>
+              <Page {...props} />
+            </ToolsetContext.Provider>
+          </MuiThemeProvider>
+        </JssProvider>
       </Provider>,
       rootElement,
       () => resolve(rootElement)
