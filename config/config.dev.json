@@ -4,7 +4,7 @@
     "referBackend": "http://10.18.120.241:8000",
     "backend": "http://10.18.120.241:29999",
     "gateway": "https://gateway.cybex.io",
-    "faucet": "https://faucet.51nebula.com/",
+    "faucet": "https://faucet.cybex.io/",
     "cybexWs": "wss://hongkong.cybex.io",
     "cybexHttpServer": "https://cybexluck.io"
   },

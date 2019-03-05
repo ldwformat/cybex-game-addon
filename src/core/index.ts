@@ -25,7 +25,9 @@ import {
   updateBalanceEpic,
   authUpdateBalanceEpic,
   captchaEpic,
-  regPanelCaptchaEpic
+  regPanelCaptchaEpic,
+  authRegEpic,
+  regFailedEpic
 } from "./auth";
 import { MallState, mall, loadCountriesEpic, loadProvincesEpic } from "./mall";
 import {
@@ -55,7 +57,9 @@ const loggerMiddleware = createLogger();
 const rootEpic = combineEpics(
   loginEpic,
   regPanelCaptchaEpic,
+  authRegEpic,
   captchaEpic,
+  regFailedEpic,
   loginCloseEpic,
   loginFailedEpic,
   loadCountriesEpic,

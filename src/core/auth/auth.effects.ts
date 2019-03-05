@@ -7,7 +7,8 @@ import {
   takeUntil,
   take,
   filter,
-  debounceTime
+  debounceTime,
+  delay
 } from "rxjs/operators";
 import {
   AuthActions,
@@ -23,14 +24,19 @@ import {
   authUpdateBalance,
   authUpdateBalanceSuccess,
   authRegGetCaptchaSuccess,
-  authRegGetCaptcha
+  authRegGetCaptcha,
+  AuthRegImpl,
+  authLogin,
+  AuthRegImplFailed,
+  authRegImplFailed,
+  AuthLoginModalShowAction
 } from "./auth.actions";
 import { of, from, interval, NEVER, merge } from "rxjs";
 import assert from "assert";
-import { authCheckFromSeed } from "../../utils/auth";
+import { authCheckFromSeed, getKeyStore, getKeySet } from "../../utils/auth";
 import { IEffectDeps } from "../modes";
 import { ActionCorePushNoti, corePushNoti } from "../core.actions";
-import { selectAuthSet } from "./auth.selectors";
+import { selectAuthSet, selectRegCaptcha } from "./auth.selectors";
 import { calcValue } from "../../utils/calc";
 import {
   AuthRegGetCaptcha,
@@ -39,6 +45,9 @@ import {
   selectLoginPanel,
   LoginPanel
 } from "./index";
+import { referAdd } from "../refer";
+import { selectGame } from "../core.selectors";
+import { selectAuthModal } from "../../../lib/core/auth";
 
 export const loginEpic: Epic<
   any,
@@ -153,23 +162,33 @@ export const loginFailedEpic: Epic<
     ofType<AuthLoginFailedAction>(AuthActions.LoginFailed),
     map(_ => corePushNoti("请检查用户名密码是否正确", { variant: "error" }))
   );
+
 export const regPanelCaptchaEpic: Epic<
-  AuthLoginModalSwitchPanel,
+  AuthLoginModalSwitchPanel | AuthLoginModalShowAction,
   any,
   any,
   IEffectDeps
 > = (action$, state$, { faucet }) =>
   action$.pipe(
-    ofType(AuthActions.LoginModalSwitchPanel),
+    ofType(AuthActions.LoginModalSwitchPanel, AuthActions.LoginModalShow),
     switchMap(_ =>
       state$.pipe(
-        filter(state => selectLoginPanel(state) === LoginPanel.Register),
+        filter(
+          state =>
+            selectLoginPanel(state) === LoginPanel.Register &&
+            selectAuthModal(state)
+        ),
         take(1),
         switchMap(_ =>
+          // merge(interval(3 * 1000), of(1)).pipe(
           merge(interval(90 * 1000), of(1)).pipe(
             takeUntil(
               state$.pipe(
-                filter(state => selectLoginPanel(state) === LoginPanel.Login)
+                filter(
+                  state =>
+                    selectLoginPanel(state) === LoginPanel.Login ||
+                    !selectAuthModal(state)
+                )
               )
             ),
             map(_ => authRegGetCaptcha())
@@ -178,13 +197,14 @@ export const regPanelCaptchaEpic: Epic<
       )
     )
   );
-export const captchaEpic: Epic<AuthRegGetCaptcha, any, any, IEffectDeps> = (
-  action$,
-  state$,
-  { faucet }
-) =>
+export const captchaEpic: Epic<
+  AuthRegGetCaptcha | AuthRegImplFailed,
+  any,
+  any,
+  IEffectDeps
+> = (action$, state$, { faucet }) =>
   action$.pipe(
-    ofType(AuthActions.RegGetCaptcha),
+    ofType(AuthActions.RegGetCaptcha, AuthActions.RegImplFailed),
     switchMap(_ =>
       from(faucet.getCaptcha()).pipe(
         map(captcha => authRegGetCaptchaSuccess(captcha)),
@@ -193,6 +213,84 @@ export const captchaEpic: Epic<AuthRegGetCaptcha, any, any, IEffectDeps> = (
           return NEVER;
         })
       )
+    )
+  );
+export const authRegEpic: Epic<AuthRegImpl, any, any, IEffectDeps> = (
+  action$,
+  state$,
+  { faucet }
+) =>
+  action$.pipe(
+    ofType<AuthRegImpl>(AuthActions.RegImpl),
+    debounceTime(500),
+    switchMap(action =>
+      state$.pipe(
+        take(1),
+        switchMap(state => {
+          let { accountName, password, captcha, referer } = action.payload;
+          let currentCaptchaInfo = selectRegCaptcha(state);
+          console.debug("Captcha: ", currentCaptchaInfo);
+          if (!currentCaptchaInfo || !accountName || !password || !captcha) {
+            throw new Error("No Captcha");
+          }
+          let keySet = getKeySet(accountName, password);
+          return from(
+            faucet.postRegistInfo({
+              cap: {
+                id: currentCaptchaInfo.id,
+                captcha
+              },
+              account: {
+                name: accountName,
+                active_key: keySet.owner,
+                owner_key: keySet.active,
+                memo_key: keySet.owner
+              }
+            })
+          ).pipe(
+            // delay(3000),
+            switchMap(regRes => {
+              if (!accountName || !password) {
+                throw new Error("no account");
+              }
+              return of(
+                authLogin({
+                  accountName,
+                  password,
+                  refer: referer
+                    ? {
+                        referrer: referer,
+                        action: selectGame(state),
+                        isRegister: true
+                      }
+                    : undefined
+                })
+              );
+            }),
+            catchError(err => {
+              console.error(err);
+              return of(authRegImplFailed(err));
+            })
+          );
+        }),
+        catchError(err => {
+          console.error(err);
+          return of(authRegImplFailed(err));
+        })
+      )
+    )
+  );
+export const regFailedEpic: Epic<any, ActionCorePushNoti, any, IEffectDeps> = (
+  action$,
+  state$,
+  { fetcher }
+) =>
+  action$.pipe(
+    ofType<AuthRegImplFailed>(AuthActions.RegImplFailed),
+    map(action =>
+      corePushNoti(`注册失败，错误码: ${action.payload.code}`, {
+        variant: "error"
+      })
     )
   );
 

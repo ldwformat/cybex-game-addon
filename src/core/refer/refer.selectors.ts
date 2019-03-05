@@ -8,6 +8,10 @@ import { NAME_OF_ACTION_REGISTER } from "../auth";
 export const selectRefer: Selector<CoreState, ReferState> = state =>
   state.refer;
 
+export const selectReferLoading = createSelector(
+  selectRefer,
+  refer => refer.isLoading
+);
 export const selectMyRegisterReferrer = createSelector(
   selectRefer,
   refer =>

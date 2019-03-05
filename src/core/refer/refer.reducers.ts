@@ -7,8 +7,19 @@ export const refer: Reducer<ReferState, ReferAction> = (
   action
 ) => {
   switch (action.type) {
+    case ReferActions.Add:
+      return {
+        ...state,
+        isLoading: true
+      };
+    case ReferActions.AddSuccess:
+    case ReferActions.AddFailed:
+      return {
+        ...state,
+        isLoading: false
+      };
     case ReferActions.LoadReferInfoSuccess:
-      return action.payload;
+      return { ...state, ...action.payload };
     default:
       return state;
   }

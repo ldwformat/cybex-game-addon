@@ -17,17 +17,20 @@ import { connect, MapStateToPropsParam, MapDispatchToProps } from "react-redux";
 import {
   selectRegCaptcha,
   FaucetCaptcha,
-  authRegGetCaptcha
+  authRegGetCaptcha,
+  selectDefaultReferer
 } from "../core/auth";
 import { CoreState } from "../core";
 
-type FormData = {
+export type RegFormData = {
   accountName: string | null;
   password: string | null;
-  confirm: string | null;
+  confirm?: string | null;
   captcha: string | null;
+  referer?: string | null;
 };
-const validate = (values: FormData) => {
+
+const validate = (values: RegFormData) => {
   const errors: any = {};
   const requiredFields = ["accountName", "password", "confirm", "captcha"];
   requiredFields.forEach(field => {
@@ -54,7 +57,7 @@ const validate = (values: FormData) => {
   return errors;
 };
 
-const asyncValidate = (values: FormData, dispatch, { toolset }) => {
+const asyncValidate = (values: RegFormData, dispatch, { toolset }) => {
   let accountName = values.accountName;
   if (accountName) {
     let { chainAssisant } = toolset as IEffectDeps;
@@ -74,11 +77,23 @@ const asyncValidate = (values: FormData, dispatch, { toolset }) => {
 };
 
 const mapStateToProps: MapStateToPropsParam<
-  { captcha: FaucetCaptcha | null },
+  {
+    captcha: FaucetCaptcha | null;
+    defaultReferer: string | null;
+    initialValues?: Partial<RegFormData>;
+  },
   {},
   CoreState
 > = state => ({
-  captcha: selectRegCaptcha(state)
+  captcha: selectRegCaptcha(state),
+  defaultReferer: selectDefaultReferer(state),
+  initialValues: {
+    accountName: "",
+    password: "",
+    confirm: "",
+    captcha: "",
+    referer: selectDefaultReferer(state) || ""
+  }
 });
 
 type LoginPropsDispatch = {
@@ -91,39 +106,52 @@ const mapDispatch: MapDispatchToProps<LoginPropsDispatch, {}> = {
 
 // Register Form
 export const RegForm = withToolset(
-  reduxForm({
+  connect(
+    mapStateToProps,
+    mapDispatch
+  )(reduxForm({
     form: "RegForm", // a unique identifier for this form
     validate,
     asyncValidate
-  })(connect(
-    mapStateToProps,
-    mapDispatch
-  )(
+  })(
     class RegForm extends React.Component<
       any,
       { showPassword: boolean; showConfirm: boolean }
     > {
+      form: HTMLFormElement | null = null;
       state = {
         showPassword: false,
         showConfirm: false
       };
+      componentDidMount() {
+        this.props.reset();
+        if (this.form) {
+          let input = this.form.querySelector("input");
+          if (input) {
+            input.focus();
+          }
+        }
+      }
       render() {
         const {
           handleSubmit,
           pristine,
           submitting,
+          reset,
           invalid,
           getCaptcha,
-          captcha
+          captcha,
+          defaultReferer
         } = this.props;
         const styleOfContent = {
-          width: "80%",
+          width: "90%",
           minWidth: "60vw",
+          maxWidth: "90vw",
           padding: 0,
-          margin: "10px 16px"
+          margin: "10px auto"
         };
         return (
-          <form onSubmit={handleSubmit}>
+          <form ref={form => (this.form = form)} onSubmit={handleSubmit}>
             <DialogContent style={styleOfContent}>
               <div style={{ marginBottom: "0.5em" }}>
                 <Field
@@ -131,6 +159,7 @@ export const RegForm = withToolset(
                   style={{ width: "100%" }}
                   name="accountName"
                   component={renderTextField}
+                  autoFocusd
                   label="用户名"
                   helperText={`请输入您的云钱包账户名, 用户名须为小写，并需包含数字或字母间连字符"-"`}
                 />
@@ -147,6 +176,7 @@ export const RegForm = withToolset(
                     endAdornment: (
                       <InputAdornment position="end">
                         <IconButton
+                          tabIndex={-1}
                           onClick={() =>
                             this.setState(prev => ({
                               showPassword: !prev.showPassword
@@ -170,12 +200,13 @@ export const RegForm = withToolset(
                   component={renderTextField}
                   name="confirm"
                   label="确认密码"
-                  helperText="再次输入您的密码"
+                  helperText="请再次输入您的密码"
                   type={this.state.showConfirm ? "text" : "password"}
                   InputProps={{
                     endAdornment: (
                       <InputAdornment position="end">
                         <IconButton
+                          tabIndex={-1}
                           onClick={() =>
                             this.setState(prev => ({
                               showConfirm: !prev.showConfirm
@@ -206,13 +237,27 @@ export const RegForm = withToolset(
                       <InputAdornment position="end">
                         {captcha && (
                           <SVGInline
-                            svg={(captcha as FaucetCaptcha).data}
+                            svg={(captcha as FaucetCaptcha).data.replace(
+                              "#4AA0E2",
+                              "#FFFFFF"
+                            )}
                             onClick={getCaptcha}
                           />
                         )}
                       </InputAdornment>
                     )
                   }}
+                />
+              </div>
+              <div style={{ marginBottom: "0.5em" }}>
+                <Field
+                  autoFocus
+                  style={{ width: "100%" }}
+                  name="referer"
+                  component={renderTextField}
+                  disabled={!!defaultReferer}
+                  label="推荐人（选填）"
+                  helperText={`请输入推荐人分享给您的推荐码，若无推荐人，可不填`}
                 />
               </div>
             </DialogContent>

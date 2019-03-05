@@ -371,11 +371,11 @@ export class FaucetFetcher {
       body: JSON.stringify(body)
     })
       .then(res => res.json())
-      .then((res: CybexGateway.Response<R>) => {
-        if (res.data) {
-          return res.data as R;
+      .then((res: IRegistRes) => {
+        if (res.account) {
+          return (res as unknown) as R;
         }
-        throw new Error("Fetch Gateway Error");
+        throw res;
       });
   }
 

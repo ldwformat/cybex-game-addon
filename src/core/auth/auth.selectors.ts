@@ -56,3 +56,7 @@ export const selectRegCaptcha = createSelector(
   selectAuth,
   auth => auth.captcha
 );
+export const selectDefaultReferer = createSelector(
+  selectAuth,
+  auth => auth.defaultReferer
+);

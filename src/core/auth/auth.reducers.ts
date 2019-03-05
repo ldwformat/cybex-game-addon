@@ -8,11 +8,17 @@ export const auth: Reducer<AuthState, AuthAction> = (
 ) => {
   switch (action.type) {
     case AuthActions.Login:
+    case AuthActions.RegImpl:
       return {
         ...state,
+        keyStore: null,
+        isAuthed: false,
+        account: null,
+        accountName: null,
         isLogging: true
       };
     case AuthActions.LoginFailed:
+    case AuthActions.RegImplFailed:
       return {
         ...state,
         isLogging: false
@@ -32,6 +38,7 @@ export const auth: Reducer<AuthState, AuthAction> = (
     case AuthActions.LoginModalShow:
       return {
         ...state,
+        loginPanel: LoginPanel.Login,
         showModal: true
       };
     case AuthActions.LoginModalClose:

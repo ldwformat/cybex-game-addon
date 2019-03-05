@@ -5,6 +5,7 @@ import {
   BalanceObj,
   FaucetCaptcha
 } from "./auth.models";
+import { RegFormData } from "../../components/reg-form";
 
 export enum AuthActions {
   LoginModalShow = "[Auth] LoginModalShow",
@@ -15,6 +16,7 @@ export enum AuthActions {
   RegGetCaptchaSuccess = "[Auth] RegGetCaptchaSuccess",
   RegImpl = "[Auth] RegImpl",
   RegImplSuccess = "[Auth] RegImplSuccess",
+  RegImplFailed = "[Auth] RegImplFailed",
 
   Login = "[Auth] Login",
   LoginSuccess = "[Auth] Login Success",
@@ -59,9 +61,14 @@ export class AuthRegGetCaptchaSuccess implements Action {
 }
 export class AuthRegImpl implements Action {
   readonly type = AuthActions.RegImpl;
+  constructor(public payload: RegFormData) {}
 }
 export class AuthRegImplSuccess implements Action {
   readonly type = AuthActions.RegImplSuccess;
+}
+export class AuthRegImplFailed implements Action {
+  readonly type = AuthActions.RegImplFailed;
+  constructor(public payload: { code: number }) {}
 }
 
 export const authRegGetCaptcha = () =>
@@ -71,9 +78,12 @@ export const authRegGetCaptchaSuccess = (captcha: FaucetCaptcha) =>
     type: AuthActions.RegGetCaptchaSuccess,
     payload: captcha
   } as AuthRegGetCaptchaSuccess);
-export const authRegImpl = () => ({ type: AuthActions.RegImpl } as AuthRegImpl);
+export const authRegImpl = (regData: RegFormData) =>
+  ({ type: AuthActions.RegImpl, payload: regData } as AuthRegImpl);
 export const authRegImplSuccess = () =>
   ({ type: AuthActions.RegImplSuccess } as AuthRegImplSuccess);
+export const authRegImplFailed = (err: { code: number }) =>
+  ({ type: AuthActions.RegImplFailed, payload: err } as AuthRegImplFailed);
 
 // LoginImplement
 export class AuthLoginAction implements Action {
@@ -139,6 +149,7 @@ export type AuthAction =
   | AuthRegGetCaptchaSuccess
   | AuthRegImpl
   | AuthRegImplSuccess
+  | AuthRegImplFailed
   | AuthLogoutAction
   | AuthLoginAction
   | AuthLoginFailedAction

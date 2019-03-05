@@ -36,6 +36,7 @@ import { ReferCode } from "../components/refer-code";
 import { formatTime } from "../utils/datetime";
 import { PrimaryButton } from "../components/form-utils";
 import { ShareButton } from "../components/share-btn";
+import { ReferModal } from "../components/refer-modal";
 
 type StateProps = {
   accountName: string | null;
@@ -92,13 +93,15 @@ export const Refer = connect(mapStateToProps)(
       static Panels = {
         RegisterRef: "RegisterRef",
         GameRegisterRef: "GameRegisterRef",
-        Drawer: "Drawer"
+        Drawer: "Drawer",
+        ReferModal: "ReferModal"
       };
 
       state = {
         [Refer.Panels.RegisterRef]: false,
         [Refer.Panels.GameRegisterRef]: false,
-        [Refer.Panels.Drawer]: false
+        [Refer.Panels.Drawer]: false,
+        [Refer.Panels.ReferModal]: false
       };
 
       handleExpand = (panel: string) => {
@@ -128,7 +131,17 @@ export const Refer = connect(mapStateToProps)(
                 </ListItem>
                 <ListItem divider>
                   <ListItemText primary="我的游戏推荐人" />
-                  {(myGameReferrer && myGameReferrer.referrer) || "-"}
+                  {(myGameReferrer && myGameReferrer.referrer) || (
+                    <Button
+                      color="secondary"
+                      onClick={this.handleExpand.bind(
+                        this,
+                        Refer.Panels.ReferModal
+                      )}
+                    >
+                      补充引荐人
+                    </Button>
+                  )}
                 </ListItem>
                 <ListItem
                   button
@@ -200,6 +213,13 @@ export const Refer = connect(mapStateToProps)(
               </List>
             </div>
             <ShareButton />
+            <ReferModal
+              isModalShowing={this.state[Refer.Panels.ReferModal]}
+              onModalClose={this.handleExpand.bind(
+                this,
+                Refer.Panels.ReferModal
+              )}
+            />
           </Paper>
         );
       }

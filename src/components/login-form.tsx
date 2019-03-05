@@ -54,8 +54,8 @@ export const LoginForm = reduxForm({
         .props as any;
       console.debug("Props: ", this.props);
       const styleOfContent = {
-        width: "80%",
-        minWidth: "60vw",
+        width: "90%",
+        minWidth: "70vw",
         padding: 0,
         margin: "10px 16px"
       };

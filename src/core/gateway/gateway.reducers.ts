@@ -13,7 +13,8 @@ export const gateway: Reducer<GatewayState, GatewayAction | AuthAction> = (
   action
 ) => {
   switch (action.type) {
-    case AuthActions.LoginSuccess:
+    case AuthActions.Login:
+    case AuthActions.RegImpl:
       return new GatewayState();
     case GatewayActions.SelectAsset:
       return {
