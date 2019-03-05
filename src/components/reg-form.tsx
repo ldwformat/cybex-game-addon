@@ -1,6 +1,6 @@
 import * as React from "react";
-import { Field, reduxForm, ValidateCallback } from "redux-form";
-import { renderTextField, PrimaryButton } from "../components/form-utils";
+import { Form } from "react-form";
+import { createTextField, PrimaryButton } from "../components/form-utils";
 import { delay } from "../utils";
 import {
   DialogContent,
@@ -109,11 +109,7 @@ export const RegForm = withToolset(
   connect(
     mapStateToProps,
     mapDispatch
-  )(reduxForm({
-    form: "RegForm", // a unique identifier for this form
-    validate,
-    asyncValidate
-  })(
+  )(
     class RegForm extends React.Component<
       any,
       { showPassword: boolean; showConfirm: boolean }
@@ -152,7 +148,7 @@ export const RegForm = withToolset(
         };
         return (
           <form ref={form => (this.form = form)} onSubmit={handleSubmit}>
-            <DialogContent style={styleOfContent}>
+            {/* <DialogContent style={styleOfContent}>
               <div style={{ marginBottom: "0.5em" }}>
                 <Field
                   autoFocus
@@ -260,7 +256,7 @@ export const RegForm = withToolset(
                   helperText={`请输入推荐人分享给您的推荐码，若无推荐人，可不填`}
                 />
               </div>
-            </DialogContent>
+            </DialogContent> */}
             <DialogContent style={styleOfContent}>
               {this.props.children}
             </DialogContent>
@@ -278,5 +274,5 @@ export const RegForm = withToolset(
         );
       }
     }
-  ) as any)
+  )
 );

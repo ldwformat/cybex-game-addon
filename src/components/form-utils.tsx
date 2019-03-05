@@ -14,23 +14,71 @@ import {
 } from "@material-ui/core";
 import { Colors } from "./colors";
 import { ButtonProps } from "@material-ui/core/Button";
-export const renderTextField = ({
-  label,
-  input,
-  meta: { asyncValidating, touched, invalid, error },
-  helperText,
-  ...custom
-}) => {
-  console.debug("Text: ", label, input);
+import { Field } from "react-form";
+import {
+  TextFieldProps,
+  StandardTextFieldProps
+} from "@material-ui/core/TextField";
+
+export const createTextField = (validate?, asyncValidate?) => (
+  props: StandardTextFieldProps & { field }
+) => {
   return (
-    <TextField
-      label={label}
-      // placeholder={label}
-      error={touched && invalid}
-      helperText={(touched && error) || helperText}
-      {...input}
-      {...custom}
-    />
+    <Field
+      validate={validate}
+      asyncValidate={asyncValidate}
+      field={props.field}
+    >
+      {fieldApi => {
+        const {
+          helperText,
+          label,
+          onChange,
+          onBlur,
+          field,
+          onClick,
+          ...rest
+        } = props;
+
+        const {
+          value,
+          error,
+          touched,
+          warning,
+          success,
+          setValue,
+          setTouched
+        } = fieldApi;
+
+        return (
+          <TextField
+            {...rest}
+            label={label}
+            value={value || ""}
+            onClick={e => {
+              setValue(value);
+              if (onClick) {
+                onClick(e);
+              }
+            }}
+            onChange={e => {
+              setValue(e.target.value);
+              if (onChange) {
+                onChange(e);
+              }
+            }}
+            onBlur={e => {
+              setTouched();
+              if (onBlur) {
+                onBlur(e);
+              }
+            }}
+            error={error}
+            helperText={(touched && error) || helperText}
+          />
+        );
+      }}
+    </Field>
   );
 };
 export const renderPasswordField = ({

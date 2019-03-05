@@ -4,7 +4,6 @@ import { auth } from "./auth";
 import { mall } from "./mall";
 import { refer } from "./refer";
 import { gateway } from "./gateway";
-import { reducer as formReducer } from "redux-form";
 import { CoreAction, CoreActions } from "./core.actions";
 
 export const app: Reducer<AppState, CoreAction> = (
@@ -32,7 +31,6 @@ export const rootReducer: Reducer<CoreState> = combineReducers({
   mall,
   refer,
   gateway,
-  form: formReducer,
   app,
   game: (state = "") => state,
   referUrl: (state = "") => state

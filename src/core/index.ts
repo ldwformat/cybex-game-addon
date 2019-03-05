@@ -7,7 +7,6 @@ import {
 } from "redux";
 import { createLogger } from "redux-logger";
 import { createEpicMiddleware, combineEpics, Epic } from "redux-observable";
-import { reducer as formReducer, FormReducer, FormStateMap } from "redux-form";
 import {
   ChainFetcher,
   MallFetcher,

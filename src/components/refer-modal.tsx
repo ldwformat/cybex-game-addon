@@ -6,22 +6,9 @@ import {
   MapDispatchToProps
 } from "react-redux";
 import {
-  selectAuth,
-  selectAuthModal,
-  selectAuthIsLogging,
   selectCurrentAccount
 } from "../core/auth/auth.selectors";
 import { CoreState } from "../core/core.models";
-import {
-  AuthState,
-  authShowModal,
-  authCloseModal,
-  authLogout,
-  FaucetCaptcha,
-  authModalSwitchPanel,
-  authRegImpl
-} from "../core/auth";
-import { gatewayLoadGatewayInfo, gatewaySelectAsset } from "../core/gateway";
 import {
   Button,
   Dialog,
@@ -33,12 +20,10 @@ import {
   DialogContent
 } from "@material-ui/core";
 import { Close as CloseIcon } from "@material-ui/icons";
-import { corePushNoti } from "../core/core.actions";
 import { Subject } from "rxjs";
 import { take } from "rxjs/operators";
 import { PositionProperty } from "csstype";
-import { Field, reduxForm } from "redux-form";
-import { renderTextField, PrimaryButton } from "./form-utils";
+import { createTextField, PrimaryButton } from "./form-utils";
 import {
   selectReferLoading,
   referAdd,
@@ -63,10 +48,7 @@ const validate = values => {
   return errors;
 };
 
-export const ReferModalForm = reduxForm({
-  form: "ReferModalForm", // a unique identifier for this form
-  validate
-})(
+export const ReferModalForm = (
   class ReferModalForm extends React.Component<any> {
     render() {
       const { handleSubmit, pristine, reset, submitting, invalid } = this
@@ -81,14 +63,13 @@ export const ReferModalForm = reduxForm({
         <form onSubmit={handleSubmit}>
           <DialogContent style={styleOfContent}>
             <div style={{ marginBottom: "1em" }}>
-              <Field
+              {/* <Field
                 autoFocus
                 style={{ width: "100%" }}
                 name="referrer"
-                component={renderTextField}
                 label="推荐码"
                 helperText="请输入推荐人分享给您的推荐码"
-              />
+              /> */}
             </div>
           </DialogContent>
           <DialogActions style={{ margin: "8px 12px" }}>
