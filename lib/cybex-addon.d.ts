@@ -4,7 +4,6 @@ import { EventEmitter } from "events";
 import { IEffectDeps } from "./core/modes";
 import { CoreState } from "./core/core.models";
 export declare class CybexAddon {
-    config: CybexAddonConfig;
     static EVENT_ACTION: string;
     static OVERLAY_CONTAINER_ID: string;
     static INVATION_OVERLAY_CONTAINER_ID: string;
@@ -12,6 +11,7 @@ export declare class CybexAddon {
     store: Store<CoreState> | null;
     notifier: EventEmitter | null;
     toolset: IEffectDeps | null;
+    config: CybexAddonConfig;
     constructor(config?: CybexAddonConfig);
     init(): Promise<this>;
     patchPage: (Page: any, resolve?: (...args: any[]) => any, rootContainer?: HTMLElement | null) => Promise<void>;

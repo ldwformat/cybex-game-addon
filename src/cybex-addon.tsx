@@ -18,6 +18,7 @@ import { Refer } from "./pages/refer";
 import { ReferRule } from "./pages/refer-rule";
 import { ToolsetContext } from "./providers/toolset";
 import { InviteBtn } from "./components/invite-btn";
+import { merge } from "lodash";
 
 export class CybexAddon {
   static EVENT_ACTION = EVENT_ACTION;
@@ -40,7 +41,10 @@ export class CybexAddon {
   store: Store<CoreState> | null = null;
   notifier: EventEmitter | null = null;
   toolset: IEffectDeps | null = null;
-  constructor(public config: CybexAddonConfig = defaultConfig) {}
+  config: CybexAddonConfig;
+  constructor(config: CybexAddonConfig = defaultConfig) {
+    this.config = merge({}, defaultConfig, config);
+  }
 
   async init() {
     let { store, notifier, toolset } = await configureStore(this.config)({

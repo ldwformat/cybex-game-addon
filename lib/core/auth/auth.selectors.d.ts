@@ -16,3 +16,4 @@ export declare const selectAuthSet: import("reselect").OutputSelector<CoreState,
 export declare const selectBalances: import("reselect").OutputSelector<CoreState, import("./auth.models").BalanceObj, (res: import("./auth.models").AuthState) => import("./auth.models").BalanceObj>;
 export declare const selectLoginPanel: import("reselect").OutputSelector<CoreState, import("./auth.models").LoginPanel, (res: import("./auth.models").AuthState) => import("./auth.models").LoginPanel>;
 export declare const selectRegCaptcha: import("reselect").OutputSelector<CoreState, import("./auth.models").FaucetCaptcha | null, (res: import("./auth.models").AuthState) => import("./auth.models").FaucetCaptcha | null>;
+export declare const selectDefaultReferer: import("reselect").OutputSelector<CoreState, string | null, (res: import("./auth.models").AuthState) => string | null>;

@@ -36,7 +36,11 @@ import assert from "assert";
 import { authCheckFromSeed, getKeyStore, getKeySet } from "../../utils/auth";
 import { IEffectDeps } from "../modes";
 import { ActionCorePushNoti, corePushNoti } from "../core.actions";
-import { selectAuthSet, selectRegCaptcha } from "./auth.selectors";
+import {
+  selectAuthSet,
+  selectRegCaptcha,
+  selectAuthModal
+} from "./auth.selectors";
 import { calcValue } from "../../utils/calc";
 import {
   AuthRegGetCaptcha,
@@ -47,7 +51,6 @@ import {
 } from "./index";
 import { referAdd } from "../refer";
 import { selectGame } from "../core.selectors";
-import { selectAuthModal } from "../../../lib/core/auth";
 
 export const loginEpic: Epic<
   any,

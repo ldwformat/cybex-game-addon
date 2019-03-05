@@ -1,5 +1,6 @@
 import { Action, ActionCreator } from "redux";
 import { IAuthParams, IAuthResult, BalanceObj, FaucetCaptcha } from "./auth.models";
+import { RegFormData } from "../../components/reg-form";
 export declare enum AuthActions {
     LoginModalShow = "[Auth] LoginModalShow",
     LoginModalClose = "[Auth] LoginModalClose",
@@ -8,6 +9,7 @@ export declare enum AuthActions {
     RegGetCaptchaSuccess = "[Auth] RegGetCaptchaSuccess",
     RegImpl = "[Auth] RegImpl",
     RegImplSuccess = "[Auth] RegImplSuccess",
+    RegImplFailed = "[Auth] RegImplFailed",
     Login = "[Auth] Login",
     LoginSuccess = "[Auth] Login Success",
     LoginFailed = "[Auth] Login Failed",
@@ -37,15 +39,29 @@ export declare class AuthRegGetCaptchaSuccess implements Action {
     constructor(payload: FaucetCaptcha);
 }
 export declare class AuthRegImpl implements Action {
+    payload: RegFormData;
     readonly type = AuthActions.RegImpl;
+    constructor(payload: RegFormData);
 }
 export declare class AuthRegImplSuccess implements Action {
     readonly type = AuthActions.RegImplSuccess;
 }
+export declare class AuthRegImplFailed implements Action {
+    payload: {
+        code: number;
+    };
+    readonly type = AuthActions.RegImplFailed;
+    constructor(payload: {
+        code: number;
+    });
+}
 export declare const authRegGetCaptcha: () => AuthRegGetCaptcha;
 export declare const authRegGetCaptchaSuccess: (captcha: FaucetCaptcha) => AuthRegGetCaptchaSuccess;
-export declare const authRegImpl: () => AuthRegImpl;
+export declare const authRegImpl: (regData: RegFormData) => AuthRegImpl;
 export declare const authRegImplSuccess: () => AuthRegImplSuccess;
+export declare const authRegImplFailed: (err: {
+    code: number;
+}) => AuthRegImplFailed;
 export declare class AuthLoginAction implements Action {
     payload: IAuthParams;
     readonly type = AuthActions.Login;
@@ -80,4 +96,4 @@ export declare class AuthUpdateBalanceSuccessAction implements Action {
 export declare const authUnauthed: () => AuthUnauthedAction;
 export declare const authUpdateBalance: () => AuthUpdateBalanceAction;
 export declare const authUpdateBalanceSuccess: (balanceObj: BalanceObj) => AuthUpdateBalanceSuccessAction;
-export declare type AuthAction = AuthLoginModalShowAction | AuthLoginModalCloseAction | AuthLoginModalSwitchPanel | AuthRegGetCaptcha | AuthRegGetCaptchaSuccess | AuthRegImpl | AuthRegImplSuccess | AuthLogoutAction | AuthLoginAction | AuthLoginFailedAction | AuthLoginSuccessAction | AuthUpdateBalanceAction | AuthUpdateBalanceSuccessAction | AuthUnauthedAction;
+export declare type AuthAction = AuthLoginModalShowAction | AuthLoginModalCloseAction | AuthLoginModalSwitchPanel | AuthRegGetCaptcha | AuthRegGetCaptchaSuccess | AuthRegImpl | AuthRegImplSuccess | AuthRegImplFailed | AuthLogoutAction | AuthLoginAction | AuthLoginFailedAction | AuthLoginSuccessAction | AuthUpdateBalanceAction | AuthUpdateBalanceSuccessAction | AuthUnauthedAction;
