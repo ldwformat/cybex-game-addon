@@ -1,7 +1,6 @@
 "use strict";
 const HTMLWebpackPlugin = require("html-webpack-plugin");
 const CompressionPlugin = require("compression-webpack-plugin");
-
 const path = require("path");
 
 module.exports = {
@@ -23,9 +22,11 @@ module.exports = {
         test: /\.(png|jpg|gif)$/,
         use: [
           {
-            loader: "file-loader",
+            loader: "url-loader",
             options: {
-              name: "[path][name].[ext]"
+              limit: 16384,
+              fallback: "responsive-loader",
+              quality: 85
             }
           }
         ]

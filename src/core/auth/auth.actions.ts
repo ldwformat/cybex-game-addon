@@ -57,6 +57,12 @@ export class AuthRegGetCaptchaSuccess implements Action {
   readonly type = AuthActions.RegGetCaptchaSuccess;
   constructor(public payload: FaucetCaptcha) {}
 }
+export class AuthRegImpl implements Action {
+  readonly type = AuthActions.RegImpl;
+}
+export class AuthRegImplSuccess implements Action {
+  readonly type = AuthActions.RegImplSuccess;
+}
 
 export const authRegGetCaptcha = () =>
   ({ type: AuthActions.RegGetCaptcha } as AuthRegGetCaptcha);
@@ -65,6 +71,9 @@ export const authRegGetCaptchaSuccess = (captcha: FaucetCaptcha) =>
     type: AuthActions.RegGetCaptchaSuccess,
     payload: captcha
   } as AuthRegGetCaptchaSuccess);
+export const authRegImpl = () => ({ type: AuthActions.RegImpl } as AuthRegImpl);
+export const authRegImplSuccess = () =>
+  ({ type: AuthActions.RegImplSuccess } as AuthRegImplSuccess);
 
 // LoginImplement
 export class AuthLoginAction implements Action {
@@ -128,6 +137,8 @@ export type AuthAction =
   | AuthLoginModalSwitchPanel
   | AuthRegGetCaptcha
   | AuthRegGetCaptchaSuccess
+  | AuthRegImpl
+  | AuthRegImplSuccess
   | AuthLogoutAction
   | AuthLoginAction
   | AuthLoginFailedAction

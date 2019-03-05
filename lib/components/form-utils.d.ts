@@ -1,6 +1,6 @@
 import * as React from "react";
 import { ButtonProps } from "@material-ui/core/Button";
-export declare const renderTextField: ({ label, input, meta: { asyncValidating, touched, invalid, error }, ...custom }: {
+export declare const renderTextField: ({ label, input, meta: { asyncValidating, touched, invalid, error }, helperText, ...custom }: {
     [x: string]: any;
     label: any;
     input: any;
@@ -10,6 +10,7 @@ export declare const renderTextField: ({ label, input, meta: { asyncValidating, 
         invalid: any;
         error: any;
     };
+    helperText: any;
 }) => JSX.Element;
 export declare const renderPasswordField: ({ label, input, meta: { touched, invalid, error }, ...custom }: {
     [x: string]: any;

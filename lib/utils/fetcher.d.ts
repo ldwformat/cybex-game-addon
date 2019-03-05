@@ -1,7 +1,7 @@
 import PrivateKey from "../../src/cybex/ecc/src/PrivateKey";
 import Serializer from "../../src/cybex/serializer/src/serializer";
 import { GetAddressRequest, SetAddressRequest, SetAddress } from "../../src/cybex/serializer/src/operations";
-import { IRegistInfo, IRegistRes } from "../core/auth";
+import { IRegistInfo, IRegistRes, FaucetCaptcha } from "../core/auth";
 export declare const fetchWithRetry: (url: string, method: string, ...params: any[]) => Promise<any>;
 export declare class ChainFetcher {
     private wsUrl;
@@ -46,6 +46,6 @@ export declare class FaucetFetcher {
     faucetUrl: string;
     constructor(faucetUrl: string);
     fetch<R = any>(path: string, body: any): Promise<R>;
-    getCaptcha(): Promise<any>;
+    getCaptcha(): Promise<FaucetCaptcha>;
     postRegistInfo(regInfo: IRegistInfo): Promise<IRegistRes>;
 }

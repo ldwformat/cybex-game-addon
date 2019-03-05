@@ -18,17 +18,21 @@ export const renderTextField = ({
   label,
   input,
   meta: { asyncValidating, touched, invalid, error },
+  helperText,
   ...custom
-}) => (
-  <TextField
-    label={label}
-    // placeholder={label}
-    error={touched && invalid}
-    helperText={touched && error}
-    {...input}
-    {...custom}
-  />
-);
+}) => {
+  console.debug("Text: ", label, input);
+  return (
+    <TextField
+      label={label}
+      // placeholder={label}
+      error={touched && invalid}
+      helperText={(touched && error) || helperText}
+      {...input}
+      {...custom}
+    />
+  );
+};
 export const renderPasswordField = ({
   label,
   input,

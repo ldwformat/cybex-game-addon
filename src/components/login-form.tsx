@@ -2,7 +2,13 @@ import * as React from "react";
 import { Field, reduxForm } from "redux-form";
 import { renderTextField, PrimaryButton } from "../components/form-utils";
 import { delay } from "../utils";
-import { DialogContent, DialogActions } from "@material-ui/core";
+import {
+  DialogContent,
+  DialogActions,
+  InputAdornment,
+  IconButton
+} from "@material-ui/core";
+import { AccountCircle, VisibilityOff, Visibility } from "@material-ui/icons";
 
 const validate = values => {
   const errors: any = {};
@@ -32,51 +38,85 @@ const asyncValidate = (values /*, dispatch */) => {
 
 export const LoginForm = reduxForm({
   form: "LoginForm", // a unique identifier for this form
-  validate,
-})(props => {
-  const { handleSubmit, pristine, reset, submitting, invalid } = props;
-  console.debug("Props: ", props);
-  const styleOfContent = {
-    width: "80%",
-    minWidth: "60vw",
-    padding: 0,
-    margin: "10px 16px"
-  };
-  return (
-    <form onSubmit={handleSubmit}>
-      <DialogContent style={styleOfContent}>
-        <div style={{ marginBottom: "1em" }}>
-          <Field
-            autoFocus
-            style={{ width: "100%" }}
-            name="accountName"
-            component={renderTextField}
-            label="用户名"
-            helperText="请输入您的云钱包账户名"
-          />
-        </div>
-        <div style={{ marginBottom: "1em" }}>
-          <Field
-            style={{ width: "100%" }}
-            component={renderTextField}
-            name="password"
-            type="password"
-            label="密码"
-            helperText="请输入您的云钱包密码"
-          />
-        </div>
-      </DialogContent>
-      <DialogContent style={styleOfContent}>{props.children}</DialogContent>
-      <DialogActions style={{ margin: "8px 12px" }}>
-        <PrimaryButton
-          color="primary"
-          fullWidth
-          type="submit"
-          disabled={pristine || submitting || invalid}
-        >
-          登录
-        </PrimaryButton>
-      </DialogActions>
-    </form>
-  );
-});
+  validate
+})(
+  class LoginForm extends React.Component<
+    any,
+    {
+      showPassword: boolean;
+    }
+  > {
+    state = {
+      showPassword: false
+    };
+    render() {
+      const { handleSubmit, pristine, reset, submitting, invalid } = this
+        .props as any;
+      console.debug("Props: ", this.props);
+      const styleOfContent = {
+        width: "80%",
+        minWidth: "60vw",
+        padding: 0,
+        margin: "10px 16px"
+      };
+      return (
+        <form onSubmit={handleSubmit}>
+          <DialogContent style={styleOfContent}>
+            <div style={{ marginBottom: "1em" }}>
+              <Field
+                autoFocus
+                style={{ width: "100%" }}
+                name="accountName"
+                component={renderTextField}
+                label="用户名"
+                helperText="请输入您的云钱包账户名"
+              />
+            </div>
+            <div style={{ marginBottom: "1em" }}>
+              <Field
+                style={{ width: "100%" }}
+                component={renderTextField}
+                name="password"
+                type={this.state.showPassword ? "text" : "password"}
+                label="密码"
+                helperText="请输入您的云钱包密码"
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        onClick={() =>
+                          this.setState(prev => ({
+                            showPassword: !prev.showPassword
+                          }))
+                        }
+                      >
+                        {this.state.showPassword ? (
+                          <VisibilityOff />
+                        ) : (
+                          <Visibility />
+                        )}
+                      </IconButton>
+                    </InputAdornment>
+                  )
+                }}
+              />
+            </div>
+          </DialogContent>
+          <DialogContent style={styleOfContent}>
+            {this.props.children}
+          </DialogContent>
+          <DialogActions style={{ margin: "8px 12px" }}>
+            <PrimaryButton
+              color="primary"
+              fullWidth
+              type="submit"
+              disabled={pristine || submitting || invalid}
+            >
+              登录
+            </PrimaryButton>
+          </DialogActions>
+        </form>
+      );
+    }
+  }
+);

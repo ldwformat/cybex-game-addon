@@ -36,7 +36,7 @@ function getObservables(domItem) {
   const touchMoves = fromEvent(domItem, "touchmove").pipe(
     map(touchEventToCoordinate)
   );
-  const touchEnds = fromEvent(window, "touchend").pipe(
+  const touchEnds = fromEvent(domItem, "touchend").pipe(
     map(touchEventToCoordinate)
   );
 

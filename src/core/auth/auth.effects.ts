@@ -21,15 +21,24 @@ import {
   AuthUpdateBalanceAction,
   AuthLogoutAction,
   authUpdateBalance,
-  authUpdateBalanceSuccess
+  authUpdateBalanceSuccess,
+  authRegGetCaptchaSuccess,
+  authRegGetCaptcha
 } from "./auth.actions";
-import { of, from, interval } from "rxjs";
+import { of, from, interval, NEVER, merge } from "rxjs";
 import assert from "assert";
 import { authCheckFromSeed } from "../../utils/auth";
 import { IEffectDeps } from "../modes";
 import { ActionCorePushNoti, corePushNoti } from "../core.actions";
 import { selectAuthSet } from "./auth.selectors";
 import { calcValue } from "../../utils/calc";
+import {
+  AuthRegGetCaptcha,
+  AuthRegGetCaptchaSuccess,
+  AuthLoginModalSwitchPanel,
+  selectLoginPanel,
+  LoginPanel
+} from "./index";
 
 export const loginEpic: Epic<
   any,
@@ -143,6 +152,48 @@ export const loginFailedEpic: Epic<
   action$.pipe(
     ofType<AuthLoginFailedAction>(AuthActions.LoginFailed),
     map(_ => corePushNoti("请检查用户名密码是否正确", { variant: "error" }))
+  );
+export const regPanelCaptchaEpic: Epic<
+  AuthLoginModalSwitchPanel,
+  any,
+  any,
+  IEffectDeps
+> = (action$, state$, { faucet }) =>
+  action$.pipe(
+    ofType(AuthActions.LoginModalSwitchPanel),
+    switchMap(_ =>
+      state$.pipe(
+        filter(state => selectLoginPanel(state) === LoginPanel.Register),
+        take(1),
+        switchMap(_ =>
+          merge(interval(90 * 1000), of(1)).pipe(
+            takeUntil(
+              state$.pipe(
+                filter(state => selectLoginPanel(state) === LoginPanel.Login)
+              )
+            ),
+            map(_ => authRegGetCaptcha())
+          )
+        )
+      )
+    )
+  );
+export const captchaEpic: Epic<AuthRegGetCaptcha, any, any, IEffectDeps> = (
+  action$,
+  state$,
+  { faucet }
+) =>
+  action$.pipe(
+    ofType(AuthActions.RegGetCaptcha),
+    switchMap(_ =>
+      from(faucet.getCaptcha()).pipe(
+        map(captcha => authRegGetCaptchaSuccess(captcha)),
+        catchError(err => {
+          console.error(err);
+          return NEVER;
+        })
+      )
+    )
   );
 
 export const loginCloseEpic: Epic<any, any, any, IEffectDeps> = (

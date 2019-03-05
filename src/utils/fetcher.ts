@@ -16,7 +16,7 @@ import {
   SetReferRequest,
   set_refer
 } from "../../src/cybex/serializer/src/operations";
-import { IRegistInfo, IRegistRes } from "../core/auth";
+import { IRegistInfo, IRegistRes, FaucetCaptcha } from "../core/auth";
 
 const simpleCache = {};
 const getKey = (...args) => JSON.stringify(args);
@@ -380,8 +380,8 @@ export class FaucetFetcher {
   }
 
   async getCaptcha() {
-    return fetch(resolvePath(this.faucetUrl, "captcha")).then(res =>
-      res.json()
+    return fetch(resolvePath(this.faucetUrl, "captcha")).then(
+      res => res.json() as Promise<FaucetCaptcha>
     );
   }
 

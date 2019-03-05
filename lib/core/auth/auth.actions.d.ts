@@ -36,8 +36,16 @@ export declare class AuthRegGetCaptchaSuccess implements Action {
     readonly type = AuthActions.RegGetCaptchaSuccess;
     constructor(payload: FaucetCaptcha);
 }
+export declare class AuthRegImpl implements Action {
+    readonly type = AuthActions.RegImpl;
+}
+export declare class AuthRegImplSuccess implements Action {
+    readonly type = AuthActions.RegImplSuccess;
+}
 export declare const authRegGetCaptcha: () => AuthRegGetCaptcha;
 export declare const authRegGetCaptchaSuccess: (captcha: FaucetCaptcha) => AuthRegGetCaptchaSuccess;
+export declare const authRegImpl: () => AuthRegImpl;
+export declare const authRegImplSuccess: () => AuthRegImplSuccess;
 export declare class AuthLoginAction implements Action {
     payload: IAuthParams;
     readonly type = AuthActions.Login;
@@ -72,4 +80,4 @@ export declare class AuthUpdateBalanceSuccessAction implements Action {
 export declare const authUnauthed: () => AuthUnauthedAction;
 export declare const authUpdateBalance: () => AuthUpdateBalanceAction;
 export declare const authUpdateBalanceSuccess: (balanceObj: BalanceObj) => AuthUpdateBalanceSuccessAction;
-export declare type AuthAction = AuthLoginModalShowAction | AuthLoginModalCloseAction | AuthLoginModalSwitchPanel | AuthRegGetCaptcha | AuthRegGetCaptchaSuccess | AuthLogoutAction | AuthLoginAction | AuthLoginFailedAction | AuthLoginSuccessAction | AuthUpdateBalanceAction | AuthUpdateBalanceSuccessAction | AuthUnauthedAction;
+export declare type AuthAction = AuthLoginModalShowAction | AuthLoginModalCloseAction | AuthLoginModalSwitchPanel | AuthRegGetCaptcha | AuthRegGetCaptchaSuccess | AuthRegImpl | AuthRegImplSuccess | AuthLogoutAction | AuthLoginAction | AuthLoginFailedAction | AuthLoginSuccessAction | AuthUpdateBalanceAction | AuthUpdateBalanceSuccessAction | AuthUnauthedAction;
