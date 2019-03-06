@@ -106,7 +106,10 @@ export const configureStore = (config: CybexAddonConfig) => async (
   let store = createStore(
     rootReducer,
     preloadState,
-    applyMiddleware(loggerMiddleware, epicMiddleware)
+    applyMiddleware(
+      // loggerMiddleware,
+      epicMiddleware
+    )
   );
 
   epicMiddleware.run(rootEpic);
