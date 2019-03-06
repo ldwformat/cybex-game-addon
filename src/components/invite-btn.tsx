@@ -39,7 +39,6 @@ function getObservables(domItem) {
   );
   const touchEnds = merge(
     fromEvent(domItem, "touchend")
-    // fromEvent(window, "touchend")
   ).pipe(map(touchEventToCoordinate));
 
   const starts$ = merge(mouseDowns, touchStarts);
@@ -66,7 +65,6 @@ export class InviteBtn extends React.Component<any> {
       });
       starts$
         .pipe(
-          // takeUntil(moves$),
           switchMap(startP => ends$.pipe(map(endP => ({ startP, endP }))))
         )
         .subscribe(({ startP, endP }) => {
@@ -79,14 +77,7 @@ export class InviteBtn extends React.Component<any> {
             }
           }
         });
-      // zip(starts$, ends$).subscribe(([start, end]) => {
-      //   console.debug("One pair");
-      //   if (Math.pow(start.x - end.x, 2) + Math.pow(start.y - end.y, 2) < 256) {
-      //     if (this.props.onClick) {
-      //       this.props.onClick();
-      //     }
-      //   }
-      // });
+      
       this.subscription = starts$
         .pipe(
           switchMap(startE => {

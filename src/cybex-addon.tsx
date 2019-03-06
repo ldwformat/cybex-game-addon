@@ -85,6 +85,13 @@ export class CybexAddon {
     public pageContext = getPageContext()
   ) {
     this.config = merge({}, defaultConfig, config);
+    if (typeof window !== undefined) {
+      window.addEventListener("popstate", e => {
+        Array.from(document.querySelectorAll("[role=presentation]")).forEach(
+          node => node.remove()
+        );
+      });
+    }
   }
 
   async init() {

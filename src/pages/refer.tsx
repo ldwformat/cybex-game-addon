@@ -104,6 +104,15 @@ export const Refer = connect(mapStateToProps)(
         [Refer.Panels.ReferModal]: false
       };
 
+      componentWillUnmount = () => {
+        this.setState({
+          [Refer.Panels.RegisterRef]: false,
+          [Refer.Panels.GameRegisterRef]: false,
+          [Refer.Panels.Drawer]: false,
+          [Refer.Panels.ReferModal]: false
+        });
+      };
+
       handleExpand = (panel: string) => {
         this.setState(prev => ({
           [panel]: !prev[panel]
