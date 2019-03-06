@@ -126,10 +126,7 @@ export class CybexAddon {
           registry={this.pageContext.sheetsRegistry}
           generateClassName={this.pageContext.generateClassName}
         >
-          <MuiThemeProvider
-            theme={this.theme}
-            // sheetsManager={this.pageContext.sheetsManager}
-          >
+          <MuiThemeProvider theme={this.theme}>
             <SnackbarProvider maxSnack={3}>
               <Notifier />
             </SnackbarProvider>
@@ -162,6 +159,14 @@ export class CybexAddon {
     return new Promise(resolve =>
       this.bootstrap(InviteBtn, { onClick })(rootContainer as any, resolve)
     );
+  }
+  hideInviteBtn() {
+    let rootContainer = document.getElementById(
+      CybexAddon.INVATION_OVERLAY_CONTAINER_ID
+    );
+    if (rootContainer) {
+      rootContainer.remove();
+    }
   }
   async depositPage(root: HTMLElement) {
     return new Promise(resolve => this.bootstrap(Deposit)(root, resolve));

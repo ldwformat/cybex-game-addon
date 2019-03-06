@@ -20,6 +20,7 @@ export declare class CybexAddon {
     bootstrap: (Page: any, props?: any) => (rootElement: HTMLElement, resolve?: (...args: any[]) => any) => Promise<void>;
     loginPage(): Promise<{}>;
     showInviteBtn(onClick: (e: any) => any): Promise<{}>;
+    hideInviteBtn(): void;
     depositPage(root: HTMLElement): Promise<{}>;
     referPage(root: HTMLElement): Promise<{}>;
     referRulePage(root: HTMLElement): Promise<{}>;

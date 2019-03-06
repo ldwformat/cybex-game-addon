@@ -31,6 +31,7 @@
     <button id="refer" data-ref="root2">邀请页</button>
     <button id="referRule" data-ref="root3">邀请规则页</button>
     <button id="invite" data-ref="root4">邀请按钮</button>
+    <button id="inviteHide" data-ref="root4">隐藏邀请按钮</button>
     <script>
       {
         let count = 0;
@@ -78,6 +79,9 @@
             console.debug("E: ", e);
             alert("Hello");
           });
+        });
+        document.getElementById("inviteHide").addEventListener("click", async e => {
+          addon.hideInviteBtn();
         });
       }
     </script>
