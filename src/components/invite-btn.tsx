@@ -14,6 +14,7 @@ function getObservables(domItem) {
 
   const touchEventToCoordinate = touchEvent => {
     touchEvent.preventDefault();
+    touchEvent.stopPropagation();
     return {
       x: touchEvent.changedTouches[0].clientX,
       y: touchEvent.changedTouches[0].clientY
@@ -36,9 +37,10 @@ function getObservables(domItem) {
   const touchMoves = fromEvent(domItem, "touchmove").pipe(
     map(touchEventToCoordinate)
   );
-  const touchEnds = fromEvent(domItem, "touchend").pipe(
-    map(touchEventToCoordinate)
-  );
+  const touchEnds = merge(
+    fromEvent(domItem, "touchend")
+    // fromEvent(window, "touchend")
+  ).pipe(map(touchEventToCoordinate));
 
   const starts$ = merge(mouseDowns, touchStarts);
   const moves$ = merge(mouseMoves, touchMoves);
@@ -57,14 +59,34 @@ export class InviteBtn extends React.Component<any> {
       this.wrapper.style.left = window.innerWidth - width + "px";
       this.wrapper.style.top =
         Math.floor((window.innerHeight - height) * 0.75) + "px";
-
-      zip(starts$, ends$).subscribe(([start, end]) => {
-        if (Math.pow(start.x - end.x, 2) + Math.pow(start.y - end.y, 2) < 16) {
-          if (this.props.onClick) {
-            this.props.onClick();
-          }
+      this.wrapper.addEventListener("click", e => {
+        if (this.props.onClick) {
+          this.props.onClick();
         }
       });
+      starts$
+        .pipe(
+          // takeUntil(moves$),
+          switchMap(startP => ends$.pipe(map(endP => ({ startP, endP }))))
+        )
+        .subscribe(({ startP, endP }) => {
+          if (
+            Math.pow(startP.x - endP.x, 2) + Math.pow(startP.y - endP.y, 2) <
+            256
+          ) {
+            if (this.props.onClick) {
+              this.props.onClick();
+            }
+          }
+        });
+      // zip(starts$, ends$).subscribe(([start, end]) => {
+      //   console.debug("One pair");
+      //   if (Math.pow(start.x - end.x, 2) + Math.pow(start.y - end.y, 2) < 256) {
+      //     if (this.props.onClick) {
+      //       this.props.onClick();
+      //     }
+      //   }
+      // });
       this.subscription = starts$
         .pipe(
           switchMap(startE => {
