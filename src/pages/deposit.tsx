@@ -82,7 +82,6 @@ export const Deposit = connect(
     > {
       componentDidMount() {
         if (!this.props.currentDeposit && this.props.coinList.length) {
-          console.debug("This.props: ", this.props);
           this.props.selectAsset(this.props.coinList[0].asset);
         }
       }

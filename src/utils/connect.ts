@@ -47,10 +47,8 @@ export class WsConnection extends EventEmitter {
         this.options.protocol
         // this.options
       );
-      console.debug("WsConnect Init");
 
       this.rws.addEventListener("open", (e: Event) => {
-        console.debug("WsConnect Open");
         resolve(e);
       });
       this.rws.addEventListener("close", (e: CloseEvent) => {

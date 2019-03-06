@@ -56,7 +56,6 @@ describe("认证测试", () => {
     );
     await delay(1000);
     let stateAfterLogin = store.getState();
-    console.debug("State: ", stateAfterLogin);
     expect(stateAfterLogin.auth.isAuthed).toStrictEqual(false);
     done();
   });

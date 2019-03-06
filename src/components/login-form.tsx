@@ -1,6 +1,7 @@
 import * as React from "react";
-import { Form } from "react-form";
-import { PrimaryButton, createTextField } from "../components/form-utils";
+import { Form, Field } from "react-final-form";
+
+import { PrimaryButton, renderTextField } from "../components/form-utils";
 import {
   DialogContent,
   DialogActions,
@@ -8,12 +9,25 @@ import {
   IconButton
 } from "@material-ui/core";
 import { AccountCircle, VisibilityOff, Visibility } from "@material-ui/icons";
-const validate = username =>
-  !username || username.trim() === "" ? "Username is a required field" : null;
+// const validate = username =>
+//   !username || username.trim() === "" ? "Username is a required field" : null;
 
-const AccountNameInput = createTextField(validate);
-const PasswordInput = createTextField(validate);
-
+const validate = values => {
+  const errors: any = {};
+  const requiredFields = ["accountName", "password"];
+  requiredFields.forEach(field => {
+    if (!values[field]) {
+      errors[field] = "Required";
+    }
+  });
+  if (
+    values.email &&
+    !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
+  ) {
+    errors.email = "Invalid email address";
+  }
+  return errors;
+};
 export const LoginForm = class LoginForm extends React.Component<
   any,
   {
@@ -32,28 +46,39 @@ export const LoginForm = class LoginForm extends React.Component<
       margin: "10px 16px"
     };
     return (
-      <Form>
-        {formApi => (
-          <form onSubmit={onSubmit}>
+      <Form
+        onSubmit={onSubmit}
+        validate={validate}
+        render={({
+          handleSubmit,
+          reset,
+          submitting,
+          pristine,
+          values,
+          invalid
+        }) => (
+          <form onSubmit={handleSubmit}>
             <DialogContent style={styleOfContent}>
               <div style={{ marginBottom: "1em" }}>
-                <AccountNameInput
+                <Field
+                  fullWidth
                   autoFocus
-                  style={{ width: "100%" }}
                   name="accountName"
-                  field="accountName"
+                  component={renderTextField as any}
+                  type="text"
                   label="用户名"
                   helperText="请输入您的云钱包账户名"
                 />
               </div>
               <div style={{ marginBottom: "1em" }}>
-                <PasswordInput
+                <Field
                   style={{ width: "100%" }}
-                  field="password"
+                  fullWidth
                   name="password"
                   type={this.state.showPassword ? "text" : "password"}
                   label="密码"
                   helperText="请输入您的云钱包密码"
+                  component={renderTextField as any}
                   InputProps={{
                     endAdornment: (
                       <InputAdornment position="end">
@@ -84,14 +109,14 @@ export const LoginForm = class LoginForm extends React.Component<
                 color="primary"
                 fullWidth
                 type="submit"
-                disabled={formApi.validationFailed}
+                disabled={pristine || submitting || invalid}
               >
                 登录
               </PrimaryButton>
             </DialogActions>
           </form>
         )}
-      </Form>
+      />
     );
   }
 };

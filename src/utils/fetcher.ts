@@ -205,7 +205,6 @@ export class BackendFetcher {
     })
       .then(res => res.json())
       .then((res: Backend.Response<R>) => {
-        console.debug("Fetch Res: ", res);
         if (res.success) {
           return res.data as R;
         }
@@ -269,7 +268,6 @@ export class ReferFetcher {
     })
       .then(res => res.json())
       .then((res: Backend.Response<R>) => {
-        console.debug("Fetch Res: ", res, "Request: ", JSON.stringify(body));
         if (res.success) {
           return res.data as R;
         }

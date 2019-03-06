@@ -64,12 +64,10 @@ export const loginEpic: Epic<
     switchMap(action => {
       return from(fetcher.fetchAccount(action.payload.accountName)).pipe(
         map(account => {
-          console.debug("Login Action: ", account);
           assert(account, "没找到相应账户信息");
           let keyStore = authCheckFromSeed(action.payload, account);
           assert(keyStore, "登录验证失败");
           if (keyStore) {
-            console.debug("LoginSuccess: ", action.payload.refer);
             return authLoginSuccess({
               accountName: action.payload.accountName,
               account,
@@ -95,7 +93,6 @@ export const authUpdateBalanceEpic: Epic<
 > = (action$, state$, { chainAssisant }) =>
   action$.pipe(
     ofType(AuthActions.LoginSuccess),
-    tap(action => console.debug("SUCCESS!!!!!!!!", action)),
     switchMap(action =>
       interval(3000).pipe(
         takeUntil(action$.pipe(ofType(AuthActions.Logout))),
@@ -232,7 +229,6 @@ export const authRegEpic: Epic<AuthRegImpl, any, any, IEffectDeps> = (
         switchMap(state => {
           let { accountName, password, captcha, referer } = action.payload;
           let currentCaptchaInfo = selectRegCaptcha(state);
-          console.debug("Captcha: ", currentCaptchaInfo);
           if (!currentCaptchaInfo || !accountName || !password || !captcha) {
             throw new Error("No Captcha");
           }

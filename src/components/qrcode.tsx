@@ -10,7 +10,6 @@ export class QRCodeDisplay extends React.Component<{
   qrcode: HTMLDivElement | undefined | null;
 
   download = (filename: string = "deposit.jpg") => {
-    console.debug("Download: ", this);
     if (!this.qrcode) {
       return;
     }
@@ -25,7 +24,6 @@ export class QRCodeDisplay extends React.Component<{
       let file = new File([blob], filename, { type: "image/png" });
       let url = URL.createObjectURL(file);
       let a = document.createElement("a");
-      console.debug("File: ", file);
       a.download = filename;
       a.href = url;
       a.target = "_blank";

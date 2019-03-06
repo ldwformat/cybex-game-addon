@@ -16,7 +16,11 @@ module.exports = {
     rules: [
       {
         test: /\.tsx?$/,
-        loader: "awesome-typescript-loader"
+        loader: "awesome-typescript-loader",
+        exclude: /node_modules/,
+        options: {
+          transpileOnly: true
+        }
       },
       {
         test: /\.(png|jpg|gif)$/,

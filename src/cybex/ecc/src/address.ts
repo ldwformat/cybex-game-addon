@@ -41,14 +41,6 @@ class Address {
 
   /** @return Address - Compressed PTS format (by default) */
   static fromPublic(public_key, compressed = true, version = 56) {
-    console.debug(
-      "Address",
-      "Start",
-      public_key.toString(),
-      public_key.toAddressString(),
-      compressed,
-      version
-    );
     var sha2 = sha256(public_key.toBuffer(compressed));
     // console.debug("Address", "SHA256", sha2);
     var rep = ripemd160(sha2);
@@ -66,11 +58,6 @@ class Address {
     var buffer = Buffer.concat([addr, check.slice(0, 4)]);
     // console.debug("Address", "BUFFER", buffer);
     // console.debug("Address", "FINAL", new Address(ripemd160(buffer)));
-    console.debug(
-      "Address",
-      "FINALSTRING",
-      new Address(ripemd160(buffer)).toString("CYB")
-    );
     return new Address(ripemd160(buffer));
   }
 

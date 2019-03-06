@@ -5,9 +5,7 @@ import {
   MapStateToProps,
   MapDispatchToProps
 } from "react-redux";
-import {
-  selectCurrentAccount
-} from "../core/auth/auth.selectors";
+import { selectCurrentAccount } from "../core/auth/auth.selectors";
 import { CoreState } from "../core/core.models";
 import {
   Button,
@@ -23,70 +21,78 @@ import { Close as CloseIcon } from "@material-ui/icons";
 import { Subject } from "rxjs";
 import { take } from "rxjs/operators";
 import { PositionProperty } from "csstype";
-import { createTextField, PrimaryButton } from "./form-utils";
+import { PrimaryButton, renderTextField } from "./form-utils";
 import {
   selectReferLoading,
   referAdd,
   selectMyGameReferrer
 } from "../core/refer";
 import { selectGame } from "../core/core.selectors";
+import { Form, Field } from "react-final-form";
 
 const validate = values => {
   const errors: any = {};
-  const requiredFields = ["accountName", "password"];
+  const requiredFields = ["referrer"];
   requiredFields.forEach(field => {
     if (!values[field]) {
       errors[field] = "Required";
     }
   });
-  if (
-    values.email &&
-    !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
-  ) {
-    errors.email = "Invalid email address";
-  }
   return errors;
 };
 
-export const ReferModalForm = (
-  class ReferModalForm extends React.Component<any> {
-    render() {
-      const { handleSubmit, pristine, reset, submitting, invalid } = this
-        .props as any;
-      const styleOfContent = {
-        width: "90%",
-        minWidth: "70vw",
-        padding: 0,
-        margin: "10px 16px"
-      };
-      return (
-        <form onSubmit={handleSubmit}>
-          <DialogContent style={styleOfContent}>
-            <div style={{ marginBottom: "1em" }}>
-              {/* <Field
-                autoFocus
-                style={{ width: "100%" }}
-                name="referrer"
-                label="推荐码"
-                helperText="请输入推荐人分享给您的推荐码"
-              /> */}
-            </div>
-          </DialogContent>
-          <DialogActions style={{ margin: "8px 12px" }}>
-            <PrimaryButton
-              color="primary"
-              fullWidth
-              type="submit"
-              disabled={pristine || submitting || invalid}
-            >
-              增加推荐人
-            </PrimaryButton>
-          </DialogActions>
-        </form>
-      );
-    }
+export const ReferModalForm = class ReferModalForm extends React.Component<
+  any
+> {
+  render() {
+    const { onSubmit } = this.props as any;
+    const styleOfContent = {
+      width: "90%",
+      minWidth: "70vw",
+      padding: 0,
+      margin: "10px 16px"
+    };
+    return (
+      <Form
+        onSubmit={onSubmit}
+        validate={validate}
+        render={({
+          handleSubmit,
+          reset,
+          submitting,
+          pristine,
+          invalid,
+          values
+        }) => (
+          <form onSubmit={handleSubmit}>
+            <DialogContent style={styleOfContent}>
+              <div style={{ marginBottom: "1em" }}>
+                <Field
+                  autoFocus
+                  style={{ width: "100%" }}
+                  component={renderTextField as any}
+                  name="referrer"
+                  label="推荐码"
+                  helperText="请输入推荐人分享给您的推荐码"
+                />
+              </div>
+            </DialogContent>
+            <DialogActions style={{ margin: "8px 12px" }}>
+              <PrimaryButton
+                color="primary"
+                fullWidth
+                type="submit"
+                disabled={pristine || submitting || invalid}
+              >
+                增加推荐人
+              </PrimaryButton>
+            </DialogActions>
+          </form>
+        )}
+      />
+    );
   }
-);
+};
 
 ////////////
 

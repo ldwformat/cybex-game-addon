@@ -33,8 +33,7 @@ import {
   StyledComponentProps,
   IconButton,
   Typography,
-  DialogActions,
-  TextField
+  DialogActions
 } from "@material-ui/core";
 import { Close as CloseIcon } from "@material-ui/icons";
 import { corePushNoti } from "../core/core.actions";
@@ -120,11 +119,6 @@ let LoginClass = withStyles(styles)(
       }
     };
 
-    constructor(props) {
-      super(props);
-      console.debug("New Login: ", props);
-    }
-
     onSubmit = _data => {
       let data: IAuthParams = {
         ..._data,
@@ -174,7 +168,6 @@ let LoginClass = withStyles(styles)(
               <CloseIcon />
             </IconButton>
           </div>
-          <TextField label="test" />
           {currentPanel === LoginPanel.Login ? (
             <LoginForm onSubmit={this.onSubmit} />
           ) : (
