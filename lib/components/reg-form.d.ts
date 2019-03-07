@@ -1,4 +1,4 @@
-/// <reference types="react" />
+import * as React from "react";
 export declare type RegFormData = {
     accountName: string | null;
     password: string | null;
@@ -6,4 +6,4 @@ export declare type RegFormData = {
     captcha: string | null;
     referer?: string | null;
 };
-export declare const RegForm: (props: any) => JSX.Element;
+export declare const RegForm: React.ComponentType<Pick<any, string | number | symbol>>;

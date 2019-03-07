@@ -1,9 +1,6 @@
 import * as React from "react";
-export declare class QRCodeDisplay extends React.Component<{
+import { WithTranslation } from "react-i18next";
+export declare const QRCodeDisplay: React.ComponentType<Pick<{
     text: string;
     filename: string;
-}> {
-    qrcode: HTMLDivElement | undefined | null;
-    download: (filename?: string) => void;
-    render(): JSX.Element;
-}
+} & WithTranslation, "text" | "filename">>;

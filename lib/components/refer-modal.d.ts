@@ -1,35 +1,7 @@
 import * as React from "react";
 import { StyledComponentProps } from "@material-ui/core";
 import { referAdd } from "../core/refer";
-export declare const ReferModalForm: {
-    new (props: Readonly<any>): {
-        render(): JSX.Element;
-        context: any;
-        setState<K extends never>(state: {} | ((prevState: Readonly<{}>, props: Readonly<any>) => {} | Pick<{}, K> | null) | Pick<{}, K> | null, callback?: (() => void) | undefined): void;
-        forceUpdate(callBack?: (() => void) | undefined): void;
-        readonly props: Readonly<{
-            children?: React.ReactNode;
-        }> & Readonly<any>;
-        state: Readonly<{}>;
-        refs: {
-            [key: string]: React.ReactInstance;
-        };
-    };
-    new (props: any, context?: any): {
-        render(): JSX.Element;
-        context: any;
-        setState<K extends never>(state: {} | ((prevState: Readonly<{}>, props: Readonly<any>) => {} | Pick<{}, K> | null) | Pick<{}, K> | null, callback?: (() => void) | undefined): void;
-        forceUpdate(callBack?: (() => void) | undefined): void;
-        readonly props: Readonly<{
-            children?: React.ReactNode;
-        }> & Readonly<any>;
-        state: Readonly<{}>;
-        refs: {
-            [key: string]: React.ReactInstance;
-        };
-    };
-    contextType?: React.Context<any> | undefined;
-};
+export declare const ReferModalForm: React.ComponentType<Pick<any, string | number | symbol>>;
 declare type ReferModalPropsDispatch = {
     addRefer: typeof referAdd;
 };

@@ -1,5 +1,6 @@
 import * as React from "react";
 import { StyledComponentProps } from "@material-ui/core";
-export declare const ReferCode: React.ComponentType<Pick<{
+import { WithTranslation } from "react-i18next";
+export declare const ReferCode: React.ComponentType<Pick<Pick<{
     code?: string | undefined;
-} & StyledComponentProps<"root" | "cardRoot" | "cardMain" | "cardShadow" | "textRoot">, "code" | "innerRef"> & StyledComponentProps<string>>;
+} & StyledComponentProps<"root" | "cardRoot" | "cardMain" | "cardShadow" | "textRoot"> & WithTranslation, "code" | "innerRef" | "t" | "i18n"> & StyledComponentProps<string>, "code" | "classes" | "innerRef">>;
