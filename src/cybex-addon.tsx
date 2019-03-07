@@ -89,22 +89,28 @@ export class CybexAddon {
     this.config = merge({}, defaultConfig, config);
     if (typeof window !== undefined) {
       window.addEventListener("popstate", e => {
-        Array.from(document.querySelectorAll("[role=presentation]")).forEach(
-          node => node.remove()
-        );
+        Array.from(document.body.children)
+          .filter(
+            node =>
+              node.attributes["role"].value === "presentation" ||
+              node.attributes["role"].value === "dialog"
+          )
+          .forEach(node => node.remove());
       });
     }
     i18n.changeLanguage(config.lang);
   }
 
   async init() {
-    let { store, notifier, toolset } = await configureStore(this.config)({
-      game: this.config.game,
-      referUrl: this.config.referUrl
-    });
-    this.toolset = toolset;
-    this.notifier = notifier;
-    this.store = store;
+    if (!this.store) {
+      let { store, notifier, toolset } = await configureStore(this.config)({
+        game: this.config.game,
+        referUrl: this.config.referUrl
+      });
+      this.toolset = toolset;
+      this.notifier = notifier;
+      this.store = store;
+    }
 
     return this;
   }

@@ -159,12 +159,13 @@ export const Refer = connect(mapStateToProps)(
                   </ListItem>
                   <ListItem
                     button
+                    divider
                     onClick={this.handleExpand.bind(
                       this,
                       Refer.Panels.RegisterRef
                     )}
                   >
-                    <ListItemText primary={t(Dict.MyGameReferral)} />
+                    <ListItemText primary={t(Dict.MyRegisterReferral)} />
                     {(myRegisterReferral &&
                       myRegisterReferral.referrals.length.toString()) ||
                       0}
