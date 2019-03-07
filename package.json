@@ -63,6 +63,7 @@
     "ecurve": "^1.0.6",
     "events": "^3.0.0",
     "final-form": "^4.12.0",
+    "i18next": "^15.0.6",
     "isomorphic-fetch": "^2.2.1",
     "lodash": "^4.17.11",
     "moment": "^2.24.0",

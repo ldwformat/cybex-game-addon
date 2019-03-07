@@ -43,6 +43,8 @@ import { LoginForm } from "../components/login-form";
 import { RegForm, RegFormData } from "../components/reg-form";
 import { PositionProperty } from "csstype";
 import { selectGame } from "../core/core.selectors";
+import { withTranslation, WithTranslation } from "react-i18next";
+import { Dict } from "../providers/i18n";
 
 type LoginPropsDispatch = {
   login: typeof authLogin;
@@ -105,110 +107,114 @@ type LoginProps = {
 };
 
 let LoginClass = withStyles(styles)(
-  class Login extends React.Component<
-    StyledComponentProps<"paper"> &
-      LoginPropsDispatch &
-      LoginPropsState &
-      LoginProps
-  > {
-    logging$ = new Subject();
+  withTranslation()(
+    class Login extends React.Component<
+      StyledComponentProps<"paper"> &
+        LoginPropsDispatch &
+        LoginPropsState &
+        LoginProps &
+        WithTranslation
+    > {
+      logging$ = new Subject();
 
-    componentDidUpdate = (prevProps, prevState) => {
-      if (prevProps.isLogging && !this.props.isLogging) {
-        this.logging$.next(false);
-      }
-    };
-
-    onSubmit = _data => {
-      let data: IAuthParams = {
-        ..._data,
-        refer: this.props.defaultReferrer
-          ? {
-              referrer: this.props.defaultReferrer,
-              action: this.props.game
-            }
-          : undefined
+      componentDidUpdate = (prevProps, prevState) => {
+        if (prevProps.isLogging && !this.props.isLogging) {
+          this.logging$.next(false);
+        }
       };
-      return new Promise((resolve, reject) => {
-        this.props.login(data);
-        this.logging$
-          .pipe(take(1))
-          .subscribe(() => setTimeout(resolve, 2000), reject);
-      });
-    };
 
-    onRegister = (regData: RegFormData) => {
-      return new Promise((resolve, reject) => {
-        this.props.regImpl(regData);
-        this.logging$
-          .pipe(take(1))
-          .subscribe(() => setTimeout(resolve, 2000), reject);
-      });
-    };
+      onSubmit = _data => {
+        let data: IAuthParams = {
+          ..._data,
+          refer: this.props.defaultReferrer
+            ? {
+                referrer: this.props.defaultReferrer,
+                action: this.props.game
+              }
+            : undefined
+        };
+        return new Promise((resolve, reject) => {
+          this.props.login(data);
+          this.logging$
+            .pipe(take(1))
+            .subscribe(() => setTimeout(resolve, 2000), reject);
+        });
+      };
 
-    render() {
-      let {
-        classes,
-        logout,
-        closeModal,
-        isModalShowing,
-        currentPanel,
-        switchPanel
-      } = this.props;
-      return (
-        <Dialog
-          open={isModalShowing}
-          disableBackdropClick
-          classes={classes && { paper: classes.paper }}
-          maxWidth="lg"
-          onClose={closeModal}
-        >
-          <div style={{ position: "absolute", right: 0, top: 0 }}>
-            <IconButton onClick={closeModal}>
-              <CloseIcon />
-            </IconButton>
-          </div>
-          {currentPanel === LoginPanel.Login ? (
-            <LoginForm onSubmit={this.onSubmit} />
-          ) : (
-            <RegForm onSubmit={this.onRegister} />
-          )}
-          {/* <Button onClick={logout}>登出</Button> */}
-          <div
-            style={{
-              textAlign: "center",
-              backgroundColor: "#fff",
-              position: "sticky",
-              padding: "0.5em",
-              bottom: "-8px"
-            }}
+      onRegister = (regData: RegFormData) => {
+        return new Promise((resolve, reject) => {
+          this.props.regImpl(regData);
+          this.logging$
+            .pipe(take(1))
+            .subscribe(() => setTimeout(resolve, 2000), reject);
+        });
+      };
+
+      render() {
+        let {
+          classes,
+          logout,
+          closeModal,
+          isModalShowing,
+          currentPanel,
+          switchPanel,
+          t
+        } = this.props;
+        return (
+          <Dialog
+            open={isModalShowing}
+            disableBackdropClick
+            classes={classes && { paper: classes.paper }}
+            maxWidth="lg"
+            onClose={closeModal}
           >
-            <Typography style={{ display: "inline" }} component="span">
-              {currentPanel === LoginPanel.Login
-                ? "还没有Cybex云账户？"
-                : "已经有Cybex云账户？"}
-            </Typography>
-
-            <a
-              href="javascript:;"
-              style={{ textDecoration: "none" }}
-              onClick={switchPanel}
+            <div style={{ position: "absolute", right: 0, top: 0 }}>
+              <IconButton onClick={closeModal}>
+                <CloseIcon />
+              </IconButton>
+            </div>
+            {currentPanel === LoginPanel.Login ? (
+              <LoginForm onSubmit={this.onSubmit} />
+            ) : (
+              <RegForm onSubmit={this.onRegister} />
+            )}
+            {/* <Button onClick={logout}>登出</Button> */}
+            <div
+              style={{
+                textAlign: "center",
+                backgroundColor: "#fff",
+                position: "sticky",
+                padding: "0.5em",
+                bottom: "-8px"
+              }}
             >
-              <Typography
-                style={{ display: "inline" }}
-                component="span"
-                color="secondary"
-              >
+              <Typography style={{ display: "inline" }} component="span">
                 {currentPanel === LoginPanel.Login
-                  ? "注册新账户"
-                  : "登录云账户"}
+                  ? t(Dict.HasNoAccountYet)
+                  : t(Dict.HasAccountAlready)}
               </Typography>
-            </a>
-          </div>
-        </Dialog>
-      );
+
+              <a
+                href="javascript:;"
+                style={{ textDecoration: "none" }}
+                onClick={switchPanel}
+              >
+                <Typography
+                  style={{ display: "inline" }}
+                  component="span"
+                  color="secondary"
+                >
+                  {currentPanel === LoginPanel.Login
+                    ? t(Dict.AuthRegisterLong)
+                    : t(Dict.LoginLong)}
+                </Typography>
+              </a>
+            </div>
+          </Dialog>
+        );
+      }
     }
-  }
+  )
 );
 
 export const Login = connect(

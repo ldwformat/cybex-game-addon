@@ -37,6 +37,8 @@ import { formatTime } from "../utils/datetime";
 import { PrimaryButton } from "../components/form-utils";
 import { ShareButton } from "../components/share-btn";
 import { ReferModal } from "../components/refer-modal";
+import { Dict } from "../providers/i18n";
+import { withTranslation, WithTranslation } from "react-i18next";
 
 type StateProps = {
   accountName: string | null;
@@ -83,155 +85,159 @@ const styles: StyleRulesCallback = theme => ({
 
 export const Refer = connect(mapStateToProps)(
   withStyles(styles)(
-    class Refer extends React.Component<
-      StyledComponentProps<
-        "root" | "copyCard" | "innerWrapper" | "buttonRoot"
-      > &
-        StateProps &
-        DispatchProps
-    > {
-      static Panels = {
-        RegisterRef: "RegisterRef",
-        GameRegisterRef: "GameRegisterRef",
-        Drawer: "Drawer",
-        ReferModal: "ReferModal"
-      };
+    withTranslation()(
+      class Refer extends React.Component<
+        StyledComponentProps<
+          "root" | "copyCard" | "innerWrapper" | "buttonRoot"
+        > &
+          StateProps &
+          DispatchProps &
+          WithTranslation
+      > {
+        static Panels = {
+          RegisterRef: "RegisterRef",
+          GameRegisterRef: "GameRegisterRef",
+          Drawer: "Drawer",
+          ReferModal: "ReferModal"
+        };
 
-      state = {
-        [Refer.Panels.RegisterRef]: false,
-        [Refer.Panels.GameRegisterRef]: false,
-        [Refer.Panels.Drawer]: false,
-        [Refer.Panels.ReferModal]: false
-      };
-
-      componentWillUnmount = () => {
-        this.setState({
+        state = {
           [Refer.Panels.RegisterRef]: false,
           [Refer.Panels.GameRegisterRef]: false,
           [Refer.Panels.Drawer]: false,
           [Refer.Panels.ReferModal]: false
-        });
-      };
+        };
 
-      handleExpand = (panel: string) => {
-        this.setState(prev => ({
-          [panel]: !prev[panel]
-        }));
-      };
+        componentWillUnmount = () => {
+          this.setState({
+            [Refer.Panels.RegisterRef]: false,
+            [Refer.Panels.GameRegisterRef]: false,
+            [Refer.Panels.Drawer]: false,
+            [Refer.Panels.ReferModal]: false
+          });
+        };
 
-      render() {
-        let {
-          accountName,
-          myGameReferrer,
-          myGameReferral,
-          myRegisterReferrer,
-          myRegisterReferral
-        } = this.props;
-        let classes = this.props.classes || {};
+        handleExpand = (panel: string) => {
+          this.setState(prev => ({
+            [panel]: !prev[panel]
+          }));
+        };
 
-        return (
-          <Paper classes={{ root: classes.root }} square elevation={0}>
-            <div style={{ flex: "1 1 auto", overflowY: "auto" }}>
-              <ReferCode code={accountName as string} />
-              <List>
-                <ListItem divider>
-                  <ListItemText primary="我的注册推荐人" />
-                  {(myRegisterReferrer && myRegisterReferrer.referrer) || "-"}
-                </ListItem>
-                <ListItem divider>
-                  <ListItemText primary="我的游戏推荐人" />
-                  {(myGameReferrer && myGameReferrer.referrer) || (
-                    <Button
-                      color="secondary"
-                      onClick={this.handleExpand.bind(
-                        this,
-                        Refer.Panels.ReferModal
-                      )}
-                    >
-                      补充引荐人
-                    </Button>
-                  )}
-                </ListItem>
-                <ListItem
-                  button
-                  onClick={this.handleExpand.bind(
-                    this,
-                    Refer.Panels.RegisterRef
-                  )}
-                >
-                  <ListItemText primary="我的注册推荐" />
-                  {(myRegisterReferral &&
-                    myRegisterReferral.referrals.length.toString()) ||
-                    0}
-                  人{" "}
-                  {this.state[Refer.Panels.RegisterRef] ? (
-                    <ExpandLess />
-                  ) : (
-                    <ExpandMore />
-                  )}
-                </ListItem>
-                <Collapse
-                  in={this.state[Refer.Panels.RegisterRef]}
-                  timeout="auto"
-                  unmountOnExit
-                >
-                  <List style={{ opacity: 0.5 }} disablePadding>
-                    {myRegisterReferral &&
-                      myRegisterReferral.referrals.map(refer => (
-                        <ListItem key={refer.referral} divider>
-                          <ListItemText primary={refer.referral} />
-                          <Typography>{formatTime(refer.ts)}</Typography>
-                        </ListItem>
-                      ))}
-                  </List>
-                </Collapse>
-                <ListItem
-                  button
-                  divider
-                  onClick={this.handleExpand.bind(
-                    this,
-                    Refer.Panels.GameRegisterRef
-                  )}
-                >
-                  <ListItemText primary="我的游戏推荐" />
-                  {(myGameReferral &&
-                    myGameReferral.referrals.length.toString()) ||
-                    0}
-                  人{" "}
-                  {this.state[Refer.Panels.GameRegisterRef] ? (
-                    <ExpandLess />
-                  ) : (
-                    <ExpandMore />
-                  )}
-                </ListItem>
-                <Collapse
-                  in={this.state[Refer.Panels.GameRegisterRef]}
-                  timeout="auto"
-                  unmountOnExit
-                >
-                  <List style={{ opacity: 0.5 }} disablePadding>
-                    {myGameReferral &&
-                      myGameReferral.referrals.map(refer => (
-                        <ListItem divider key={refer.referral}>
-                          <ListItemText primary={refer.referral} />
-                          <Typography>{formatTime(refer.ts)}</Typography>
-                        </ListItem>
-                      ))}
-                  </List>
-                </Collapse>
-              </List>
-            </div>
-            <ShareButton />
-            <ReferModal
-              isModalShowing={this.state[Refer.Panels.ReferModal]}
-              onModalClose={this.handleExpand.bind(
-                this,
-                Refer.Panels.ReferModal
-              )}
-            />
-          </Paper>
-        );
+        render() {
+          let {
+            accountName,
+            myGameReferrer,
+            myGameReferral,
+            myRegisterReferrer,
+            myRegisterReferral,
+            t
+          } = this.props;
+          let classes = this.props.classes || {};
+
+          return (
+            <Paper classes={{ root: classes.root }} square elevation={0}>
+              <div style={{ flex: "1 1 auto", overflowY: "auto" }}>
+                <ReferCode code={accountName as string} />
+                <List>
+                  <ListItem divider>
+                    <ListItemText primary={t(Dict.MyRegisterReferrer)} />
+                    {(myRegisterReferrer && myRegisterReferrer.referrer) || "-"}
+                  </ListItem>
+                  <ListItem divider>
+                    <ListItemText primary={t(Dict.MyGameReferrer)} />
+                    {(myGameReferrer && myGameReferrer.referrer) || (
+                      <Button
+                        color="secondary"
+                        onClick={this.handleExpand.bind(
+                          this,
+                          Refer.Panels.ReferModal
+                        )}
+                      >
+                        {t(Dict.PatchReferrer)}
+                      </Button>
+                    )}
+                  </ListItem>
+                  <ListItem
+                    button
+                    onClick={this.handleExpand.bind(
+                      this,
+                      Refer.Panels.RegisterRef
+                    )}
+                  >
+                    <ListItemText primary={t(Dict.MyGameReferral)} />
+                    {(myRegisterReferral &&
+                      myRegisterReferral.referrals.length.toString()) ||
+                      0}
+                    人{" "}
+                    {this.state[Refer.Panels.RegisterRef] ? (
+                      <ExpandLess />
+                    ) : (
+                      <ExpandMore />
+                    )}
+                  </ListItem>
+                  <Collapse
+                    in={this.state[Refer.Panels.RegisterRef]}
+                    timeout="auto"
+                    unmountOnExit
+                  >
+                    <List style={{ opacity: 0.5 }} disablePadding>
+                      {myRegisterReferral &&
+                        myRegisterReferral.referrals.map(refer => (
+                          <ListItem key={refer.referral} divider>
+                            <ListItemText primary={refer.referral} />
+                            <Typography>{formatTime(refer.ts)}</Typography>
+                          </ListItem>
+                        ))}
+                    </List>
+                  </Collapse>
+                  <ListItem
+                    button
+                    divider
+                    onClick={this.handleExpand.bind(
+                      this,
+                      Refer.Panels.GameRegisterRef
+                    )}
+                  >
+                    <ListItemText primary={t(Dict.MyGameReferral)} />
+                    {(myGameReferral &&
+                      myGameReferral.referrals.length.toString()) ||
+                      0}
+                    人{" "}
+                    {this.state[Refer.Panels.GameRegisterRef] ? (
+                      <ExpandLess />
+                    ) : (
+                      <ExpandMore />
+                    )}
+                  </ListItem>
+                  <Collapse
+                    in={this.state[Refer.Panels.GameRegisterRef]}
+                    timeout="auto"
+                    unmountOnExit
+                  >
+                    <List style={{ opacity: 0.5 }} disablePadding>
+                      {myGameReferral &&
+                        myGameReferral.referrals.map(refer => (
+                          <ListItem divider key={refer.referral}>
+                            <ListItemText primary={refer.referral} />
+                            <Typography>{formatTime(refer.ts)}</Typography>
+                          </ListItem>
+                        ))}
+                    </List>
+                  </Collapse>
+                </List>
+              </div>
+              <ShareButton />
+              <ReferModal
+                isModalShowing={this.state[Refer.Panels.ReferModal]}
+                onModalClose={this.handleExpand.bind(
+                  this,
+                  Refer.Panels.ReferModal
+                )}
+              />
+            </Paper>
+          );
+        }
       }
-    }
+    )
   )
 );

@@ -23,6 +23,9 @@ import { PrimaryButton } from "../components/form-utils";
 import { SvgIconProps } from "@material-ui/core/SvgIcon";
 import { selectReferUrl } from "../core/core.selectors";
 import { getReferUrl } from "../utils/refer-url";
+import { withTranslation, WithTranslation } from "react-i18next";
+import { Dict } from "../providers/i18n";
+
 const ShareItem = ({
   IconComponent,
   title,
@@ -80,102 +83,126 @@ export const ShareButton = connect(
   mapDispatchToProps
 )(
   withStyles(styles)(
-    class ShareButton extends React.Component<
-      StyledComponentProps<"buttonRoot" | "drawerRoot"> &
-        StateProps &
-        DispatchProps
-    > {
-      static Panels = {
-        Drawer: "Drawer",
-        QRCode: "QRCode"
-      };
+    withTranslation()(
+      class ShareButton extends React.Component<
+        StyledComponentProps<"buttonRoot" | "drawerRoot"> &
+          StateProps &
+          DispatchProps &
+          WithTranslation
+      > {
+        static Panels = {
+          Drawer: "Drawer",
+          QRCode: "QRCode"
+        };
 
-      state = {
-        [ShareButton.Panels.Drawer]: false,
-        [ShareButton.Panels.QRCode]: false
-      };
+        state = {
+          [ShareButton.Panels.Drawer]: false,
+          [ShareButton.Panels.QRCode]: false
+        };
 
-      handleExpand = (panel: string) => {
-        this.setState(prev => ({
-          [panel]: !prev[panel]
-        }));
-      };
+        handleExpand = (panel: string) => {
+          this.setState(prev => ({
+            [panel]: !prev[panel]
+          }));
+        };
 
-      render() {
-        let classes = this.props.classes || {};
-        let { pushNoti, accountName, referUrl: referUrlPrefix } = this.props;
-        let referUrl = getReferUrl(
-          referUrlPrefix as string,
-          accountName as string
-        );
-        return (
-          <>
-            <PrimaryButton
-              onClick={this.handleExpand.bind(this, ShareButton.Panels.Drawer)}
-              size="large"
-              classes={{ root: classes.buttonRoot }}
-              fullWidth
-            >
-              分享邀请
-            </PrimaryButton>
-            <SwipeableDrawer
-              classes={{ paper: classes.drawerRoot }}
-              open={this.state[ShareButton.Panels.Drawer]}
-              onOpen={this.handleExpand.bind(this, ShareButton.Panels.Drawer)}
-              onClose={this.handleExpand.bind(this, ShareButton.Panels.Drawer)}
-              anchor="bottom"
-            >
-              <Grid
-                style={{ height: "100%" }}
-                container
-                alignItems="center"
-                justify="space-evenly"
-              >
-                {referUrl && accountName && (
-                  <CopyToClipboard
-                    text={referUrl.trim()}
-                    onCopy={() =>
-                      pushNoti(`邀请链接已复制到剪贴板`, {
-                        variant: "success"
-                      })
-                    }
-                  >
-                    <ShareItem
-                      IconComponent={Link}
-                      title="复制邀请链接"
-                      color={colors.orange[300]}
-                      onClick={this.handleExpand.bind(
-                        this,
-                        ShareButton.Panels.Drawer
-                      )}
-                    />
-                  </CopyToClipboard>
+        render() {
+          let classes = this.props.classes || {};
+          let {
+            pushNoti,
+            accountName,
+            referUrl: referUrlPrefix,
+            t
+          } = this.props;
+          let referUrl = getReferUrl(
+            referUrlPrefix as string,
+            accountName as string
+          );
+          return (
+            <>
+              <PrimaryButton
+                onClick={this.handleExpand.bind(
+                  this,
+                  ShareButton.Panels.Drawer
                 )}
-                <ShareItem
-                  IconComponent={Image}
-                  color={colors.blue[300]}
-                  title="邀请二维码"
-                  onClick={() => {
-                    this.handleExpand(ShareButton.Panels.QRCode);
-                    this.handleExpand(ShareButton.Panels.Drawer);
-                  }}
-                />
-              </Grid>
-            </SwipeableDrawer>
-            <Dialog
-              open={this.state[ShareButton.Panels.QRCode]}
-              onClose={this.handleExpand.bind(this, ShareButton.Panels.QRCode)}
-            >
-              <DialogContent style={{ padding: "2em", paddingBottom: "0.5em" }}>
-                <QRCodeDisplay
-                  text={referUrl}
-                  filename={`cybex_invite_${accountName}.png`}
-                />
-              </DialogContent>
-            </Dialog>
-          </>
-        );
+                size="large"
+                classes={{ root: classes.buttonRoot }}
+                fullWidth
+              >
+                {t(Dict.ShareLink)}
+              </PrimaryButton>
+              {referUrl && accountName && (
+                <SwipeableDrawer
+                  classes={{ paper: classes.drawerRoot }}
+                  open={this.state[ShareButton.Panels.Drawer]}
+                  onOpen={this.handleExpand.bind(
+                    this,
+                    ShareButton.Panels.Drawer
+                  )}
+                  onClose={this.handleExpand.bind(
+                    this,
+                    ShareButton.Panels.Drawer
+                  )}
+                  anchor="bottom"
+                >
+                  <Grid
+                    style={{ height: "100%" }}
+                    container
+                    alignItems="center"
+                    justify="space-evenly"
+                  >
+                    {referUrl && accountName && (
+                      <CopyToClipboard
+                        text={referUrl.trim()}
+                        onCopy={() =>
+                          pushNoti(t(Dict.ShareLinkCopied), {
+                            variant: "success"
+                          })
+                        }
+                      >
+                        <ShareItem
+                          IconComponent={Link}
+                          title={t(Dict.CopyShareLink)}
+                          color={colors.orange[300]}
+                          onClick={this.handleExpand.bind(
+                            this,
+                            ShareButton.Panels.Drawer
+                          )}
+                        />
+                      </CopyToClipboard>
+                    )}
+                    <ShareItem
+                      IconComponent={Image}
+                      color={colors.blue[300]}
+                      title={t(Dict.ShareQRCode)}
+                      onClick={() => {
+                        this.handleExpand(ShareButton.Panels.QRCode);
+                        this.handleExpand(ShareButton.Panels.Drawer);
+                      }}
+                    />
+                  </Grid>
+                </SwipeableDrawer>
+              )}
+              <Dialog
+                open={this.state[ShareButton.Panels.QRCode]}
+                onClose={this.handleExpand.bind(
+                  this,
+                  ShareButton.Panels.QRCode
+                )}
+              >
+                <DialogContent
+                  style={{ padding: "2em", paddingBottom: "0.5em" }}
+                >
+                  <QRCodeDisplay
+                    text={referUrl}
+                    filename={`cybex_invite_${accountName}.png`}
+                  />
+                </DialogContent>
+              </Dialog>
+            </>
+          );
+        }
       }
-    }
+    )
   )
 );

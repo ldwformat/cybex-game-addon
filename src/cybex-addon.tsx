@@ -39,6 +39,8 @@ function createPageContext() {
   };
 }
 
+import "./providers/i18n";
+
 export function getPageContext() {
   // Make sure to create a new context for every server-side request so that data
   // isn't shared between connections (which would be bad).

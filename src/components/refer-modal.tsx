@@ -29,6 +29,8 @@ import {
 } from "../core/refer";
 import { selectGame } from "../core/core.selectors";
 import { Form, Field } from "react-final-form";
+import { Dict } from "../providers/i18n";
+import { withTranslation, WithTranslation } from "react-i18next";
 
 const validate = values => {
   const errors: any = {};
@@ -41,58 +43,58 @@ const validate = values => {
   return errors;
 };
 
-export const ReferModalForm = class ReferModalForm extends React.Component<
-  any
-> {
-  render() {
-    const { onSubmit } = this.props as any;
-    const styleOfContent = {
-      width: "90%",
-      minWidth: "70vw",
-      padding: 0,
-      margin: "10px 16px"
-    };
-    return (
-      <Form
-        onSubmit={onSubmit}
-        validate={validate}
-        render={({
-          handleSubmit,
-          reset,
-          submitting,
-          pristine,
-          invalid,
-          values
-        }) => (
-          <form onSubmit={handleSubmit}>
-            <DialogContent style={styleOfContent}>
-              <div style={{ marginBottom: "1em" }}>
-                <Field
-                  autoFocus
-                  style={{ width: "100%" }}
-                  component={renderTextField as any}
-                  name="referrer"
-                  label="推荐码"
-                  helperText="请输入推荐人分享给您的推荐码"
-                />
-              </div>
-            </DialogContent>
-            <DialogActions style={{ margin: "8px 12px" }}>
-              <PrimaryButton
-                color="primary"
-                fullWidth
-                type="submit"
-                disabled={pristine || submitting || invalid}
-              >
-                增加推荐人
-              </PrimaryButton>
-            </DialogActions>
-          </form>
-        )}
-      />
-    );
+export const ReferModalForm = withTranslation()(
+  class ReferModalForm extends React.Component<any> {
+    render() {
+      const { onSubmit, t } = this.props as any;
+      const styleOfContent = {
+        width: "90%",
+        minWidth: "70vw",
+        padding: 0,
+        margin: "10px 16px"
+      };
+      return (
+        <Form
+          onSubmit={onSubmit}
+          validate={validate}
+          render={({
+            handleSubmit,
+            reset,
+            submitting,
+            pristine,
+            invalid,
+            values
+          }) => (
+            <form onSubmit={handleSubmit}>
+              <DialogContent style={styleOfContent}>
+                <div style={{ marginBottom: "1em" }}>
+                  <Field
+                    autoFocus
+                    style={{ width: "100%" }}
+                    component={renderTextField as any}
+                    name="referrer"
+                    label={t(Dict.PatchReferrerLabel)}
+                    helperText={t(Dict.PatchReferrerHelper)}
+                  />
+                </div>
+              </DialogContent>
+              <DialogActions style={{ margin: "8px 12px" }}>
+                <PrimaryButton
+                  color="primary"
+                  fullWidth
+                  type="submit"
+                  disabled={pristine || submitting || invalid}
+                >
+                  {t(Dict.PatchReferrerAdd)}
+                </PrimaryButton>
+              </DialogActions>
+            </form>
+          )}
+        />
+      );
+    }
   }
-};
+);
 
 ////////////
 
