@@ -30,16 +30,23 @@ const ShareItem = ({
   IconComponent,
   title,
   color = colors.grey[300],
+  style,
   onClick
 }: {
   IconComponent: React.ComponentType<SvgIconProps>;
   onClick: () => any;
   color: string;
   title: string;
+  style?: any;
 }) => (
   <div
     onClick={onClick}
-    style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
+    style={{
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      ...style
+    }}
   >
     <Avatar style={{ background: color, width: 48, height: 48 }}>
       <IconComponent />
@@ -149,7 +156,7 @@ export const ShareButton = connect(
                     style={{ height: "100%" }}
                     container
                     alignItems="center"
-                    justify="space-evenly"
+                    justify="space-around"
                   >
                     {referUrl && accountName && (
                       <CopyToClipboard
@@ -163,6 +170,7 @@ export const ShareButton = connect(
                         <ShareItem
                           IconComponent={Link}
                           title={t(Dict.CopyShareLink)}
+                          // style={{ width: "50%", textAlign: "center" }}
                           color={colors.orange[300]}
                           onClick={this.handleExpand.bind(
                             this,
@@ -175,6 +183,7 @@ export const ShareButton = connect(
                       IconComponent={Image}
                       color={colors.blue[300]}
                       title={t(Dict.ShareQRCode)}
+                      // style={{ width: "50%", textAlign: "center" }}
                       onClick={() => {
                         this.handleExpand(ShareButton.Panels.QRCode);
                         this.handleExpand(ShareButton.Panels.Drawer);

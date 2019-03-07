@@ -8,7 +8,7 @@ import { Login } from "./pages";
 import { selectAuthSet } from "./core/auth/auth.selectors";
 import { EventEmitter } from "events";
 import { EVENT_ACTION, IEffectDeps } from "./core/modes";
-import { authShowModal } from "./core/auth";
+import { authShowModal, authLogout } from "./core/auth";
 import { CoreState } from "./core/core.models";
 import { Notifier } from "./components/notifier";
 import { SnackbarProvider } from "notistack";
@@ -39,7 +39,7 @@ function createPageContext() {
   };
 }
 
-import "./providers/i18n";
+import { i18n } from "./providers/i18n";
 
 export function getPageContext() {
   // Make sure to create a new context for every server-side request so that data
@@ -64,7 +64,7 @@ export class CybexAddon {
   static EVENT_ACTION = EVENT_ACTION;
   static OVERLAY_CONTAINER_ID = "$OVERLAY_CONTAINER_ID";
   static INVATION_OVERLAY_CONTAINER_ID = "$INVATION_OVERLAY_CONTAINER_ID";
-
+  i18n = i18n;
   theme = createMuiTheme({
     typography: {
       useNextVariants: true
@@ -94,6 +94,7 @@ export class CybexAddon {
         );
       });
     }
+    i18n.changeLanguage(config.lang);
   }
 
   async init() {
@@ -149,9 +150,19 @@ export class CybexAddon {
       () => resolve(rootElement)
     );
 
+  async setLang(lang: string) {
+    return this.i18n.changeLanguage(lang);
+  }
+
   async loginPage() {
     if (this.store) {
       this.store.dispatch(authShowModal());
+    }
+    return new Promise(resolve => this.patchPage(Login, resolve));
+  }
+  async logout() {
+    if (this.store) {
+      this.store.dispatch(authLogout());
     }
     return new Promise(resolve => this.patchPage(Login, resolve));
   }

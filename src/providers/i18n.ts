@@ -16,7 +16,6 @@ import { initReactI18next } from "react-i18next";
 //   AuthRegisterLong = "[Auth]RegisterLong",
 //   AuthRegister = "[Auth]Register"
 // }
-
 export const cnDict = {
   LoginSubmit: "登录",
   LoginLong: "登录云账户",
@@ -46,26 +45,99 @@ export const cnDict = {
   PatchReferrerHelper: "请输入推荐人分享给您的推荐码",
   PatchReferrerAdd: "增加推荐人",
   MyRefererCode: "您的推荐码",
+  PeopleUnit: "人",
   CopyAddress: "复制地址",
   AddressCopied: "充值地址已复制到剪贴板",
   CopyShareLink: "复制邀请链接",
   ShareLink: "分享邀请",
-  ShareLinkCopied: "分享邀请",
+  ShareLinkCopied: "分享邀请链接已复制",
   ShareQRCode: "邀请二维码",
-  QRCodeCopied: "保存二维码"
+  SaveQRCode: "保存二维码"
 };
+type Dictionary = typeof cnDict;
+
 export const Dict = Object.keys(cnDict).reduce(
   (indexes, index) => {
     indexes[index] = index;
     return indexes;
   },
-  {} as typeof cnDict
+  {} as Dictionary
 );
-export const enDict = {
-  LoginSubmit: "Submit"
+export const enDict: Dictionary = {
+  LoginSubmit: "Log in",
+  LoginLong: "Log in",
+  AuthAccountName: "Account Name",
+  AuthAccountNameHelper: "Enter account name for cloud wallet",
+  AuthReferrer: "Inviter (Optional)",
+  AuthReferrerHelper: "Enter invitation code from the inviter",
+  AuthCaptcha: "Verify Code",
+  AuthCaptchaHelper: "Enter verify code",
+  AuthPassword: "Password",
+  AuthPasswordConfirm: "Confirm Password",
+  AuthLoginPasswordHelper: "Please enter your password",
+  AuthRegAccountNameHelper: `Account name for cloud wallet`,
+  AuthRegPasswordHelper: "Please enter your password",
+  AuthRegConfirmHelper: "Enter password again",
+  AuthRegister: "Register",
+  AuthRegisterLong: "Register",
+  HasNoAccountYet: "",
+  HasAccountAlready: "",
+  MyRegisterReferrer: "My Register Inviter",
+  MyRegisterReferral: "My Register Invitees",
+  MyGameReferrer: "My Game Inviter",
+  MyGameReferral: "My Game Invitees",
+  PatchReferrer: "Add Inviter",
+  PatchReferrerLabel: "invitation code",
+  PatchReferrerHelper: "Enter invitation code from the inviter",
+  PatchReferrerAdd: "Add Inviter",
+  MyRefererCode: "Your Invitation Code",
+  PeopleUnit: "",
+  CopyAddress: "Copy Address",
+  AddressCopied: "Address copied",
+  CopyShareLink: "Copy Link",
+  ShareLink: "Invite Others",
+  ShareLinkCopied: "Copy link copied",
+  ShareQRCode: "Generate QRcode",
+  SaveQRCode: "Save"
 };
-export const vnDict = {
-  LoginSubmit: "Submit"
+export const vnDict: Dictionary = {
+  LoginSubmit: "Đăng nhập",
+  LoginLong: "Đăng nhập",
+  AuthAccountName: "Tên tài khoản",
+  AuthAccountNameHelper: "Vui lòng nhập tên tài khoản ví điện toán đám mây",
+  AuthReferrer: "Người giới thiệu (tùy chọn)",
+  AuthReferrerHelper:
+    "Vui lòng nhập mã giới thiệu của người giới thiệu của bạn",
+  AuthCaptcha: "Mã xác minh",
+  AuthCaptchaHelper: "Vui lòng nhập mã xác minh",
+  AuthPassword: "Mật khẩu",
+  AuthPasswordConfirm: "Xác nhận mật khẩu",
+  AuthLoginPasswordHelper: "Vui lòng nhập mật khẩu của bạn",
+  AuthRegAccountNameHelper: `Vui lòng nhập tên tài khoản ví điện toán đám mây`,
+  AuthRegPasswordHelper: "Vui lòng nhập mật khẩu của bạn",
+  AuthRegConfirmHelper: "Vui lòng nhập lại mật khẩu của bạn",
+  AuthRegister: "Đăng ký tài khoản mới",
+  AuthRegisterLong: "Đăng ký tài khoản mới",
+  HasNoAccountYet: "",
+  HasAccountAlready: "",
+  MyRegisterReferrer: "Người mời tôi đăng ký",
+  MyRegisterReferral: "Người tôi mời đăng ký",
+  MyGameReferrer: "Người giới thiệu trò chơi cho tôi",
+  MyGameReferral: "Người được tôi giới thiệu trò chơi",
+  PatchReferrer: "Người giới thiệu",
+  PatchReferrerLabel: "Người giới thiệu",
+  PatchReferrerHelper:
+    "Vui lòng nhập mã giới thiệu của người giới thiệu của bạn",
+  PatchReferrerAdd: "Người giới thiệu",
+  MyRefererCode: "Mã giới thiệu của bạn",
+  PeopleUnit: "",
+  CopyAddress: "Copy Address",
+  AddressCopied: "Address copied",
+  CopyShareLink: "Sao chép liên kết",
+  ShareLink: "Sao chép liên kết",
+  ShareLinkCopied: "Chia sẻ lời mời",
+  ShareQRCode: "Tạo áp phích độc quyền",
+  SaveQRCode: "Save"
 };
 
 // have a look at the Quick start guide
@@ -78,16 +150,16 @@ i18n
   // for all options read: https://www.i18next.com/overview/configuration-options
   .init({
     fallbackLng: "en",
-    lng: "zhCN",
+    lng: "zh",
     debug: true,
     resources: {
       en: {
-        translation: {
-          "Welcome to React": "Welcome to React and react-i18next",
-          "[Login]Submit": "Submit"
-        }
+        translation: enDict
       },
-      zhCN: {
+      vn: {
+        translation: vnDict
+      },
+      zh: {
         translation: cnDict
       }
     },

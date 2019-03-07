@@ -9,5 +9,6 @@
     "cybexHttpServer": "https://cybexluck.io"
   },
   "game": "cybexbet",
+  "lang": "vn",
   "referUrl": "http://localhost:5560"
 }

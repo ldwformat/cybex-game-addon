@@ -58,7 +58,6 @@ const mapDispatchToProps: MapDispatchToProps<DepositDispatchProps, {}> = {
 const styles: StyleRulesCallback = theme => ({
   root: {
     height: "100%",
-    paddingTop: "1em"
   },
   innerWrapper: {
     margin: theme.spacing.unit * 2,
@@ -164,7 +163,7 @@ export const Deposit = connect(
                       <Grid
                         container
                         direction="column"
-                        justify="space-evenly"
+                        justify="space-around"
                         wrap="nowrap"
                         alignItems="center"
                         style={{ width: "100%" }}

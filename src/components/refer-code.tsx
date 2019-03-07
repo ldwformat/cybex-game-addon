@@ -16,8 +16,10 @@ const ReferBg = require("../assets/images/refer-bg.jpg");
 
 const referCodeStyle: StyleRulesCallback = theme => ({
   root: {
-    margin: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 5}px`,
+    margin: `${theme.spacing.unit * 2}px auto`,
     height: 160,
+    width: "75%",
+    minWidth: "239px",
     filter: `drop-shadow(0 ${(theme.spacing.unit * 3) / 4}px ${(theme.spacing
       .unit *
       3) /
@@ -87,9 +89,11 @@ export const ReferCode = withTranslation()(
         let { classes, code, t } = this.props;
         return (
           <div className={classes && (classes.root as string)}>
-            <svg style={{ position: "fixed", zIndex: -1 }}>
+            <svg
+              style={{ position: "fixed", zIndex: -1, width: this.state.width }}
+            >
               <defs>
-                <clipPath id="mask" viewBox="0 0 279 160">
+                <clipPath id="mask" viewBox={`0 0 ${this.state.width} 160`}>
                   <path
                     d={`M 0 0 V 70 A 10 10 0 1 1 0 90 V 160 H ${
                       this.state.width
@@ -99,10 +103,10 @@ export const ReferCode = withTranslation()(
               </defs>
             </svg>
             <div
-              ref={wrapper => (this.wrapper = wrapper)}
               className={
                 classes && (classes.cardRoot as string) + " " + classes.cardMain
               }
+              ref={wrapper => (this.wrapper = wrapper)}
             >
               <Grid container item xs justify="center" alignItems="center">
                 <Typography

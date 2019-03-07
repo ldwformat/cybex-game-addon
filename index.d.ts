@@ -126,6 +126,7 @@ declare namespace Cybex {
 declare interface CybexAddonConfig {
   apiUrl: APIURL;
   game: string;
+  lang: string;
   referUrl: string;
 }
 

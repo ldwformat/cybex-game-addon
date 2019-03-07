@@ -168,7 +168,7 @@ export const Refer = connect(mapStateToProps)(
                     {(myRegisterReferral &&
                       myRegisterReferral.referrals.length.toString()) ||
                       0}
-                    人{" "}
+                    {t(Dict.PeopleUnit)}{" "}
                     {this.state[Refer.Panels.RegisterRef] ? (
                       <ExpandLess />
                     ) : (
@@ -202,7 +202,7 @@ export const Refer = connect(mapStateToProps)(
                     {(myGameReferral &&
                       myGameReferral.referrals.length.toString()) ||
                       0}
-                    人{" "}
+                    {t(Dict.PeopleUnit)}{" "}
                     {this.state[Refer.Panels.GameRegisterRef] ? (
                       <ExpandLess />
                     ) : (

@@ -44,7 +44,7 @@ export const QRCodeDisplay = withTranslation()(
             <QRCode value={text} />
           </div>
           <Button color="secondary" onClick={_e => this.download(filename)}>
-            {t(Dict.QRCodeCopied)}
+            {t(Dict.SaveQRCode)}
             <CloudDownload style={{ marginLeft: "4px" }} fontSize="small" />
           </Button>
         </Grid>

@@ -27,11 +27,15 @@
       Here is a 邀请按钮
     </div>
     <button id="loginPage0" data-ref="root0">登录页</button>
+    <button id="logout" data-ref="root0">登出</button>
     <button id="deposit" data-ref="root1">充值页</button>
     <button id="refer" data-ref="root2">邀请页</button>
     <button id="referRule" data-ref="root3">邀请规则页</button>
     <button id="invite" data-ref="root4">邀请按钮</button>
     <button id="inviteHide" data-ref="root4">隐藏邀请按钮</button>
+    <button id="langCN" data-ref="root4">切换中文</button>
+    <button id="langEN" data-ref="root4">切换英文</button>
+    <button id="langVN" data-ref="root4">切换越南语</button>
     <script>
       {
         let count = 0;
@@ -53,6 +57,11 @@
           .getElementById("loginPage0")
           .addEventListener("click", async e => {
             let loginPage = await addon.loginPage();
+          });
+        document
+          .getElementById("logout")
+          .addEventListener("click", async e => {
+            let loginPage = await addon.logout();
           });
 
         document
@@ -82,6 +91,15 @@
         });
         document.getElementById("inviteHide").addEventListener("click", async e => {
           addon.hideInviteBtn();
+        });
+        document.getElementById("langCN").addEventListener("click", async e => {
+          addon.setLang("zh");
+        });
+        document.getElementById("langEN").addEventListener("click", async e => {
+          addon.setLang("en");
+        });
+        document.getElementById("langVN").addEventListener("click", async e => {
+          addon.setLang("vn");
         });
       }
     </script>
