@@ -2,6 +2,10 @@
   "name": "cybex-game-addon",
   "version": "0.0.1",
   "description": "A plugin can be integrated into another Cybex dapp",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ldwformat/cybex-game-addon.git"
+  },
   "main": "dist/index.js",
   "author": "ldwformat@gmail.com",
   "license": "MIT",
