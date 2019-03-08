@@ -52,7 +52,21 @@ export const cnDict = {
   ShareLink: "分享邀请",
   ShareLinkCopied: "分享邀请链接已复制",
   ShareQRCode: "邀请二维码",
-  SaveQRCode: "保存二维码"
+  SaveQRCode: "保存二维码",
+  NotiLoginWrongPass: "登录失败，请检查用户名密码是否正确",
+  NotiAddReferWrong: "增加推荐人失败，请检查推荐码",
+  NotiRegWrong: "注册错误",
+  NotiRegWrong_429: "注册失败，注册次数过于频繁，请稍后再试",
+  NotiRegWrong_403: "验证码错误",
+  NotiRegWrong_507: "注册失败，请稍后再试",
+  ErrorRequired: "该项目为必填项",
+  ErrorRequired_accountName: "请填写账户名",
+  ErrorRequired_password: "请填写密码",
+  ErrorRequired_confirm: "请填写密码确认",
+  ErrorRequired_captcha: "请填写验证码",
+  ErrorRequired_referrer: "请填写推荐码",
+  ErrorMatch: "密码确认不匹配",
+  ErrorAccountExists: "该账户名已被占用，请尝试其他账户名"
 };
 type Dictionary = typeof cnDict;
 
@@ -98,7 +112,21 @@ export const enDict: Dictionary = {
   ShareLink: "Invite Others",
   ShareLinkCopied: "Copy link copied",
   ShareQRCode: "Generate QRcode",
-  SaveQRCode: "Save"
+  SaveQRCode: "Save",
+  NotiLoginWrongPass: "登录失败，请检查用户名密码是否正确",
+  NotiAddReferWrong: "增加推荐人失败，请检查推荐码",
+  NotiRegWrong: "注册错误",
+  NotiRegWrong_429: "注册失败，注册次数过于频繁，请稍后再试",
+  NotiRegWrong_403: "验证码错误",
+  NotiRegWrong_507: "注册失败，请稍后再试",
+  ErrorRequired: "该项目为必填项",
+  ErrorRequired_accountName: "请填写账户名",
+  ErrorRequired_password: "请填写密码",
+  ErrorRequired_confirm: "请填写密码确认",
+  ErrorRequired_captcha: "请填写验证码",
+  ErrorRequired_referrer: "请填写推荐码",
+  ErrorMatch: "密码确认不匹配",
+  ErrorAccountExists: "该账户名已被占用，请尝试其他账户名"
 };
 export const vnDict: Dictionary = {
   LoginSubmit: "Đăng nhập",
@@ -137,7 +165,21 @@ export const vnDict: Dictionary = {
   ShareLink: "Sao chép liên kết",
   ShareLinkCopied: "Chia sẻ lời mời",
   ShareQRCode: "Tạo áp phích độc quyền",
-  SaveQRCode: "Save"
+  SaveQRCode: "Save",
+  NotiLoginWrongPass: "登录失败，请检查用户名密码是否正确",
+  NotiAddReferWrong: "增加推荐人失败，请检查推荐码",
+  NotiRegWrong: "注册错误",
+  NotiRegWrong_429: "注册失败，注册次数过于频繁，请稍后再试",
+  NotiRegWrong_403: "验证码错误",
+  NotiRegWrong_507: "注册失败，请稍后再试",
+  ErrorRequired: "该项目为必填项",
+  ErrorRequired_accountName: "请填写账户名",
+  ErrorRequired_password: "请填写密码",
+  ErrorRequired_confirm: "请填写密码确认",
+  ErrorRequired_captcha: "请填写验证码",
+  ErrorRequired_referrer: "请填写推荐码",
+  ErrorMatch: "密码确认不匹配",
+  ErrorAccountExists: "该账户名已被占用，请尝试其他账户名"
 };
 
 // have a look at the Quick start guide

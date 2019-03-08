@@ -51,6 +51,7 @@ import {
 } from "./index";
 import { referAdd } from "../refer";
 import { selectGame } from "../core.selectors";
+import { Dict } from "../../providers/i18n";
 
 export const loginEpic: Epic<
   any,
@@ -160,7 +161,7 @@ export const loginFailedEpic: Epic<
 > = (action$, state$, { fetcher }) =>
   action$.pipe(
     ofType<AuthLoginFailedAction>(AuthActions.LoginFailed),
-    map(_ => corePushNoti("请检查用户名密码是否正确", { variant: "error" }))
+    map(_ => corePushNoti(Dict.NotiLoginWrongPass, { variant: "error" }))
   );
 
 export const regPanelCaptchaEpic: Epic<
@@ -287,9 +288,12 @@ export const regFailedEpic: Epic<any, ActionCorePushNoti, any, IEffectDeps> = (
   action$.pipe(
     ofType<AuthRegImplFailed>(AuthActions.RegImplFailed),
     map(action =>
-      corePushNoti(`注册失败，错误码: ${action.payload.code}`, {
-        variant: "error"
-      })
+      corePushNoti(
+        Dict[`NotiRegWrong_${action.payload.code}`] || Dict.NotiRegWrong,
+        {
+          variant: "error"
+        }
+      )
     )
   );
 

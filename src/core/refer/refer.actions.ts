@@ -1,4 +1,6 @@
 import { Action, ActionCreator } from "redux";
+import { ReferResult, SetReferForm, AddReferOptions } from "./refer.models";
+import { WithNotiOptions, withNotiOptions } from "../core.models";
 
 export enum ReferActions {
   LoadReferInfo = "[Refer] LoadReferInfo",
@@ -17,17 +19,19 @@ export class ReferLoadReferInfoFailedAction implements Action {
 }
 export class ReferLoadReferInfoSuccessAction implements Action {
   readonly type = ReferActions.LoadReferInfoSuccess;
-  constructor(public payload: Backend.ReferResult) {}
+  constructor(public payload: ReferResult) {}
 }
 export class ReferAddAction implements Action {
   readonly type = ReferActions.Add;
-  constructor(public payload: Backend.SetReferForm) {}
+  constructor(public payload: SetReferForm & WithNotiOptions) {}
 }
 export class ReferAddSuccessAction implements Action {
   readonly type = ReferActions.AddSuccess;
+  constructor(public payload: WithNotiOptions = withNotiOptions()) {}
 }
 export class ReferAddFailedAction implements Action {
   readonly type = ReferActions.AddFailed;
+  constructor(public payload: WithNotiOptions = withNotiOptions()) {}
 }
 
 export const referLoadReferInfo: () => ReferLoadReferInfoAction = () => ({
@@ -37,22 +41,28 @@ export const referLoadReferInfoFailed: () => ReferLoadReferInfoFailedAction = ()
   type: ReferActions.LoadReferInfoFailed
 });
 export const referLoadReferInfoSuccess: (
-  referInfo: Backend.ReferResult
+  referInfo: ReferResult
 ) => ReferLoadReferInfoSuccessAction = referInfo => ({
   type: ReferActions.LoadReferInfoSuccess,
   payload: referInfo
 });
 export const referAdd: (
-  form: Backend.SetReferForm
+  form: SetReferForm & WithNotiOptions
 ) => ReferAddAction = form => ({
   type: ReferActions.Add,
   payload: form
 });
-export const referAddSuccess: () => ReferAddSuccessAction = () => ({
-  type: ReferActions.AddSuccess
+export const referAddSuccess: (withNoti?: boolean) => ReferAddSuccessAction = (
+  withNoti = false
+) => ({
+  type: ReferActions.AddSuccess,
+  payload: withNotiOptions(withNoti)
 });
-export const referAddFailed: () => ReferAddFailedAction = () => ({
-  type: ReferActions.AddFailed
+export const referAddFailed: (withNoti?: boolean) => ReferAddFailedAction = (
+  withNoti = false
+) => ({
+  type: ReferActions.AddFailed,
+  payload: withNotiOptions(withNoti)
 });
 
 export type ReferAction =

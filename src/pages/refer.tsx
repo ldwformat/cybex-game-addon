@@ -6,7 +6,9 @@ import {
   selectMyRegisterReferrer,
   selectMyGameReferral,
   selectMyRegisterReferral,
-  selectMyGameReferrer
+  selectMyGameReferrer,
+  Referrer,
+  TypesReferral
 } from "../core/refer";
 import {
   withStyles,
@@ -42,10 +44,10 @@ import { withTranslation, WithTranslation } from "react-i18next";
 
 type StateProps = {
   accountName: string | null;
-  myRegisterReferrer: Backend.Referrer | undefined;
-  myRegisterReferral: Backend.TypesReferral | undefined;
-  myGameReferrer: Backend.Referrer | undefined;
-  myGameReferral: Backend.TypesReferral | undefined;
+  myRegisterReferrer: Referrer | undefined;
+  myRegisterReferral: TypesReferral | undefined;
+  myGameReferrer: Referrer | undefined;
+  myGameReferral: TypesReferral | undefined;
 };
 type DispatchProps = {
   selectAsset: typeof gatewaySelectAsset;

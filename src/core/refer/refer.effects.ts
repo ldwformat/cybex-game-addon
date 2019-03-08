@@ -7,7 +7,8 @@ import {
   ReferAddAction,
   referAddSuccess,
   referAddFailed,
-  ReferAddSuccessAction
+  ReferAddSuccessAction,
+  ReferAddFailedAction
 } from "./refer.actions";
 import {
   switchMap,
@@ -27,6 +28,8 @@ import {
   AuthActions,
   LoginReferParams
 } from "../auth";
+import { ActionCorePushNoti, corePushNoti } from "../core.actions";
+import { Dict } from "../../providers/i18n";
 
 export const loadReferInfoEpic: Epic<any, any, CoreState, IEffectDeps> = (
   action$,
@@ -86,7 +89,17 @@ export const addReferEpic: Epic<any, any, CoreState, IEffectDeps> = (
               action,
               authSet.key
             )
-          ).pipe(map(referAddSuccess));
+          ).pipe(
+            map(referAddSuccess),
+            catchError(err => {
+              console.error(err);
+              return of(referAddFailed(reduxAction.payload.withNoti));
+            })
+          );
+        }),
+        catchError(err => {
+          console.error(err);
+          return of(referAddFailed(reduxAction.payload.withNoti));
         })
       )
     ),
@@ -94,6 +107,22 @@ export const addReferEpic: Epic<any, any, CoreState, IEffectDeps> = (
       console.error(err);
       return of(referAddFailed());
     })
+  );
+
+export const addRefFailedEpic: Epic<
+  any,
+  ActionCorePushNoti,
+  any,
+  IEffectDeps
+> = (action$, state$, { fetcher }) =>
+  action$.pipe(
+    ofType<ReferAddFailedAction>(ReferActions.AddFailed),
+    filter(action => !!action.payload.withNoti),
+    map(action =>
+      corePushNoti(Dict.NotiAddReferWrong, {
+        variant: "error"
+      })
+    )
   );
 
 export const addReferAfterLoginEpic: Epic<any, any, CoreState, IEffectDeps> = (

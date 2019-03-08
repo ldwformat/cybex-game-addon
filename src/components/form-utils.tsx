@@ -19,6 +19,7 @@ import {
   TextFieldProps,
   StandardTextFieldProps
 } from "@material-ui/core/TextField";
+import { useTranslation } from "react-i18next";
 
 // export const createTextField = (validate?, asyncValidate?) => (
 //   props: StandardTextFieldProps & { field }
@@ -89,12 +90,13 @@ export const renderTextField = ({
   helperText,
   ...custom
 }) => {
+  let { t, i18n } = useTranslation();
   return (
     <TextField
       label={label}
       // placeholder={label}
       error={touched && invalid}
-      helperText={(touched && error) || helperText}
+      helperText={(touched && t(error)) || helperText}
       {...input}
       {...custom}
     />

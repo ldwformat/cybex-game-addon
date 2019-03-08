@@ -34,7 +34,8 @@ import {
   refer,
   loadReferInfoEpic,
   addReferEpic,
-  addReferAfterLoginEpic
+  addReferAfterLoginEpic,
+  addRefFailedEpic
 } from "./refer";
 import {
   GatewayState,
@@ -56,6 +57,7 @@ const loggerMiddleware = createLogger();
 const rootEpic = combineEpics(
   loginEpic,
   regPanelCaptchaEpic,
+  addRefFailedEpic,
   authRegEpic,
   captchaEpic,
   regFailedEpic,

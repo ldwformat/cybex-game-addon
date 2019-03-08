@@ -37,7 +37,7 @@ const validate = values => {
   const requiredFields = ["accountName", "password", "confirm", "captcha"];
   requiredFields.forEach(field => {
     if (!values[field]) {
-      errors[field] = "Required";
+      errors[field] = Dict[`ErrorRequired_${field}`] || Dict.ErrorRequired;
     }
   });
   if (
@@ -45,28 +45,28 @@ const validate = values => {
     (!!ChainValidation.is_account_name_error(values.accountName, false) ||
       !ChainValidation.is_cheap_name(values.accountName))
   ) {
-    errors.accountName = "Invalid";
+    errors.accountName = Dict.AuthRegAccountNameHelper;
   }
   if (
     values.password &&
     !/(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z]).{12,}/.test(values.password)
   ) {
-    errors.password = "Invalid";
+    errors.password = Dict.AuthRegPasswordHelper;
   }
   if (values.confirm && values.confirm !== values.password) {
-    errors.confirm = "Match";
+    errors.confirm = Dict.ErrorMatch;
   }
   return errors;
 };
 
 const usernameAvailable = toolset => async (value: string) => {
   if (!value) {
-    return "Required";
+    return Dict.ErrorRequired_accountName;
   }
   let { chainAssisant } = toolset as IEffectDeps;
   let res = await chainAssisant.getAccounts(value);
   if (res[0]) {
-    return "Exists";
+    return Dict.ErrorAccountExists;
   }
   return null;
 };

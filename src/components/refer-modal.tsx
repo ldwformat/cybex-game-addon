@@ -25,7 +25,8 @@ import { PrimaryButton, renderTextField } from "./form-utils";
 import {
   selectReferLoading,
   referAdd,
-  selectMyGameReferrer
+  selectMyGameReferrer,
+  Referrer
 } from "../core/refer";
 import { selectGame } from "../core/core.selectors";
 import { Form, Field } from "react-final-form";
@@ -105,7 +106,7 @@ type ReferModalPropsDispatch = {
 type ReferModalPropsState = {
   isLogging: boolean;
   account: string | null;
-  myGameReferrer: Backend.Referrer | undefined;
+  myGameReferrer: Referrer | undefined;
   game: string;
 };
 
@@ -157,7 +158,8 @@ let ReferModalClass = withStyles(styles)(
         this.props.addRefer({
           referrer,
           account: this.props.account as string,
-          action: this.props.game
+          action: this.props.game,
+          withNoti: true
         });
         this.logging$
           .pipe(take(1))

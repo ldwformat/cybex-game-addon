@@ -214,32 +214,6 @@ declare namespace Backend {
     defaultAddress: string;
   };
 
-  export interface ReferResult {
-    referrers: Referrer[];
-    referrals: TypesReferral[];
-  }
-
-  export interface TypesReferral {
-    action: string;
-    referrals: Referral[];
-  }
-
-  export type SetReferForm = {
-    action: string; // 活动名称
-    referrer: string; // 引荐人
-    account: string; // 注册人
-    isRegister?: boolean; // 是否为注册引荐人
-  };
-
-  export interface Referral {
-    ts: string;
-    referral: string;
-  }
-
-  export interface Referrer {
-    action: string;
-    referrer: string;
-  }
 }
 declare namespace CybexGateway {
   export interface Response<R> {

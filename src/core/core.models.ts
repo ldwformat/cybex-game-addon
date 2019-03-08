@@ -3,11 +3,24 @@ import { MallState } from "./mall";
 import { ReferState } from "./refer";
 import { GatewayState } from "./gateway";
 import { OptionsObject } from "notistack";
-
+type NotiOptions = OptionsObject & {
+  i18n?: boolean;
+};
 export class Noti {
   key =
     "$" + Date.now() + "|" + (10000000 + Math.floor(Math.random() * 100000000));
-  constructor(public message: string, public options: OptionsObject = {}) {}
+  options: NotiOptions = { i18n: true };
+  constructor(public message: string, options: NotiOptions = {}) {
+    this.options = { ...this.options, ...options };
+  }
+}
+export type WithNotiOptions = {
+  withNoti?: boolean;
+};
+export function withNotiOptions(withNoti: boolean = false): WithNotiOptions {
+  return {
+    withNoti
+  };
 }
 
 export class AppState {
