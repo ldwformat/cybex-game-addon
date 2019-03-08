@@ -244,3 +244,4 @@ export const Refer = connect(mapStateToProps)(
     )
   )
 );
+export default Refer;

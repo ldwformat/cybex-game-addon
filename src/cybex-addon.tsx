@@ -3,16 +3,17 @@ import * as React from "react";
 import { Provider } from "react-redux";
 import { configureStore } from "./core";
 import { Store } from "redux";
-import { config as defaultConfig, CybexAddonConfig, CybexAddonConfigOptions } from "./config";
-import { Login } from "./pages";
-import { selectAuthSet } from "./core/auth/auth.selectors";
+import {
+  config as defaultConfig,
+  CybexAddonConfig,
+  CybexAddonConfigOptions
+} from "./config";
 import { EventEmitter } from "events";
 import { EVENT_ACTION, IEffectDeps } from "./core/modes";
 import { authShowModal, authLogout } from "./core/auth";
 import { CoreState } from "./core/core.models";
 import { Notifier } from "./components/notifier";
 import { SnackbarProvider } from "notistack";
-import { Deposit } from "./pages/deposit";
 import {
   createMuiTheme,
   MuiThemeProvider,
@@ -20,8 +21,6 @@ import {
 } from "@material-ui/core";
 import JssProvider from "react-jss/lib/JssProvider";
 import { SheetsRegistry } from "jss";
-import { Refer } from "./pages/refer";
-import { ReferRule } from "./pages/refer-rule";
 import { ToolsetContext } from "./providers/toolset";
 import { InviteBtn } from "./components/invite-btn";
 import { merge } from "lodash";
@@ -161,13 +160,14 @@ export class CybexAddon {
     if (this.store) {
       this.store.dispatch(authShowModal());
     }
-    return new Promise(resolve => this.patchPage(Login, resolve));
+    return import("./pages/login")
+      .then(module => module.Login)
+      .then(Login => new Promise(resolve => this.patchPage(Login, resolve)));
   }
-  async logout() {
+  logout() {
     if (this.store) {
       this.store.dispatch(authLogout());
     }
-    return new Promise(resolve => this.patchPage(Login, resolve));
   }
 
   async showInviteBtn(onClick: (e) => any) {
@@ -192,12 +192,26 @@ export class CybexAddon {
     }
   }
   async depositPage(root: HTMLElement) {
-    return new Promise(resolve => this.bootstrap(Deposit)(root, resolve));
+    return import("./pages/deposit")
+      .then(module => module.Deposit)
+      .then(
+        Deposit =>
+          new Promise(resolve => this.bootstrap(Deposit)(root, resolve))
+      );
   }
   async referPage(root: HTMLElement) {
-    return new Promise(resolve => this.bootstrap(Refer)(root, resolve));
+    return import("./pages/refer")
+      .then(module => module.Refer)
+      .then(
+        Refer => new Promise(resolve => this.bootstrap(Refer)(root, resolve))
+      );
   }
   async referRulePage(root: HTMLElement) {
-    return new Promise(resolve => this.bootstrap(ReferRule)(root, resolve));
+    return import("./pages/refer-rule")
+      .then(module => module.ReferRule)
+      .then(
+        ReferRule =>
+          new Promise(resolve => this.bootstrap(ReferRule)(root, resolve))
+      );
   }
 }

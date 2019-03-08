@@ -23,7 +23,7 @@ export declare class CybexAddon {
     bootstrap: (Page: any, props?: any) => (rootElement: HTMLElement, resolve?: (...args: any[]) => any) => Promise<void>;
     setLang(lang: string): Promise<i18n.TFunction>;
     loginPage(): Promise<{}>;
-    logout(): Promise<{}>;
+    logout(): void;
     showInviteBtn(onClick: (e: any) => any): Promise<{}>;
     hideInviteBtn(): void;
     depositPage(root: HTMLElement): Promise<{}>;
