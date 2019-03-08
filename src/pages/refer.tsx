@@ -154,7 +154,7 @@ export const Refer = connect(mapStateToProps)(
 
           return (
             <Paper classes={{ root: classes.root }} square elevation={0}>
-              <div style={{ flex: "1 1 auto", overflowY: "auto" }}>
+              <div style={{ flex: "1 10 auto", overflowY: "auto" }}>
                 <ReferCode code={accountName as string} />
                 <List>
                   <ListItem divider>

@@ -47,7 +47,7 @@ export const ReferRule = withStyles(styles)(
       let classes = this.props.classes || {};
       return (
         <Paper classes={{ root: classes.root }} square elevation={0}>
-          <div style={{ flex: "1 1 auto", overflowY: "auto", margin: 16 }}>
+          <div style={{ flex: "1 10 auto", overflowY: "auto", margin: 16 }}>
             <Paragraph
               title="示例标题1"
               contents={[
