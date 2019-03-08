@@ -3,7 +3,7 @@ import * as React from "react";
 import { Provider } from "react-redux";
 import { configureStore } from "./core";
 import { Store } from "redux";
-import { config as defaultConfig, CybexAddonConfig } from "./config";
+import { config as defaultConfig, CybexAddonConfig, CybexAddonConfigOptions } from "./config";
 import { Login } from "./pages";
 import { selectAuthSet } from "./core/auth/auth.selectors";
 import { EventEmitter } from "events";
@@ -30,11 +30,8 @@ declare const process: any;
 declare const global: any;
 function createPageContext() {
   return {
-    // This is needed in order to deduplicate the injection of CSS in the page.
     sheetsManager: new Map(),
-    // This is needed in order to inject the critical CSS.
     sheetsRegistry: new SheetsRegistry(),
-    // The standard class name generator.
     generateClassName: createGenerateClassName()
   };
 }
@@ -83,7 +80,7 @@ export class CybexAddon {
   toolset: IEffectDeps | null = null;
   config: CybexAddonConfig;
   constructor(
-    config: CybexAddonConfig = defaultConfig,
+    config: CybexAddonConfigOptions = defaultConfig,
     public pageContext = getPageContext()
   ) {
     this.config = merge({}, defaultConfig, config);
@@ -98,7 +95,7 @@ export class CybexAddon {
           .forEach(node => node.remove());
       });
     }
-    i18n.changeLanguage(config.lang);
+    i18n.changeLanguage(this.config.lang);
   }
 
   async init() {

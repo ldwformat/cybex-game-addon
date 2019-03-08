@@ -1,6 +1,6 @@
 /// <reference types="node" />
 import { Store } from "redux";
-import { CybexAddonConfig } from "./config";
+import { CybexAddonConfig, CybexAddonConfigOptions } from "./config";
 import { EventEmitter } from "events";
 import { IEffectDeps } from "./core/modes";
 import { CoreState } from "./core/core.models";
@@ -17,7 +17,7 @@ export declare class CybexAddon {
     notifier: EventEmitter | null;
     toolset: IEffectDeps | null;
     config: CybexAddonConfig;
-    constructor(config?: CybexAddonConfig, pageContext?: any);
+    constructor(config?: CybexAddonConfigOptions, pageContext?: any);
     init(): Promise<this>;
     patchPage: (Page: any, resolve?: (...args: any[]) => any, rootContainer?: HTMLElement | null) => Promise<void>;
     bootstrap: (Page: any, props?: any) => (rootElement: HTMLElement, resolve?: (...args: any[]) => any) => Promise<void>;
