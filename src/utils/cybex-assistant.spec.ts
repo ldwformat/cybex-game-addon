@@ -1,7 +1,7 @@
 import { WsConnection } from "./connect";
 import { CybexAssistant } from "./cybex-assistant";
-import { KeyStore } from "../../src/core/auth/keystore/keystore";
-import { PrivateKey } from "../../src/cybex/ecc";
+import { KeyStore } from "../core/auth/keystore/keystore";
+import { PrivateKey } from "../cybex/ecc";
 
 const NORMAL_TIMEOUT = 30 * 1000;
 

@@ -1,7 +1,7 @@
 /// <reference types="node" />
 import { WsConnection } from "./connect";
-import { KeyStore } from "../../src/core/auth/keystore/keystore";
-import { PrivateKey } from "../../src/cybex/ecc";
+import { KeyStore } from "../core/auth/keystore/keystore";
+import { PrivateKey } from "../cybex/ecc";
 declare type TransferParams = {
     from: string;
     to: string;

@@ -1,9 +1,9 @@
 import { WsConnection } from "./connect";
 import assert from "assert";
 import { calcAmount } from "./calc";
-import { KeyStore } from "../../src/core/auth/keystore/keystore";
-import { PrivateKey, Aes } from "../../src/cybex/ecc";
-import { TransactionHelper } from "../../src/cybex/chain";
+import { KeyStore } from "../core/auth/keystore/keystore";
+import { PrivateKey, Aes } from "../cybex/ecc";
+import { TransactionHelper } from "../cybex/chain";
 import Transaction from "./transaction";
 
 type TransferParams = {

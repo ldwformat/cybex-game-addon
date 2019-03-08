@@ -1,6 +1,6 @@
-import PrivateKey from "../../src/cybex/ecc/src/PrivateKey";
-import Serializer from "../../src/cybex/serializer/src/serializer";
-import { GetAddressRequest, SetAddressRequest, SetAddress } from "../../src/cybex/serializer/src/operations";
+import PrivateKey from "../cybex/ecc/src/PrivateKey";
+import Serializer from "../cybex/serializer/src/serializer";
+import { GetAddressRequest, SetAddressRequest, SetAddress } from "../cybex/serializer/src/operations";
 import { IRegistInfo, IRegistRes, FaucetCaptcha } from "../core/auth";
 import { ReferResult } from "../core/refer";
 export declare const fetchWithRetry: (url: string, method: string, ...params: any[]) => Promise<any>;

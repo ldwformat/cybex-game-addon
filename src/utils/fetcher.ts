@@ -2,9 +2,9 @@ import fetch from "isomorphic-fetch";
 import moment from "moment";
 import { WsConnection } from "./connect";
 import { resolvePath } from "./path";
-import PrivateKey from "../../src/cybex/ecc/src/PrivateKey";
-import Serializer from "../../src/cybex/serializer/src/serializer";
-import Signature from "../../src/cybex/ecc/src/signature";
+import PrivateKey from "../cybex/ecc/src/PrivateKey";
+import Serializer from "../cybex/serializer/src/serializer";
+import Signature from "../cybex/ecc/src/signature";
 import {
   query_address,
   GetAddressRequest,
@@ -15,7 +15,7 @@ import {
   SetRefer,
   SetReferRequest,
   set_refer
-} from "../../src/cybex/serializer/src/operations";
+} from "../cybex/serializer/src/operations";
 import { IRegistInfo, IRegistRes, FaucetCaptcha } from "../core/auth";
 import { ReferResult } from "../core/refer";
 

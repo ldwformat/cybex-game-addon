@@ -8,7 +8,7 @@ import {
   MallBackendProvince
 } from "./fetcher";
 import { config } from "../config";
-import PrivateKey from "../../src/cybex/ecc/src/PrivateKey";
+import PrivateKey from "../cybex/ecc/src/PrivateKey";
 
 describe("Test class ChainFetcher", () => {
   let fetcher: ChainFetcher;

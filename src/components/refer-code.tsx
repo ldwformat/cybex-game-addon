@@ -11,8 +11,7 @@ import {
 } from "@material-ui/core";
 import { Dict } from "../providers/i18n";
 import { withTranslation, WithTranslation } from "react-i18next";
-
-const ReferBg = require("../assets/images/refer-bg.jpg");
+import { bg } from "./refer-bg";
 
 const referCodeStyle: StyleRulesCallback = theme => ({
   root: {
@@ -32,7 +31,7 @@ const referCodeStyle: StyleRulesCallback = theme => ({
     borderRadius: `${theme.spacing.unit}px`
   },
   cardMain: {
-    backgroundImage: `url(${ReferBg})`,
+    backgroundImage: bg,
     backgroundSize: "cover",
     display: "flex",
     flexDirection: "column",
