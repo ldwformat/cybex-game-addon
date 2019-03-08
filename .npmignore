@@ -2,3 +2,12 @@ src
 node_modules
 http
 examples
+tsconfig.json
+tslint.json
+types.json
+webpack.config.js
+yarn-error.log
+yarn.lock
+.gitignore
+.editconfig
+.vscode
