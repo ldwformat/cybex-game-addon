@@ -77,7 +77,8 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = {
 
 const styles: StyleRulesCallback = theme => ({
   buttonRoot: {
-    borderRadius: "unset"
+    borderRadius: "unset",
+    flexShrink: 0
   },
   drawerRoot: {
     height: "188px",
