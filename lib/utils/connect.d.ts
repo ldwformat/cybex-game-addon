@@ -1,6 +1,16 @@
 /// <reference types="node" />
 import { EventEmitter } from "events";
 import ReconnectingWebSocket, { Options as RsOptions } from "reconnecting-websocket";
+declare enum ApiFailedMode {
+    Ignore = 0,
+    Panic = 1
+}
+interface WsConnectionOption {
+    url: string;
+    apis?: string[];
+    mode?: ApiFailedMode;
+    protocol?: string;
+}
 export declare class WsConnection extends EventEmitter {
     private options;
     readonly callId: number;
@@ -23,3 +33,4 @@ export declare class WsConnection extends EventEmitter {
     login(): Promise<void[]>;
     api: (api: string) => (method: string, ...params: any[]) => Promise<any>;
 }
+export {};

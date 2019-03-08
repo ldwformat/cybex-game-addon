@@ -1,4 +1,10 @@
 import { Action, ActionCreator } from "redux";
+import {
+  BackendAddressInfo,
+  BackendAddressFormFields,
+  MallBackendCountry,
+  MallBackendProvince
+} from "../../utils/fetcher";
 
 export enum MallActions {
   LoadCountries = "[Mall] Load Countries",
@@ -26,7 +32,7 @@ export class MallLoadCountriesFailedAction implements Action {
 
 export class MallLoadCountriesSuccessAction implements Action {
   readonly type = MallActions.LoadCountriesSuccess;
-  constructor(public payload: MallBackend.Country[]) {}
+  constructor(public payload: MallBackendCountry[]) {}
 }
 
 export const mallLoadCountries: () => MallLoadCountriesAction = () => ({
@@ -40,7 +46,7 @@ export const mallLoadCountriesFailed: ActionCreator<
 });
 
 export const mallLoadCountriesSuccess: (
-  countries: MallBackend.Country[]
+  countries: MallBackendCountry[]
 ) => MallLoadCountriesSuccessAction = countries => ({
   type: MallActions.LoadCountriesSuccess,
   payload: countries
@@ -64,7 +70,7 @@ export class MallLoadProvincesFailedAction implements Action {
 export class MallLoadProvincesSuccessAction implements Action {
   readonly type = MallActions.LoadProvincesSuccess;
   constructor(
-    public payload: { countryID: number; provinces: MallBackend.Province[] }
+    public payload: { countryID: number; provinces: MallBackendProvince[] }
   ) {}
 }
 
@@ -83,7 +89,7 @@ export const mallLoadProvinces: (
 
 export const mallLoadProvincesSuccess: (provinceRes: {
   countryID: number;
-  provinces: MallBackend.Province[];
+  provinces: MallBackendProvince[];
 }) => MallLoadProvincesSuccessAction = provinceRes => ({
   type: MallActions.LoadProvincesSuccess,
   payload: provinceRes
@@ -105,11 +111,11 @@ export class MallLoadAddressBookFailedAction implements Action {
 }
 export class MallLoadAddressBookSuccessAction implements Action {
   readonly type = MallActions.LoadAddressBookSuccess;
-  constructor(public payload: Backend.AddressInfo[]) {}
+  constructor(public payload: BackendAddressInfo[]) {}
 }
 export class MallAddAddressAction implements Action {
   readonly type = MallActions.AddAddress;
-  constructor(public payload: Backend.AddressFormFields) {}
+  constructor(public payload: BackendAddressFormFields) {}
 }
 export class MallAddAddressSuccessAction implements Action {
   readonly type = MallActions.AddAddressSuccess;
@@ -125,19 +131,19 @@ export const mallLoadAddressBookFailed: () => MallLoadAddressBookFailedAction = 
   type: MallActions.LoadAddressBookFailed
 });
 export const mallLoadAddressBookSuccess: (
-  addressBook: Backend.AddressInfo[]
+  addressBook: BackendAddressInfo[]
 ) => MallLoadAddressBookSuccessAction = addressBook => ({
   type: MallActions.LoadAddressBookSuccess,
   payload: addressBook
 });
 export const mallAddAddress: (
-  addressForm: Backend.AddressFormFields
+  addressForm: BackendAddressFormFields
 ) => MallAddAddressAction = addressForm => ({
   type: MallActions.AddAddress,
   payload: addressForm
 });
 export const mallAddAddressSuccess: (
-  addressInfo: Backend.AddressInfo
+  addressInfo: BackendAddressInfo
 ) => MallAddAddressSuccessAction = addressInfo => ({
   type: MallActions.AddAddressSuccess
 });

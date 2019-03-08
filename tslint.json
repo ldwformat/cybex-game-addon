@@ -37,6 +37,7 @@
     "no-empty": false,
     "no-empty-interface": true,
     "no-eval": true,
+    "interface-name": false,
     "no-inferrable-types": [true, "ignore-params"],
     "no-misused-new": true,
     "no-non-null-assertion": true,

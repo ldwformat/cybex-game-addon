@@ -1,4 +1,5 @@
 import { Action, ActionCreator } from "redux";
+import { BackendAddressInfo, BackendAddressFormFields, MallBackendCountry, MallBackendProvince } from "../../utils/fetcher";
 export declare enum MallActions {
     LoadCountries = "[Mall] Load Countries",
     LoadCountriesSuccess = "[Mall] Load Countries Success",
@@ -20,13 +21,13 @@ export declare class MallLoadCountriesFailedAction implements Action {
     readonly type = MallActions.LoadCountriesFailed;
 }
 export declare class MallLoadCountriesSuccessAction implements Action {
-    payload: MallBackend.Country[];
+    payload: MallBackendCountry[];
     readonly type = MallActions.LoadCountriesSuccess;
-    constructor(payload: MallBackend.Country[]);
+    constructor(payload: MallBackendCountry[]);
 }
 export declare const mallLoadCountries: () => MallLoadCountriesAction;
 export declare const mallLoadCountriesFailed: ActionCreator<MallLoadCountriesFailedAction>;
-export declare const mallLoadCountriesSuccess: (countries: MallBackend.Country[]) => MallLoadCountriesSuccessAction;
+export declare const mallLoadCountriesSuccess: (countries: MallBackendCountry[]) => MallLoadCountriesSuccessAction;
 export declare type MallCountriesAction = MallLoadCountriesAction | MallLoadCountriesFailedAction | MallLoadCountriesSuccessAction;
 export declare class MallLoadProvincesAction implements Action {
     payload: number;
@@ -39,19 +40,19 @@ export declare class MallLoadProvincesFailedAction implements Action {
 export declare class MallLoadProvincesSuccessAction implements Action {
     payload: {
         countryID: number;
-        provinces: MallBackend.Province[];
+        provinces: MallBackendProvince[];
     };
     readonly type = MallActions.LoadProvincesSuccess;
     constructor(payload: {
         countryID: number;
-        provinces: MallBackend.Province[];
+        provinces: MallBackendProvince[];
     });
 }
 export declare const mallLoadProvincesFailed: ActionCreator<MallLoadProvincesFailedAction>;
 export declare const mallLoadProvinces: (countryID: number) => MallLoadProvincesAction;
 export declare const mallLoadProvincesSuccess: (provinceRes: {
     countryID: number;
-    provinces: MallBackend.Province[];
+    provinces: MallBackendProvince[];
 }) => MallLoadProvincesSuccessAction;
 export declare type MallProvincesAction = MallLoadProvincesAction | MallLoadProvincesSuccessAction | MallLoadProvincesFailedAction;
 export declare type MallChoreAction = MallCountriesAction | MallProvincesAction;
@@ -62,14 +63,14 @@ export declare class MallLoadAddressBookFailedAction implements Action {
     readonly type = MallActions.LoadAddressBookFailed;
 }
 export declare class MallLoadAddressBookSuccessAction implements Action {
-    payload: Backend.AddressInfo[];
+    payload: BackendAddressInfo[];
     readonly type = MallActions.LoadAddressBookSuccess;
-    constructor(payload: Backend.AddressInfo[]);
+    constructor(payload: BackendAddressInfo[]);
 }
 export declare class MallAddAddressAction implements Action {
-    payload: Backend.AddressFormFields;
+    payload: BackendAddressFormFields;
     readonly type = MallActions.AddAddress;
-    constructor(payload: Backend.AddressFormFields);
+    constructor(payload: BackendAddressFormFields);
 }
 export declare class MallAddAddressSuccessAction implements Action {
     readonly type = MallActions.AddAddressSuccess;
@@ -79,9 +80,9 @@ export declare class MallAddAddressFailedAction implements Action {
 }
 export declare const mallLoadAddressBook: () => MallLoadAddressBookAction;
 export declare const mallLoadAddressBookFailed: () => MallLoadAddressBookFailedAction;
-export declare const mallLoadAddressBookSuccess: (addressBook: Backend.AddressInfo[]) => MallLoadAddressBookSuccessAction;
-export declare const mallAddAddress: (addressForm: Backend.AddressFormFields) => MallAddAddressAction;
-export declare const mallAddAddressSuccess: (addressInfo: Backend.AddressInfo) => MallAddAddressSuccessAction;
+export declare const mallLoadAddressBookSuccess: (addressBook: BackendAddressInfo[]) => MallLoadAddressBookSuccessAction;
+export declare const mallAddAddress: (addressForm: BackendAddressFormFields) => MallAddAddressAction;
+export declare const mallAddAddressSuccess: (addressInfo: BackendAddressInfo) => MallAddAddressSuccessAction;
 export declare const mallAddAddressFailed: () => MallAddAddressFailedAction;
 export declare type MallAddressAction = MallLoadAddressBookAction | MallLoadAddressBookSuccessAction | MallLoadAddressBookFailedAction | MallAddAddressAction | MallAddAddressFailedAction | MallAddAddressSuccessAction;
 export declare type MallAction = MallAddressAction | MallChoreAction;

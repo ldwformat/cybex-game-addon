@@ -3,7 +3,7 @@ import * as React from "react";
 import { Provider } from "react-redux";
 import { configureStore } from "./core";
 import { Store } from "redux";
-import { config as defaultConfig } from "./config";
+import { config as defaultConfig, CybexAddonConfig } from "./config";
 import { Login } from "./pages";
 import { selectAuthSet } from "./core/auth/auth.selectors";
 import { EventEmitter } from "events";

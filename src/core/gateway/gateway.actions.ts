@@ -1,4 +1,5 @@
 import { Action, ActionCreator } from "redux";
+import { CoinInfo, GetDepositAddress } from "../../utils/fetcher";
 
 export enum GatewayActions {
   LoadGatewayInfo = "[Gateway] LoadGatewayInfo",
@@ -22,7 +23,7 @@ export class GatewayLoadGatewayInfoFailedAction implements Action {
 }
 export class GatewayLoadGatewayInfoSuccessAction implements Action {
   readonly type = GatewayActions.LoadGatewayInfoSuccess;
-  constructor(public payload: CybexGateway.CoinInfo[]) {}
+  constructor(public payload: CoinInfo[]) {}
 }
 export class GatewayLoadDepositInfoAction implements Action {
   readonly type = GatewayActions.LoadDepositInfo;
@@ -30,7 +31,7 @@ export class GatewayLoadDepositInfoAction implements Action {
 }
 export class GatewayLoadDepositInfoSuccessAction implements Action {
   readonly type = GatewayActions.LoadDepositInfoSuccess;
-  constructor(public payload: CybexGateway.GetDepositAddress) {}
+  constructor(public payload: GetDepositAddress) {}
 }
 export class GatewayLoadDepositInfoFailedAction implements Action {
   readonly type = GatewayActions.LoadDepositInfoFailed;
@@ -43,7 +44,7 @@ export const gatewayLoadGatewayInfoFailed: () => GatewayLoadGatewayInfoFailedAct
   type: GatewayActions.LoadGatewayInfoFailed
 });
 export const gatewayLoadGatewayInfoSuccess: (
-  gatewayInfoList: CybexGateway.CoinInfo[]
+  gatewayInfoList: CoinInfo[]
 ) => GatewayLoadGatewayInfoSuccessAction = gatewayInfo => ({
   type: GatewayActions.LoadGatewayInfoSuccess,
   payload: gatewayInfo
@@ -55,7 +56,7 @@ export const gatewayLoadDepositInfo: (
   payload: asset
 });
 export const gatewayLoadDepositInfoSuccess: (
-  depositAddress: CybexGateway.GetDepositAddress
+  depositAddress: GetDepositAddress
 ) => GatewayLoadDepositInfoSuccessAction = depositAddress => ({
   payload: depositAddress,
   type: GatewayActions.LoadDepositInfoSuccess

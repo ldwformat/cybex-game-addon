@@ -1,14 +1,15 @@
 import * as React from "react";
 import { gatewaySelectAsset } from "../core/gateway";
+import { Referrer, TypesReferral } from "../core/refer";
 import { StyledComponentProps } from "@material-ui/core";
 import { corePushNoti } from "../core/core.actions";
 import { WithTranslation } from "react-i18next";
 declare type StateProps = {
     accountName: string | null;
-    myRegisterReferrer: Backend.Referrer | undefined;
-    myRegisterReferral: Backend.TypesReferral | undefined;
-    myGameReferrer: Backend.Referrer | undefined;
-    myGameReferral: Backend.TypesReferral | undefined;
+    myRegisterReferrer: Referrer | undefined;
+    myRegisterReferral: TypesReferral | undefined;
+    myGameReferrer: Referrer | undefined;
+    myGameReferral: TypesReferral | undefined;
 };
 declare type DispatchProps = {
     selectAsset: typeof gatewaySelectAsset;

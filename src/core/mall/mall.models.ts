@@ -1,6 +1,8 @@
+import { MallBackendCountry, MallBackendProvince } from "../../utils/fetcher";
+
 export class Chore {
-  countryList: MallBackend.Country[] = [];
-  proviceMap: { [countryID: number]: MallBackend.Province[] } = {};
+  countryList: MallBackendCountry[] = [];
+  proviceMap: { [countryID: number]: MallBackendProvince[] } = {};
 }
 
 export class MallState {

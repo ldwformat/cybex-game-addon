@@ -6,12 +6,12 @@ export declare const Actions: {
     mallLoadAddressBook: () => import("./core/mall").MallLoadAddressBookAction;
     mallLoadProvinces: (countryID: number) => import("./core/mall").MallLoadProvincesAction;
     mallLoadCountries: () => import("./core/mall").MallLoadCountriesAction;
-    mallAddAddress: (addressForm: Backend.AddressFormFields) => import("./core/mall").MallAddAddressAction;
+    mallAddAddress: (addressForm: import("./utils/fetcher").BackendAddressFormFields) => import("./core/mall").MallAddAddressAction;
     gatewayLoadGatewayInfo: () => import("./core/gateway").GatewayLoadGatewayInfoAction;
     gatewaySelectAsset: (asset: string) => import("./core/gateway").GatewaySelectAssetAction;
     gatewayLoadDepositInfo: (asset: string) => import("./core/gateway").GatewayLoadDepositInfoAction;
     referLoadReferInfo: () => import("./core/refer").ReferLoadReferInfoAction;
-    referAdd: (form: Backend.SetReferForm) => import("./core/refer").ReferAddAction;
+    referAdd: (form: import("./core/refer").SetReferForm & import("./core").WithNotiOptions) => import("./core/refer").ReferAddAction;
 };
 declare const Selectors: {
     selectAuth: (state: import("./core").CoreState) => import("./core/auth").AuthState;

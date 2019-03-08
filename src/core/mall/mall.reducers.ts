@@ -1,9 +1,10 @@
 import { Reducer } from "redux";
 import { MallState, Chore } from "./mall.models";
 import { MallChoreAction, MallActions } from "./mall.actions";
+import { MallBackendProvince } from "../../utils/fetcher";
 
 const proviceMap: Reducer<
-  { [countryID: number]: MallBackend.Province[] },
+  { [countryID: number]: MallBackendProvince[] },
   MallChoreAction
 > = (state = {}, action) => {
   switch (action.type) {

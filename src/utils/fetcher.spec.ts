@@ -3,7 +3,9 @@ import {
   MallFetcher,
   BackendFetcher,
   ReferFetcher,
-  GatewayFetcher
+  GatewayFetcher,
+  MallBackendCountry,
+  MallBackendProvince
 } from "./fetcher";
 import { config } from "../config";
 import PrivateKey from "../../src/cybex/ecc/src/PrivateKey";
@@ -61,13 +63,13 @@ describe("Test class MallFetcher", () => {
     expect(allCountries).toBeInstanceOf(Array);
     let china = (allCountries.find(
       country => country.country === "中国"
-    ) as unknown) as MallBackend.Country;
+    ) as unknown) as MallBackendCountry;
     expect(china).not.toBeUndefined();
     let provinces = await fetcher.getProvinceList(china.id);
     expect(provinces).toBeInstanceOf(Array);
     let beijing = (provinces.find(
       province => province.id === 192
-    ) as unknown) as MallBackend.Province;
+    ) as unknown) as MallBackendProvince;
     expect(beijing).not.toBeUndefined();
     expect(beijing.provice).toBe("北京市");
 

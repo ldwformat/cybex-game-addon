@@ -3,10 +3,11 @@ import { GatewayState, gatewaySelectAsset } from "../core/gateway";
 import { StyledComponentProps } from "@material-ui/core";
 import { corePushNoti } from "../core/core.actions";
 import { WithTranslation } from "react-i18next";
+import { CoinInfo, GetDepositAddress } from "../utils/fetcher";
 declare type DepositStateProps = {
     gateway: GatewayState;
-    coinList: CybexGateway.CoinInfo[];
-    currentDeposit: CybexGateway.GetDepositAddress | undefined;
+    coinList: CoinInfo[];
+    currentDeposit: GetDepositAddress | undefined;
 };
 declare type DepositDispatchProps = {
     selectAsset: typeof gatewaySelectAsset;

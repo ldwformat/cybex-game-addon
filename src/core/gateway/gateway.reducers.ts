@@ -2,11 +2,10 @@ import { Reducer } from "redux";
 import { GatewayState } from "./gateway.models";
 import { GatewayAction, GatewayActions } from "./gateway.actions";
 import { AuthAction, AuthActions } from "../auth";
+import { GetDepositAddress } from "../../utils/fetcher";
 
-const isSameDpsInfo = (
-  left: CybexGateway.GetDepositAddress,
-  right: CybexGateway.GetDepositAddress
-) => Object.keys(left).every(key => left[key] === right[key]);
+const isSameDpsInfo = (left: GetDepositAddress, right: GetDepositAddress) =>
+  Object.keys(left).every(key => left[key] === right[key]);
 
 export const gateway: Reducer<GatewayState, GatewayAction | AuthAction> = (
   state = new GatewayState(),

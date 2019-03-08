@@ -1,21 +1,6 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 
-// export enum Dict {
-//   LoginSubmit = "[Login]Submit",
-//   AuthAccountName = "[Auth]AccountName",
-//   AuthAccountNameHelper = "[Auth]AccountNameHelper",
-//   AuthPassword = "[Auth]Password",
-//   AuthPasswordConfirm = "[Auth]PasswordConfirm",
-//   AuthCaptcha = "[Auth]Captcha",
-//   AuthLoginPasswordHelper = "[Auth]LoginPasswordHelper",
-//   AuthRegPasswordHelper = "[Auth]RegPasswordHelper",
-//   AuthRegAccountNameHelper = "[Auth]RegAccountNameHelper",
-//   AuthRegConfirmHelper = "[Auth]RegConfirmHelper",
-//   AuthCaptchaHelper = "[Auth]CaptchaHelper",
-//   AuthRegisterLong = "[Auth]RegisterLong",
-//   AuthRegister = "[Auth]Register"
-// }
 export const cnDict = {
   LoginSubmit: "登录",
   LoginLong: "登录云账户",
@@ -193,7 +178,7 @@ i18n
   .init({
     fallbackLng: "en",
     lng: "zh",
-    debug: true,
+    debug: false,
     resources: {
       en: {
         translation: enDict

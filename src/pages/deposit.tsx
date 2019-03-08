@@ -30,11 +30,12 @@ import { FileCopy, CloudDownload } from "@material-ui/icons";
 import { QRCodeDisplay } from "../components/qrcode";
 import { withTranslation, WithTranslation } from "react-i18next";
 import { Dict } from "../providers/i18n";
+import { CoinInfo, GetDepositAddress } from "../utils/fetcher";
 
 type DepositStateProps = {
   gateway: GatewayState;
-  coinList: CybexGateway.CoinInfo[];
-  currentDeposit: CybexGateway.GetDepositAddress | undefined;
+  coinList: CoinInfo[];
+  currentDeposit: GetDepositAddress | undefined;
 };
 type DepositDispatchProps = {
   selectAsset: typeof gatewaySelectAsset;

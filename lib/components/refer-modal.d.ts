@@ -1,6 +1,6 @@
 import * as React from "react";
 import { StyledComponentProps } from "@material-ui/core";
-import { referAdd } from "../core/refer";
+import { referAdd, Referrer } from "../core/refer";
 export declare const ReferModalForm: React.ComponentType<Pick<any, string | number | symbol>>;
 declare type ReferModalPropsDispatch = {
     addRefer: typeof referAdd;
@@ -8,7 +8,7 @@ declare type ReferModalPropsDispatch = {
 declare type ReferModalPropsState = {
     isLogging: boolean;
     account: string | null;
-    myGameReferrer: Backend.Referrer | undefined;
+    myGameReferrer: Referrer | undefined;
     game: string;
 };
 declare type ReferModalProps = {

@@ -1,5 +1,5 @@
 import { Action, ActionCreator } from "redux";
-import { ReferResult, SetReferForm, AddReferOptions } from "./refer.models";
+import { ReferResult, SetReferForm } from "./refer.models";
 import { WithNotiOptions, withNotiOptions } from "../core.models";
 
 export enum ReferActions {

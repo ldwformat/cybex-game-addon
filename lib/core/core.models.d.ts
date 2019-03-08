@@ -3,12 +3,19 @@ import { MallState } from "./mall";
 import { ReferState } from "./refer";
 import { GatewayState } from "./gateway";
 import { OptionsObject } from "notistack";
+declare type NotiOptions = OptionsObject & {
+    i18n?: boolean;
+};
 export declare class Noti {
     message: string;
-    options: OptionsObject;
     key: string;
-    constructor(message: string, options?: OptionsObject);
+    options: NotiOptions;
+    constructor(message: string, options?: NotiOptions);
 }
+export declare type WithNotiOptions = {
+    withNoti?: boolean;
+};
+export declare function withNotiOptions(withNoti?: boolean): WithNotiOptions;
 export declare class AppState {
     noties: Noti[];
 }
@@ -22,3 +29,4 @@ export declare class CoreState {
     gateway: GatewayState;
     app: AppState;
 }
+export {};

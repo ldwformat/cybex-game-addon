@@ -1,5 +1,6 @@
+import { CoinInfo, GetDepositAddress } from "../../utils/fetcher";
 export declare class GatewayState {
-    info: CybexGateway.CoinInfo[];
+    info: CoinInfo[];
     currentAsset: string | undefined;
-    depositInfoList: CybexGateway.GetDepositAddress[];
+    depositInfoList: GetDepositAddress[];
 }

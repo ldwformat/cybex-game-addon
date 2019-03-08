@@ -17,6 +17,7 @@ import {
   set_refer
 } from "../../src/cybex/serializer/src/operations";
 import { IRegistInfo, IRegistRes, FaucetCaptcha } from "../core/auth";
+import { ReferResult } from "../core/refer";
 
 const simpleCache = {};
 const getKey = (...args) => JSON.stringify(args);
@@ -140,6 +141,32 @@ export class ChainFetcher {
   );
 }
 
+//// Mall
+export interface MallBackendResponse<R> {
+  returnCode: number;
+  returnMsg: string;
+  data: R;
+}
+
+export interface MallBackendCountry {
+  id: number;
+  country: string;
+  countryCode: string;
+  addition: null;
+  deleted: "N";
+}
+
+export interface MallBackendProvince {
+  id: number;
+  countryId: number;
+  country: string;
+  countryCode: string;
+  provice: string;
+  provinceCode: string;
+  addition: null;
+  deleted: string;
+}
+
 export class MallFetcher {
   constructor(public mallBackend: string) {}
 
@@ -152,7 +179,7 @@ export class MallFetcher {
       body: JSON.stringify(body)
     })
       .then(res => res.json())
-      .then((res: MallBackend.Response<R>) => {
+      .then((res: MallBackendResponse<R>) => {
         if (res.returnCode === 10000) {
           return res.data as R;
         }
@@ -161,15 +188,62 @@ export class MallFetcher {
   }
 
   async getCountryList() {
-    return this.fetch<undefined, MallBackend.Country[]>("allCountrys");
+    return this.fetch<undefined, MallBackendCountry[]>("allCountrys");
   }
 
   async getProvinceList(countryID: string | number) {
-    return this.fetch<undefined, MallBackend.Province[]>(
+    return this.fetch<undefined, MallBackendProvince[]>(
       `countryAreas/${countryID}`
     );
   }
 }
+
+//// Backend
+export interface BackendResponse<R> {
+  success: boolean;
+  reason: string;
+  data: R;
+}
+
+export interface BackendFetchResponse<R> {
+  success: boolean;
+  reason: string;
+  result: R;
+}
+
+export type BackendAddressFormFields = {
+  loginName: string;
+  receiverName: string;
+  email: string;
+  qqNo: string;
+  wechatNo: string;
+  proviceId: number;
+  homeAddress: string;
+};
+
+export type BackendAddressInfo = {
+  id: number;
+  email: string;
+  wechatNo: string;
+  mobile: null;
+  homeAddress: string;
+  userId: number;
+  provinceCode: string;
+  countryCode: string;
+  countryId: null;
+  receverName: string;
+  updatedTime: number;
+  operator: null;
+  proviceId: null;
+  addition: null;
+  createdTime: number;
+  provice: string;
+  deleted: string;
+  country: string;
+  qqNo: string;
+  freightFee: null;
+  defaultAddress: string;
+};
 
 export class BackendFetcher {
   static signOperation<I, R>(
@@ -204,7 +278,7 @@ export class BackendFetcher {
       body: JSON.stringify(body)
     })
       .then(res => res.json())
-      .then((res: Backend.Response<R>) => {
+      .then((res: BackendResponse<R>) => {
         if (res.success) {
           return res.data as R;
         }
@@ -221,7 +295,7 @@ export class BackendFetcher {
       key
     );
     op.method = "query";
-    return [await this.fetch<Backend.AddressInfo>("user/", op)];
+    return [await this.fetch<BackendAddressInfo>("user/", op)];
   }
 
   async addAddress(addressConfig: SetAddress, key: PrivateKey) {
@@ -267,7 +341,7 @@ export class ReferFetcher {
       body: JSON.stringify(body)
     })
       .then(res => res.json())
-      .then((res: Backend.Response<R>) => {
+      .then((res: BackendResponse<R>) => {
         if (res.success) {
           return res.data as R;
         }
@@ -277,7 +351,7 @@ export class ReferFetcher {
   async fetch<R = any>(path: string): Promise<R> {
     return fetch(resolvePath(this.referBackendUrl, path))
       .then(res => res.json())
-      .then((res: Backend.FetchResponse<R>) => {
+      .then((res: BackendFetchResponse<R>) => {
         if (res.success) {
           return res.result as R;
         }
@@ -314,10 +388,39 @@ export class ReferFetcher {
   };
 
   getRefer = async (account: string) => {
-    return this.fetch<Backend.ReferResult>(
-      `refer/?account=${account}&&action=all`
-    );
+    return this.fetch<ReferResult>(`refer/?account=${account}&&action=all`);
   };
+}
+
+//// Gateway
+export interface GatewayResponse<R> {
+  data: R;
+}
+
+export interface GetDepositAddressRes {
+  getDepositAddress: GetDepositAddress | null;
+}
+
+export interface GetDepositAddress {
+  address: string;
+  accountName: string;
+  asset: string;
+  type: string;
+  createAt: string;
+  projectInfo: ProjectInfo;
+}
+
+export interface ProjectInfo {
+  projectName: string;
+  logoUrl: string;
+  contractAddress: null;
+  contractExplorerUrl: null;
+}
+
+export interface CoinInfo {
+  asset: string;
+  currency: string;
+  isDisabled: boolean;
 }
 
 export class GatewayFetcher {
@@ -332,7 +435,7 @@ export class GatewayFetcher {
       body: JSON.stringify(body)
     })
       .then(res => res.json())
-      .then((res: CybexGateway.Response<R>) => {
+      .then((res: GatewayResponse<R>) => {
         if (res.data) {
           return res.data as R;
         }
@@ -354,7 +457,7 @@ export class GatewayFetcher {
         "query GetAddress($accountName: String!, $asset: String!) {\n  getDepositAddress(accountName: $accountName, asset: $asset) {\n    address\n    accountName\n    asset\n    type\n    createAt\n    projectInfo {\n      projectName\n      logoUrl\n      contractAddress\n      contractExplorerUrl\n      __typename\n    }\n    __typename\n  }\n}\n"
     };
 
-    return this.fetch<CybexGateway.GetDepositAddressRes>("gateway", body);
+    return this.fetch<GetDepositAddressRes>("gateway", body);
   }
 }
 export class FaucetFetcher {

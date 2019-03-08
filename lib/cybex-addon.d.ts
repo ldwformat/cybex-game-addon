@@ -1,5 +1,6 @@
 /// <reference types="node" />
 import { Store } from "redux";
+import { CybexAddonConfig } from "./config";
 import { EventEmitter } from "events";
 import { IEffectDeps } from "./core/modes";
 import { CoreState } from "./core/core.models";

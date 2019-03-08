@@ -51,6 +51,7 @@ import { EventEmitter } from "events";
 import { notifierEpic } from "./core.effects";
 import { rootReducer } from "./core.reducers";
 import { CoreState } from "./core.models";
+import { CybexAddonConfig } from "../config";
 export * from "./core.models";
 const loggerMiddleware = createLogger();
 

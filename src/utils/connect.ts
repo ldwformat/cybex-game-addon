@@ -6,10 +6,27 @@ import ReconnectingWebSocket, {
   Event,
   Options as RsOptions
 } from "reconnecting-websocket";
+import {
+  RPCResult,
+  RPCNotice,
+  RPCRejectResult,
+  RPCRequest
+} from "./rpc-models";
 
 const DEFAULT_OPTIONS = {
   apis: ["database", "history", "network_broadcast"]
 };
+
+enum ApiFailedMode {
+  Ignore,
+  Panic
+}
+interface WsConnectionOption {
+  url: string;
+  apis?: string[];
+  mode?: ApiFailedMode;
+  protocol?: string;
+}
 
 export class WsConnection extends EventEmitter {
   // self-increased ID
@@ -62,9 +79,7 @@ export class WsConnection extends EventEmitter {
   msgHandler = (e: { data: string }) => {
     // console.debug("Msg: ", e.data);
     try {
-      let msg: RPC.RPCResult | RPC.RPCNotice | RPC.RPCRejectResult = JSON.parse(
-        e.data
-      );
+      let msg: RPCResult | RPCNotice | RPCRejectResult = JSON.parse(e.data);
       if ("result" in msg) {
         this.emit(WsConnection.getEventNameById(msg.id), msg.result);
         this.emit(WsConnection.EVENT_RESULT, msg);
@@ -98,7 +113,7 @@ export class WsConnection extends EventEmitter {
     if (WsConnection.CallbackMethods.has(method)) {
       params.unshift(id);
     }
-    let call: RPC.RPCRequest = {
+    let call: RPCRequest = {
       id,
       method: "call",
       params: [this.apiIds[api] || 1, method, params]

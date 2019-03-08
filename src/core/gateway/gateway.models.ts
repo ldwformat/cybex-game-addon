@@ -1,10 +1,11 @@
 import Serializer from "../../cybex/serializer/src/serializer";
 import types from "../../cybex/serializer/src/types";
+import { CoinInfo, GetDepositAddress } from "../../utils/fetcher";
 
 export class GatewayState {
-  info: CybexGateway.CoinInfo[] = [];
+  info: CoinInfo[] = [];
   currentAsset: string | undefined = undefined;
-  depositInfoList: CybexGateway.GetDepositAddress[] = [];
+  depositInfoList: GetDepositAddress[] = [];
 }
 
 // 地址簿
