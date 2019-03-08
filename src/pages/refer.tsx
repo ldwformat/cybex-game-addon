@@ -82,6 +82,16 @@ const styles: StyleRulesCallback = theme => ({
   },
   buttonRoot: {
     borderRadius: "unset"
+  },
+  accountText: {
+    flexShrink: 1,
+    wordBreak: "break-word"
+  },
+  textRight: {
+    textAlign: "right"
+  },
+  noShrink: {
+    flexShrink: 0
   }
 });
 
@@ -90,7 +100,13 @@ export const Refer = connect(mapStateToProps)(
     withTranslation()(
       class Refer extends React.Component<
         StyledComponentProps<
-          "root" | "copyCard" | "innerWrapper" | "buttonRoot"
+          | "root"
+          | "copyCard"
+          | "innerWrapper"
+          | "buttonRoot"
+          | "textRight"
+          | "accountText"
+          | "noShrink"
         > &
           StateProps &
           DispatchProps &
@@ -142,14 +158,35 @@ export const Refer = connect(mapStateToProps)(
                 <ReferCode code={accountName as string} />
                 <List>
                   <ListItem divider>
-                    <ListItemText primary={t(Dict.MyRegisterReferrer)} />
-                    {(myRegisterReferrer && myRegisterReferrer.referrer) || "-"}
+                    <ListItemText
+                      style={{ flexShrink: 0 }}
+                      primary={t(Dict.MyRegisterReferrer)}
+                    />
+                    <Typography
+                      className={`${classes.textRight} ${classes.accountText}`}
+                    >
+                      {(myRegisterReferrer && myRegisterReferrer.referrer) ||
+                        "-"}
+                    </Typography>
                   </ListItem>
                   <ListItem divider>
-                    <ListItemText primary={t(Dict.MyGameReferrer)} />
-                    {(myGameReferrer && myGameReferrer.referrer) || (
+                    <ListItemText
+                      style={{ flexShrink: 0 }}
+                      primary={t(Dict.MyGameReferrer)}
+                    />
+                    {(myGameReferrer && myGameReferrer.referrer && (
+                      <Typography
+                        className={`${classes.textRight} ${
+                          classes.accountText
+                        }`}
+                        variant="body1"
+                      >
+                        {myGameReferrer && myGameReferrer.referrer}
+                      </Typography>
+                    )) || (
                       <Button
                         color="secondary"
+                        style={{ padding: 0 }}
                         onClick={this.handleExpand.bind(
                           this,
                           Refer.Panels.ReferModal
@@ -188,7 +225,9 @@ export const Refer = connect(mapStateToProps)(
                         myRegisterReferral.referrals.map(refer => (
                           <ListItem key={refer.referral} divider>
                             <ListItemText primary={refer.referral} />
-                            <Typography style={{flexShrink: 0}}>{formatTime(refer.ts)}</Typography>
+                            <Typography style={{ flexShrink: 0 }}>
+                              {formatTime(refer.ts)}
+                            </Typography>
                           </ListItem>
                         ))}
                     </List>
@@ -222,7 +261,9 @@ export const Refer = connect(mapStateToProps)(
                         myGameReferral.referrals.map(refer => (
                           <ListItem divider key={refer.referral}>
                             <ListItemText primary={refer.referral} />
-                            <Typography style={{flexShrink: 0}}>{formatTime(refer.ts)}</Typography>
+                            <Typography style={{ flexShrink: 0 }}>
+                              {formatTime(refer.ts)}
+                            </Typography>
                           </ListItem>
                         ))}
                     </List>
