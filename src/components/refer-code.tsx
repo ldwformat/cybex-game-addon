@@ -38,7 +38,8 @@ const referCodeStyle: StyleRulesCallback = theme => ({
     justifyContent: "center"
   },
   textRoot: {
-    color: theme.palette.getContrastText(theme.palette.primary.dark)
+    color: theme.palette.getContrastText(theme.palette.primary.dark),
+    textAlign: "center"
   }
 });
 

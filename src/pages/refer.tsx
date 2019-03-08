@@ -188,7 +188,7 @@ export const Refer = connect(mapStateToProps)(
                         myRegisterReferral.referrals.map(refer => (
                           <ListItem key={refer.referral} divider>
                             <ListItemText primary={refer.referral} />
-                            <Typography>{formatTime(refer.ts)}</Typography>
+                            <Typography style={{flexShrink: 0}}>{formatTime(refer.ts)}</Typography>
                           </ListItem>
                         ))}
                     </List>
@@ -222,7 +222,7 @@ export const Refer = connect(mapStateToProps)(
                         myGameReferral.referrals.map(refer => (
                           <ListItem divider key={refer.referral}>
                             <ListItemText primary={refer.referral} />
-                            <Typography>{formatTime(refer.ts)}</Typography>
+                            <Typography style={{flexShrink: 0}}>{formatTime(refer.ts)}</Typography>
                           </ListItem>
                         ))}
                     </List>
