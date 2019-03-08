@@ -35,6 +35,7 @@ export declare const cnDict: {
     ShareLinkCopied: string;
     ShareQRCode: string;
     SaveQRCode: string;
+    SaveQRCodeLongPress: string;
     NotiLoginWrongPass: string;
     NotiAddReferWrong: string;
     NotiRegWrong: string;
@@ -87,6 +88,7 @@ export declare const Dict: {
     ShareLinkCopied: string;
     ShareQRCode: string;
     SaveQRCode: string;
+    SaveQRCodeLongPress: string;
     NotiLoginWrongPass: string;
     NotiAddReferWrong: string;
     NotiRegWrong: string;
