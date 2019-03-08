@@ -44,12 +44,6 @@
           window.addon = addon = await new CybexAddon.CybexAddon({
             referUrl: "http://10.18.120.155:5560"
           }).init();
-          addon.store.dispatch(
-            CybexAddon.Actions.authLogin({
-              accountName: "create-test12",
-              password: "qwer1234qwer1234"
-            })
-          );
           console.info("Load Done");
         });
 
