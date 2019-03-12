@@ -7,7 +7,8 @@ export const cnDict = {
   AuthAccountName: "账户名",
   AuthAccountNameHelper: "请输入您的云钱包账户名",
   AuthReferrer: "推荐人（选填）",
-  AuthReferrerHelper: "请输入推荐人分享给您的推荐码，若无推荐人，可不填",
+  AuthReferrerHelper:
+    "请输入推荐人分享给您的推荐码，若无推荐人，可不填，推荐人一经填写，将无法修改",
   AuthCaptcha: "验证码",
   AuthCaptchaHelper: "请输入右侧验证码",
   AuthPassword: "密码",
@@ -27,7 +28,8 @@ export const cnDict = {
   MyGameReferral: "我的游戏推荐",
   PatchReferrer: "补充推荐人",
   PatchReferrerLabel: "推荐码",
-  PatchReferrerHelper: "请输入推荐人分享给您的推荐码",
+  PatchReferrerHelper:
+    "请输入推荐人分享给您的推荐码，推荐人一经填写，将无法修改",
   PatchReferrerAdd: "增加推荐人",
   MyRefererCode: "您的推荐码",
   RefererRuleTitle: "赛贝游戏中心：全新邀请机制上线",
@@ -45,6 +47,8 @@ export const cnDict = {
   CopyAddress: "复制地址",
   AddressCopied: "充值地址已复制到剪贴板",
   CopyShareLink: "复制邀请链接",
+  CopyShareLinkPrefix:
+    "我正在赛贝游戏中心参与高奖金竞猜游戏！邀请您来参与！点击链接即可注册：",
   ShareLink: "分享邀请",
   ShareLinkCopied: "分享邀请链接已复制",
   ShareQRCode: "邀请二维码",
@@ -119,6 +123,8 @@ export const enDict: Dictionary = {
   CopyAddress: "Copy Address",
   AddressCopied: "Address copied",
   CopyShareLink: "Copy Link",
+  CopyShareLinkPrefix:
+    "I am playing bet games in Cybex Game Center. The prize is generous. Come play with me! Click to register:",
   ShareLink: "Invite Others",
   ShareLinkCopied: "Copy link copied",
   ShareQRCode: "Generate QRcode",
@@ -186,6 +192,8 @@ export const vnDict: Dictionary = {
   CopyAddress: "Sao chép địa chỉ",
   AddressCopied: "Đã sao chép địa chỉ",
   CopyShareLink: "Sao chép liên kết",
+  CopyShareLinkPrefix:
+    "Tôi đang chơi trò chơi Casino trong Cybex Game Center với nhiều phần thưởng hấp dẫn! Hãy cùng tham gia nào! Nhấp vào liên kết để đăng ký:",
   ShareLink: "Sao chép liên kết",
   ShareLinkCopied: "Chia sẻ lời mời",
   ShareQRCode: "Tạo mã QR",

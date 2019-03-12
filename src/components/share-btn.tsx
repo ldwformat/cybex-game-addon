@@ -161,7 +161,9 @@ export const ShareButton = connect(
                   >
                     {referUrl && accountName && (
                       <CopyToClipboard
-                        text={referUrl.trim()}
+                        text={`${t(
+                          Dict.CopyShareLinkPrefix
+                        )} ${referUrl.trim()}`}
                         onCopy={() =>
                           pushNoti(t(Dict.ShareLinkCopied), {
                             variant: "success"
@@ -180,7 +182,7 @@ export const ShareButton = connect(
                         />
                       </CopyToClipboard>
                     )}
-                    <ShareItem
+                    {/* <ShareItem
                       IconComponent={Image}
                       color={colors.blue[300]}
                       title={t(Dict.ShareQRCode)}
@@ -189,7 +191,7 @@ export const ShareButton = connect(
                         this.handleExpand(ShareButton.Panels.QRCode);
                         this.handleExpand(ShareButton.Panels.Drawer);
                       }}
-                    />
+                    /> */}
                   </Grid>
                 </SwipeableDrawer>
               )}
