@@ -128,3 +128,9 @@ export interface IAccountOptions {
   votes: any[];
   extensions: any[];
 }
+
+export enum AuthStatus {
+  NOT_LOGIN,
+  LOGIN_NORMAL,
+  LOGIN_LOCKED
+}

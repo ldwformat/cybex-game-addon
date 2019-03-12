@@ -1,5 +1,6 @@
 import { createSelector } from "reselect";
 import { CoreState } from "../core.models";
+import { AuthStatus } from "./auth.models";
 
 export const selectAuth = (state: CoreState) => state.auth;
 export const selectCurrentAccountInfo = createSelector(
@@ -16,7 +17,13 @@ export const selectCurrentKeystore = createSelector(
 );
 export const selectAuthStatus = createSelector(
   selectAuth,
-  auth => auth.isAuthed
+  selectCurrentKeystore,
+  (auth, keyStore) =>
+    !auth.isAuthed
+      ? AuthStatus.NOT_LOGIN
+      : !!keyStore
+      ? AuthStatus.LOGIN_NORMAL
+      : AuthStatus.LOGIN_LOCKED
 );
 export const selectAuthIsLogging = createSelector(
   selectAuth,
@@ -33,7 +40,7 @@ export const selectAuthSet = createSelector(
   selectCurrentAccount,
   selectCurrentKeystore,
   (isAuthed, account, keyStore) =>
-    !!isAuthed &&
+    isAuthed === AuthStatus.LOGIN_NORMAL &&
     !!account &&
     !!keyStore &&
     !!keyStore.activeKey &&
