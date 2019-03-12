@@ -38,7 +38,7 @@ const validate = values => {
   const requiredFields = ["referrer"];
   requiredFields.forEach(field => {
     if (!values[field]) {
-      errors[field] = "Required";
+      errors[field] = Dict.PatchReferrerHelper;
     }
   });
   return errors;
@@ -182,7 +182,7 @@ let ReferModalClass = withStyles(styles)(
           maxWidth="lg"
           onClose={onModalClose}
         >
-          <div style={{ position: "absolute", right: 0, top: 0 }}>
+          <div style={{ position: "absolute", right: 0, top: 0, zIndex: 100 }}>
             <IconButton onClick={onModalClose}>
               <CloseIcon />
             </IconButton>
