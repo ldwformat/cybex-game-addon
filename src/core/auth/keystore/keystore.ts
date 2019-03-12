@@ -1,5 +1,5 @@
 import PrivateKey from "../../../cybex/ecc/src/PrivateKey";
-import { KeyAuth } from "./keyauth";
+import { KeyAuth, IKeyAuth } from "./keyauth";
 import assert from "assert";
 
 export enum KeyStoreMode {
@@ -7,7 +7,16 @@ export enum KeyStoreMode {
   Seed
 }
 
+export type KeyStoreSeriOptions = {
+  password?: string;
+  identifier?: string;
+};
+
 export class KeyStore {
+  static DefaultIdentifier = "#$KeyStore";
+  static DefaultSeriOptions: KeyStoreSeriOptions = {
+    identifier: KeyStore.DefaultIdentifier
+  };
   createAt = new Date();
   updateAt = new Date();
   account: Cybex.Account | null = null;
@@ -22,14 +31,19 @@ export class KeyStore {
     return this.keys["owner"];
   }
 
+  get memoKey() {
+    return this.keys["memo"];
+  }
+
   static checkAuth(
     privKey: PrivateKey,
     authToCheck: Cybex.AccountAuthority | string
-  ): KeyAuth | false {
+  ): IKeyAuth | false {
     let pubKeyStr = privKey.toPublicKey().toPublicKeyString();
     if (typeof authToCheck === "string") {
       return (
-        (pubKeyStr === authToCheck && { fullAuth: true, privKey, pubKeyStr }) ||
+        (pubKeyStr === authToCheck &&
+          KeyAuth.fromKeyAuth({ fullAuth: true, privKey, pubKeyStr })) ||
         false
       );
     }
@@ -39,13 +53,23 @@ export class KeyStore {
     if (!validAuthList.length) {
       return false;
     }
-    return {
+    return KeyAuth.fromKeyAuth({
       fullAuth:
         validAuthList.reduce((sum, key) => key[1] + sum, 0) >=
         authToCheck.weight_threshold,
       privKey,
       pubKeyStr
-    };
+    });
+  }
+
+  static fromKeyStore(orikeyStore: KeyStore): KeyStore {
+    let keyStore = new KeyStore(orikeyStore.keyList);
+    keyStore.keys = orikeyStore.keys;
+    keyStore.valid = orikeyStore.valid;
+    keyStore.account = orikeyStore.account;
+    keyStore.createAt = orikeyStore.createAt;
+    keyStore.updateAt = orikeyStore.updateAt;
+    return keyStore;
   }
 
   constructor(
@@ -117,5 +141,43 @@ export class KeyStore {
       ...this,
       updateAt: new Date()
     };
+  }
+
+  serilize(): string {
+    let keyList = this.keyList.map(key => key.toWif());
+    let keys = Object.keys(this.keys).reduce(
+      (keys, key) => ({ ...keys, [key]: this.keys[key].serialize() }),
+      {}
+    );
+    let walletStr = JSON.stringify({
+      keyList,
+      keys,
+      account: this.account,
+      createAt: this.createAt,
+      updateAt: this.updateAt,
+      valid: this.valid
+    });
+    return walletStr;
+  }
+
+  static deserilize(walletStr: string): KeyStore {
+    return KeyStore.fromKeyStore(
+      JSON.parse(walletStr, (key, value) => {
+        switch (key) {
+          case "keyList":
+            return value.map(PrivateKey.fromWif);
+          case "keys":
+            return Object.keys(value).reduce(
+              (keys, key) => ({
+                ...keys,
+                [key]: KeyAuth.deserialize(value[key])
+              }),
+              {}
+            );
+          default:
+            return value;
+        }
+      })
+    );
   }
 }

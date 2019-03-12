@@ -3,6 +3,7 @@ import { MallState } from "./mall";
 import { ReferState } from "./refer";
 import { GatewayState } from "./gateway";
 import { OptionsObject } from "notistack";
+
 type NotiOptions = OptionsObject & {
   i18n?: boolean;
 };

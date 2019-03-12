@@ -25,7 +25,13 @@ export enum AuthActions {
 
   UpdateBalance = "[Auth] UpdateBalance",
   UpdateBalanceSuccess = "[Auth] UpdateBalanceSuccess",
-  Unauthed = "[Auth] Unauthed"
+
+  Unauthed = "[Auth] Unauthed",
+  Unlock = "[Auth] Unlock",
+  UnlockSuccess = "[Auth] UnlockSuccess",
+  UnlockFailed = "[Auth] UnlockFailed",
+  UnlockModalDisplay = "[Auth] UnlockModalDisplay",
+  UnlockModalDismiss = "[Auth] UnlockModalDismiss"
 }
 
 // Modals
@@ -117,10 +123,43 @@ export const authLoginSuccess: (
   payload: param
 });
 
-// Others
 export class AuthUnauthedAction implements Action {
   readonly type = AuthActions.Unauthed;
 }
+export class AuthUnlockAction implements Action {
+  readonly type = AuthActions.Unlock;
+}
+export class AuthUnlockSuccessAction implements Action {
+  readonly type = AuthActions.UnlockSuccess;
+}
+export class AuthUnlockFailedAction implements Action {
+  readonly type = AuthActions.UnlockFailed;
+}
+export class AuthUnlockModalDisplayAction implements Action {
+  readonly type = AuthActions.UnlockModalDisplay;
+}
+export class AuthUnlockModalDismissAction implements Action {
+  readonly type = AuthActions.UnlockModalDismiss;
+}
+export const authUnauthed: () => AuthUnauthedAction = () => ({
+  type: AuthActions.Unauthed
+});
+export const authUnlock: () => AuthUnlockAction = () => ({
+  type: AuthActions.Unlock
+});
+export const authUnlockSuccess: () => AuthUnlockSuccessAction = () => ({
+  type: AuthActions.UnlockSuccess
+});
+export const authUnlockFailed: () => AuthUnlockFailedAction = () => ({
+  type: AuthActions.UnlockFailed
+});
+export const authUnlockModalDisplay: () => AuthUnlockModalDisplayAction = () => ({
+  type: AuthActions.UnlockModalDisplay
+});
+export const authUnlockModalDismiss: () => AuthUnlockModalDismissAction = () => ({
+  type: AuthActions.UnlockModalDismiss
+});
+// Balances
 export class AuthUpdateBalanceAction implements Action {
   readonly type = AuthActions.UpdateBalance;
 }
@@ -128,9 +167,7 @@ export class AuthUpdateBalanceSuccessAction implements Action {
   readonly type = AuthActions.UpdateBalanceSuccess;
   constructor(public payload: BalanceObj) {}
 }
-export const authUnauthed: () => AuthUnauthedAction = () => ({
-  type: AuthActions.Unauthed
-});
+
 export const authUpdateBalance: () => AuthUpdateBalanceAction = () => ({
   type: AuthActions.UpdateBalance
 });
