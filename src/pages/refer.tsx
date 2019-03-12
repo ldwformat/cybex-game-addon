@@ -164,6 +164,7 @@ export const Refer = connect(mapStateToProps)(
                     />
                     <Typography
                       className={`${classes.textRight} ${classes.accountText}`}
+                      variant="body1"
                     >
                       {(myRegisterReferrer && myRegisterReferrer.referrer) ||
                         "-"}
@@ -224,7 +225,10 @@ export const Refer = connect(mapStateToProps)(
                       {myRegisterReferral &&
                         myRegisterReferral.referrals.map(refer => (
                           <ListItem key={refer.referral} divider>
-                            <ListItemText primary={refer.referral} />
+                            <ListItemText
+                              classes={{ primary: classes.accountText }}
+                              primary={refer.referral}
+                            />
                             <Typography style={{ flexShrink: 0 }}>
                               {formatTime(refer.ts)}
                             </Typography>
@@ -240,7 +244,9 @@ export const Refer = connect(mapStateToProps)(
                       Refer.Panels.GameRegisterRef
                     )}
                   >
-                    <ListItemText primary={t(Dict.MyGameReferral)} />
+                    <ListItemText
+                      primary={t(Dict.MyGameReferral)}
+                    />
                     {(myGameReferral &&
                       myGameReferral.referrals.length.toString()) ||
                       0}
@@ -260,7 +266,10 @@ export const Refer = connect(mapStateToProps)(
                       {myGameReferral &&
                         myGameReferral.referrals.map(refer => (
                           <ListItem divider key={refer.referral}>
-                            <ListItemText primary={refer.referral} />
+                            <ListItemText
+                              classes={{ primary: classes.accountText }}
+                              primary={refer.referral}
+                            />
                             <Typography style={{ flexShrink: 0 }}>
                               {formatTime(refer.ts)}
                             </Typography>
