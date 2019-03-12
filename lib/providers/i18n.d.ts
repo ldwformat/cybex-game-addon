@@ -38,6 +38,7 @@ export declare const cnDict: {
     CopyAddress: string;
     AddressCopied: string;
     CopyShareLink: string;
+    CopyShareLinkPrefix: string;
     ShareLink: string;
     ShareLinkCopied: string;
     ShareQRCode: string;
@@ -98,6 +99,7 @@ export declare const Dict: {
     CopyAddress: string;
     AddressCopied: string;
     CopyShareLink: string;
+    CopyShareLinkPrefix: string;
     ShareLink: string;
     ShareLinkCopied: string;
     ShareQRCode: string;

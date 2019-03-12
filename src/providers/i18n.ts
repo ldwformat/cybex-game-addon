@@ -155,7 +155,7 @@ export const vnDict: Dictionary = {
   AuthAccountNameHelper: "Vui lòng nhập tên tài khoản ví điện toán đám mây",
   AuthReferrer: "Người giới thiệu (tùy chọn)",
   AuthReferrerHelper:
-    'Vui lòng nhập mã giới thiệu của người giới thiệu của bạn. Một khi đã điền "Người mời", sau này không thể sửa đổi',
+    "Vui lòng nhập mã giới thiệu của người giới thiệu của bạn. Người mời sẽ không thể thay đổi sau khi được xác nhận",
   AuthCaptcha: "Mã xác minh",
   AuthCaptchaHelper: "Vui lòng nhập mã xác minh",
   AuthPassword: "Mật khẩu",
@@ -187,7 +187,7 @@ export const vnDict: Dictionary = {
   PatchReferrer: "Người giới thiệu",
   PatchReferrerLabel: "Người giới thiệu",
   PatchReferrerHelper:
-    'Vui lòng nhập mã giới thiệu của người giới thiệu của bạn. Một khi đã điền "Người mời", sau này không thể sửa đổi',
+    "Vui lòng nhập mã giới thiệu của người giới thiệu của bạn. Người mời sẽ không thể thay đổi sau khi được xác nhận",
   PatchReferrerAdd: "Người giới thiệu",
   MyRefererCode: "Mã giới thiệu của bạn",
   PeopleUnit: "",
