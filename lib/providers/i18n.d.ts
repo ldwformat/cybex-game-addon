@@ -27,6 +27,13 @@ export declare const cnDict: {
     PatchReferrerHelper: string;
     PatchReferrerAdd: string;
     MyRefererCode: string;
+    RefererRuleTitle: string;
+    RefererRuleContent_0: string;
+    RefererRuleContent_1: string;
+    RefererRuleContent_2: string;
+    RefererRuleContent_3: string;
+    RefererRuleContent_4: string;
+    RefererRuleContent_5: string;
     PeopleUnit: string;
     CopyAddress: string;
     AddressCopied: string;
@@ -80,6 +87,13 @@ export declare const Dict: {
     PatchReferrerHelper: string;
     PatchReferrerAdd: string;
     MyRefererCode: string;
+    RefererRuleTitle: string;
+    RefererRuleContent_0: string;
+    RefererRuleContent_1: string;
+    RefererRuleContent_2: string;
+    RefererRuleContent_3: string;
+    RefererRuleContent_4: string;
+    RefererRuleContent_5: string;
     PeopleUnit: string;
     CopyAddress: string;
     AddressCopied: string;

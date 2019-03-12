@@ -7,6 +7,8 @@ import {
   Typography
 } from "@material-ui/core";
 import { ShareButton } from "../components/share-btn";
+import { withTranslation, WithTranslation } from "react-i18next";
+import { Dict } from "../providers/i18n";
 
 const styles: StyleRulesCallback = theme => ({
   root: {
@@ -32,7 +34,7 @@ const Paragraph = ({
       {title}
     </Typography>
     {contents.map((p, i) => (
-      <Typography key={i} variant="body2">
+      <Typography style={{marginTop: "1em", textAlign: "justify"}} key={i} variant="body2">
         {p}
       </Typography>
     ))}
@@ -40,32 +42,30 @@ const Paragraph = ({
 );
 
 export const ReferRule = withStyles(styles)(
-  class ReferRule extends React.Component<
-    StyledComponentProps<"root" | "copyCard" | "innerWrapper" | "buttonRoot">
-  > {
-    render() {
-      let classes = this.props.classes || {};
-      return (
-        <Paper classes={{ root: classes.root }} square elevation={0}>
-          <div style={{ flex: "1 10 auto", overflowY: "auto", margin: 16 }}>
-            <Paragraph
-              title="示例标题1"
-              contents={[
-                "这是一个测试段落",
-                `Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugiat ullam, adipisci quam ipsa temporibus qui, asperiores modi a aperiam minus sapiente repudiandae nemo doloribus nisi! Doloremque perspiciatis quibusdam alias laudantium! Corrupti ea quam iusto modi accusamus minima incidunt tempore voluptate dolorem quae placeat laboriosam deserunt soluta dolor sapiente inventore libero ad sed, quos voluptatibus tenetur aliquid quasi? Expedita, itaque ullam?`
-              ]}
-            />
-            <Paragraph
-              title="示例标题2"
-              contents={[
-                "这是一个测试段落",
-                `Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugiat ullam, adipisci quam ipsa temporibus qui, asperiores modi a aperiam minus sapiente repudiandae nemo doloribus nisi! Doloremque perspiciatis quibusdam alias laudantium! Corrupti ea quam iusto modi accusamus minima incidunt tempore voluptate dolorem quae placeat laboriosam deserunt soluta dolor sapiente inventore libero ad sed, quos voluptatibus tenetur aliquid quasi? Expedita, itaque ullam?`
-              ]}
-            />
-          </div>
-          <ShareButton />
-        </Paper>
-      );
+  withTranslation()(
+    class ReferRule extends React.Component<
+      StyledComponentProps<
+        "root" | "copyCard" | "innerWrapper" | "buttonRoot"
+      > &
+        WithTranslation
+    > {
+      render() {
+        let classes = this.props.classes || {};
+        let { t } = this.props;
+        return (
+          <Paper classes={{ root: classes.root }} square elevation={0}>
+            <div style={{ flex: "1 10 auto", overflowY: "auto", margin: 16 }}>
+              <Paragraph
+                title={t(Dict.RefererRuleTitle)}
+                contents={[0, 1, 2, 3, 4, 5].map(num =>
+                  t(Dict["RefererRuleContent_" + num])
+                )}
+              />
+            </div>
+            <ShareButton />
+          </Paper>
+        );
+      }
     }
-  }
+  )
 );
