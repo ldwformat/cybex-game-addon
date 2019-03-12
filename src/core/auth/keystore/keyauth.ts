@@ -19,15 +19,6 @@ export class KeyAuth {
     return auth;
   }
 
-  serialize(): string {
-    return JSON.stringify(this, (key, value) => {
-      if (key === "privKey") {
-        return (value as PrivateKey).toWif();
-      }
-      return value;
-    });
-  }
-
   static deserialize(keyAuthStr: string): KeyAuth {
     return KeyAuth.fromKeyAuth(
       JSON.parse(keyAuthStr, (key, value) => {
@@ -37,5 +28,14 @@ export class KeyAuth {
         return value;
       })
     );
+  }
+
+  serialize(): string {
+    return JSON.stringify(this, (key, value) => {
+      if (key === "privKey") {
+        return (value as PrivateKey).toWif();
+      }
+      return value;
+    });
   }
 }

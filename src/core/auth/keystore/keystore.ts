@@ -72,6 +72,27 @@ export class KeyStore {
     return keyStore;
   }
 
+  static deserilize(walletStr: string): KeyStore {
+    return KeyStore.fromKeyStore(
+      JSON.parse(walletStr, (key, value) => {
+        switch (key) {
+          case "keyList":
+            return value.map(PrivateKey.fromWif);
+          case "keys":
+            return Object.keys(value).reduce(
+              (keys, key) => ({
+                ...keys,
+                [key]: KeyAuth.deserialize(value[key])
+              }),
+              {}
+            );
+          default:
+            return value;
+        }
+      })
+    );
+  }
+
   constructor(
     public keyList: PrivateKey[] = [
       PrivateKey.fromSeed(
@@ -158,26 +179,5 @@ export class KeyStore {
       valid: this.valid
     });
     return walletStr;
-  }
-
-  static deserilize(walletStr: string): KeyStore {
-    return KeyStore.fromKeyStore(
-      JSON.parse(walletStr, (key, value) => {
-        switch (key) {
-          case "keyList":
-            return value.map(PrivateKey.fromWif);
-          case "keys":
-            return Object.keys(value).reduce(
-              (keys, key) => ({
-                ...keys,
-                [key]: KeyAuth.deserialize(value[key])
-              }),
-              {}
-            );
-          default:
-            return value;
-        }
-      })
-    );
   }
 }

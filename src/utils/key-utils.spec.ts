@@ -17,7 +17,7 @@ let testAccount = {
     account_auths: [],
     key_auths: [
       ["CYB8Znt18kGRNWSDpXi9GeVExRpTft6TCpy5uuhzrjv5AyjMvHSzE", 1]
-    ] as [string, number][],
+    ] as Array<[string, number]>,
     address_auths: []
   },
   active: {
@@ -25,7 +25,7 @@ let testAccount = {
     account_auths: [],
     key_auths: [
       ["CYB8JpNCWPuHk6g3E4wBQtSxvDiVFBhKmTVBp8Nc4MBYGzxqTHSBk", 1]
-    ] as [string, number][],
+    ] as Array<[string, number]>,
     address_auths: []
   },
   options: {
