@@ -25,7 +25,7 @@ export const cnDict = {
   MyRegisterReferral: "我的注册推荐",
   MyGameReferrer: "我的游戏推荐人",
   MyGameReferral: "我的游戏推荐",
-  PatchReferrer: "补充引荐人",
+  PatchReferrer: "补充推荐人",
   PatchReferrerLabel: "推荐码",
   PatchReferrerHelper: "请输入推荐人分享给您的推荐码",
   PatchReferrerAdd: "增加推荐人",
