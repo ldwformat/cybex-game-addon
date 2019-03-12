@@ -84,7 +84,8 @@ export const enDict: Dictionary = {
   AuthAccountName: "Account Name",
   AuthAccountNameHelper: "Enter account name for cloud wallet",
   AuthReferrer: "Inviter (Optional)",
-  AuthReferrerHelper: "Enter invitation code from the inviter",
+  AuthReferrerHelper:
+    "Enter invitation code from the inviter. The inviter is unable to be modified once confirmed!",
   AuthCaptcha: "Verify Code",
   AuthCaptchaHelper: "Enter verify code",
   AuthPassword: "Password",
@@ -116,7 +117,8 @@ export const enDict: Dictionary = {
     "Notice: Wagers later than the fill-in of invitation code will be counted only.",
   PatchReferrer: "Add Inviter",
   PatchReferrerLabel: "invitation code",
-  PatchReferrerHelper: "Enter invitation code from the inviter",
+  PatchReferrerHelper:
+    "Enter invitation code from the inviter. The inviter is unable to be modified once confirmed!",
   PatchReferrerAdd: "Add Inviter",
   MyRefererCode: "Your Invitation Code",
   PeopleUnit: "",
@@ -153,7 +155,7 @@ export const vnDict: Dictionary = {
   AuthAccountNameHelper: "Vui lòng nhập tên tài khoản ví điện toán đám mây",
   AuthReferrer: "Người giới thiệu (tùy chọn)",
   AuthReferrerHelper:
-    "Vui lòng nhập mã giới thiệu của người giới thiệu của bạn",
+    'Vui lòng nhập mã giới thiệu của người giới thiệu của bạn. Một khi đã điền "Người mời", sau này không thể sửa đổi',
   AuthCaptcha: "Mã xác minh",
   AuthCaptchaHelper: "Vui lòng nhập mã xác minh",
   AuthPassword: "Mật khẩu",
@@ -185,7 +187,7 @@ export const vnDict: Dictionary = {
   PatchReferrer: "Người giới thiệu",
   PatchReferrerLabel: "Người giới thiệu",
   PatchReferrerHelper:
-    "Vui lòng nhập mã giới thiệu của người giới thiệu của bạn",
+    'Vui lòng nhập mã giới thiệu của người giới thiệu của bạn. Một khi đã điền "Người mời", sau này không thể sửa đổi',
   PatchReferrerAdd: "Người giới thiệu",
   MyRefererCode: "Mã giới thiệu của bạn",
   PeopleUnit: "",
