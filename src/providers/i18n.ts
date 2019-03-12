@@ -131,7 +131,7 @@ export const enDict: Dictionary = {
   ShareLinkCopied: "Copy link copied",
   ShareQRCode: "Generate QRcode",
   SaveQRCode: "Save",
-  SaveQRCodeLongPress: "",
+  SaveQRCodeLongPress: "Hold to save QR code",
   NotiLoginWrongPass: "Unable to login, please check account name or password",
   NotiAddReferWrong: "Failed to add an inviter, please check invitation code",
   NotiRegWrong: "Error",
@@ -200,7 +200,7 @@ export const vnDict: Dictionary = {
   ShareLinkCopied: "Chia sẻ lời mời",
   ShareQRCode: "Tạo mã QR",
   SaveQRCode: "Lưu mã QR",
-  SaveQRCodeLongPress: "",
+  SaveQRCodeLongPress: "Nhấn và giữ để tải xuống và lưu mã QR.",
   NotiLoginWrongPass:
     "Đăng nhập thất bại, vui lòng kiểm tra lại tên tài khoản và mật khẩu",
   NotiAddReferWrong:
