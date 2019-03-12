@@ -7,6 +7,26 @@ export const auth: Reducer<AuthState, AuthAction> = (
   action
 ) => {
   switch (action.type) {
+    case AuthActions.UnlockModalDisplay:
+      return {
+        ...state,
+        showUnlock: true
+      };
+    case AuthActions.UnlockModalDismiss:
+      return {
+        ...state,
+        showUnlock: false
+      };
+    case AuthActions.WalletPassModalDisplay:
+      return {
+        ...state,
+        showSetPassword: true
+      };
+    case AuthActions.WalletPassModalDismiss:
+      return {
+        ...state,
+        showSetPassword: false
+      };
     case AuthActions.Login:
     case AuthActions.RegImpl:
       return {

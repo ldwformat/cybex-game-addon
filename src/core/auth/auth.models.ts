@@ -17,6 +17,8 @@ export class AuthState {
   isAuthed = false;
   isLogging = false;
   showModal = false;
+  showUnlock = false;
+  showSetPassword = false;
   accountName: string | null = null;
   keyStore: null | KeyStore = null;
   balances: BalanceObj = {};

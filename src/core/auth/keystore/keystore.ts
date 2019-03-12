@@ -138,7 +138,21 @@ export class KeyStore {
 
     if (active || owner) {
       this.valid = true;
+      this.account = account;
+      return true;
     }
+    return false;
+  }
+
+  checkAccount(account: Cybex.Account) {
+    return (
+      !!this.account &&
+      !!account &&
+      this.account.id === account.id &&
+      this.account.options.memo_key === account.options.memo_key &&
+      JSON.stringify(this.account.owner) === JSON.stringify(account.owner) &&
+      JSON.stringify(this.account.active) === JSON.stringify(account.active)
+    );
   }
 
   /**

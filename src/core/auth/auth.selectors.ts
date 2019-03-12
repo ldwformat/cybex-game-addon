@@ -34,6 +34,14 @@ export const selectAuthModal = createSelector(
   selectAuth,
   auth => auth.showModal
 );
+export const selectSetPassModal = createSelector(
+  selectAuth,
+  auth => auth.showSetPassword
+);
+export const selectUnlockModal = createSelector(
+  selectAuth,
+  auth => auth.showUnlock
+);
 
 export const selectAuthSet = createSelector(
   selectAuthStatus,

@@ -26,6 +26,12 @@ export enum AuthActions {
   UpdateBalance = "[Auth] UpdateBalance",
   UpdateBalanceSuccess = "[Auth] UpdateBalanceSuccess",
 
+  WalletPassModalDisplay = "[Auth] WalletPassModalDisplay",
+  WalletPassModalDismiss = "[Auth] WalletPassModalDismiss",
+  WalletPassSet = "[Auth] WalletPassSet", // 设置密码后，立刻加密当前KeyStore并保存 success，若无KeyStore，failed
+  WalletPassSetSuccess = "[Auth] WalletPassSetSuccess",
+  WalletPassSetFailed = "[Auth] WalletPassSetFailed",
+
   Unauthed = "[Auth] Unauthed",
   Unlock = "[Auth] Unlock",
   UnlockSuccess = "[Auth] UnlockSuccess",
@@ -123,6 +129,38 @@ export const authLoginSuccess: (
   payload: param
 });
 
+export class AuthWalletPassModalDisplay implements Action {
+  readonly type = AuthActions.WalletPassModalDisplay;
+}
+export class AuthWalletPassModalDismiss implements Action {
+  readonly type = AuthActions.WalletPassModalDismiss;
+}
+export class AuthWalletPassSet implements Action {
+  readonly type = AuthActions.WalletPassSet;
+  constructor(public payload: string) {}
+}
+export class AuthWalletPassSetSuccess implements Action {
+  readonly type = AuthActions.WalletPassSetSuccess;
+}
+export class AuthWalletPassSetFailed implements Action {
+  readonly type = AuthActions.WalletPassSetFailed;
+}
+export const authDisplayWalletPassModal = () => ({
+  ...new AuthWalletPassModalDisplay()
+});
+export const authDismissWalletPassModal = () => ({
+  ...new AuthWalletPassModalDismiss()
+});
+export const authSetWalletPass = (password: string) => ({
+  ...new AuthWalletPassSet(password)
+});
+export const authSetWalletPassSuccess = (password: string) => ({
+  ...new AuthWalletPassSetSuccess()
+});
+export const authSetWalletPassFailed = (password: string) => ({
+  ...new AuthWalletPassSetFailed()
+});
+
 export class AuthUnauthedAction implements Action {
   readonly type = AuthActions.Unauthed;
 }
@@ -193,4 +231,11 @@ export type AuthAction =
   | AuthLoginSuccessAction
   | AuthUpdateBalanceAction
   | AuthUpdateBalanceSuccessAction
-  | AuthUnauthedAction;
+  | AuthUnauthedAction
+  | AuthUnlockModalDisplayAction
+  | AuthUnlockModalDismissAction
+  | AuthWalletPassModalDismiss
+  | AuthWalletPassModalDisplay
+  | AuthWalletPassSet
+  | AuthWalletPassSetSuccess
+  | AuthWalletPassSetFailed;
