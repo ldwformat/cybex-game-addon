@@ -168,7 +168,9 @@ let LoginClass = withStyles(styles)(
             maxWidth="lg"
             onClose={closeModal}
           >
-            <div style={{ position: "absolute", right: 0, top: 0 }}>
+            <div
+              style={{ position: "absolute", right: 0, top: 0, zIndex: 100 }}
+            >
               <IconButton onClick={closeModal}>
                 <CloseIcon />
               </IconButton>

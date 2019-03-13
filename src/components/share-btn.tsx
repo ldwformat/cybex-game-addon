@@ -25,6 +25,7 @@ import { selectReferUrl } from "../core/core.selectors";
 import { getReferUrl } from "../utils/refer-url";
 import { withTranslation, WithTranslation } from "react-i18next";
 import { Dict } from "../providers/i18n";
+import { PosterDisplay } from "./poster";
 
 const ShareItem = ({
   IconComponent,
@@ -161,7 +162,9 @@ export const ShareButton = connect(
                   >
                     {referUrl && accountName && (
                       <CopyToClipboard
-                        text={referUrl.trim()}
+                        text={`${t(
+                          Dict.CopyShareLinkPrefix
+                        )} ${referUrl.trim()}`}
                         onCopy={() =>
                           pushNoti(t(Dict.ShareLinkCopied), {
                             variant: "success"
@@ -203,7 +206,7 @@ export const ShareButton = connect(
                 <DialogContent
                   style={{ padding: "2em", paddingBottom: "0.5em" }}
                 >
-                  <QRCodeDisplay
+                  <PosterDisplay
                     text={referUrl}
                     filename={`cybex_invite_${accountName}.png`}
                   />
