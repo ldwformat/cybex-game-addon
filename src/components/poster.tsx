@@ -1,10 +1,11 @@
 import * as React from "react";
-import QRCode from "qrcode.react";
+import { QRCode } from "./../utils/qrcode";
 import { Button, Grid, Typography } from "@material-ui/core";
 import { CloudDownload } from "@material-ui/icons";
 import { Dict } from "../providers/i18n";
 import { withTranslation, WithTranslation } from "react-i18next";
 import { findFirstEmptyZone } from "../utils/canvas-helper";
+import * as PosterImgs from "../assets/images/poster";
 
 function drawCanvasToImg(canvas: HTMLCanvasElement, img: HTMLImageElement) {
   canvas.toBlob(blob => {
@@ -73,9 +74,7 @@ export const PosterDisplay = withTranslation()(
     }
 
     updateQRImg = async () => {
-      let posterBase64 = await import("./../assets/images/poster").then(
-        poster => poster[this.props.t(Dict.Poster)]
-      );
+      let posterBase64 = PosterImgs[this.props.t(Dict.Poster)];
       let posterImg = document.createElement("img");
       posterImg.src = posterBase64;
       let posterCanvas = (this.qrCanvas = document.createElement("canvas"));
@@ -99,9 +98,6 @@ export const PosterDisplay = withTranslation()(
         return;
       }
       posterSpace;
-      let QRCode = await import("./../utils/qrcode").then(
-        ({ QRCode }) => QRCode
-      );
 
       let oriPosterImg = document.getElementById("$POSTER");
       if (oriPosterImg) {
