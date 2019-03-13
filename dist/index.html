@@ -9,6 +9,11 @@
       rel="stylesheet"
       href="https://fonts.googleapis.com/css?family=Roboto:300,400,500"
     />
+    <style>
+      body {
+        margin: 0;
+      }
+    </style>
   </head>
   <body>
     <div id="root0">
@@ -17,7 +22,7 @@
     <div id="root1">
       Here is a 充值
     </div>
-    <div id="root2">
+    <div id="root2" style="height: 100vh">
       Here is a 邀请
     </div>
     <div id="root3">
@@ -26,6 +31,7 @@
     <div id="root4">
       Here is a 邀请按钮
     </div>
+    <div style="padding: 1em"></div>
     <button id="loginPage0" data-ref="root0">登录页</button>
     <button id="logout" data-ref="root0">登出</button>
     <button id="deposit" data-ref="root1">充值页</button>
@@ -36,6 +42,8 @@
     <button id="langCN" data-ref="root4">切换中文</button>
     <button id="langEN" data-ref="root4">切换英文</button>
     <button id="langVN" data-ref="root4">切换越南语</button>
+    <div style="padding: 1em"></div>
+
     <script>
       {
         let count = 0;
@@ -44,6 +52,12 @@
           window.addon = addon = await new CybexAddon.CybexAddon({
             referUrl: "http://10.18.120.155:5560"
           }).init();
+          addon.store.dispatch(
+            CybexAddon.Actions.authLogin({
+              accountName: "create-test2",
+              password: "qwer1234qwer1234"
+            })
+          );
           console.info("Load Done");
         });
 
@@ -52,11 +66,9 @@
           .addEventListener("click", async e => {
             let loginPage = await addon.loginPage();
           });
-        document
-          .getElementById("logout")
-          .addEventListener("click", async e => {
-            let loginPage = await addon.logout();
-          });
+        document.getElementById("logout").addEventListener("click", async e => {
+          let loginPage = await addon.logout();
+        });
 
         document
           .getElementById("deposit")
@@ -83,9 +95,11 @@
             alert("Hello");
           });
         });
-        document.getElementById("inviteHide").addEventListener("click", async e => {
-          addon.hideInviteBtn();
-        });
+        document
+          .getElementById("inviteHide")
+          .addEventListener("click", async e => {
+            addon.hideInviteBtn();
+          });
         document.getElementById("langCN").addEventListener("click", async e => {
           addon.setLang("zh");
         });

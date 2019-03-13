@@ -184,11 +184,11 @@ export const vnDict: Dictionary = {
     "Nếu người bạn  giới thiệu là người dùng cũ: Người dùng cũ nhập mã lời mời giới thiệu của bạn trong phần [Người giới thiệu trò chơi cho tôi], bạn sẽ được hưởng 0,2% tiền thưởng từ số tiền đặt cược của họ, xin lưu ý rằng tài khoản của bạn cần Chơi CybexBet trước tài khoản giới thiệu của trò chơi, nếu không, nó sẽ bị coi là không hợp lệ;",
   RefererRuleContent_5:
     "Lưu ý: Số tiền thưởng chỉ được tính sau khi đã điền mã mời.",
-  PatchReferrer: "Người giới thiệu",
-  PatchReferrerLabel: "Người giới thiệu",
+  PatchReferrer: "Thêm người giới thiệu",
+  PatchReferrerLabel: "Thêm người giới thiệu",
   PatchReferrerHelper:
     "Vui lòng nhập mã giới thiệu của người giới thiệu của bạn. Người mời sẽ không thể thay đổi sau khi được xác nhận",
-  PatchReferrerAdd: "Người giới thiệu",
+  PatchReferrerAdd: "Thêm người giới thiệu",
   MyRefererCode: "Mã giới thiệu của bạn",
   PeopleUnit: "",
   CopyAddress: "Sao chép địa chỉ",
@@ -196,7 +196,7 @@ export const vnDict: Dictionary = {
   CopyShareLink: "Sao chép liên kết",
   CopyShareLinkPrefix:
     "Tôi đang chơi trò chơi Casino trong Cybex Game Center với nhiều phần thưởng hấp dẫn! Hãy cùng tham gia nào! Nhấp vào liên kết để đăng ký:",
-  ShareLink: "Sao chép liên kết",
+  ShareLink: "Mời bạn bè",
   ShareLinkCopied: "Chia sẻ lời mời",
   ShareQRCode: "Tạo mã QR",
   SaveQRCode: "Lưu mã QR",
