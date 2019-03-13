@@ -50,6 +50,7 @@ export declare const cnDict: {
     NotiRegWrong_429: string;
     NotiRegWrong_403: string;
     NotiRegWrong_507: string;
+    Poster: string;
     ErrorRequired: string;
     ErrorRequired_accountName: string;
     ErrorRequired_password: string;
@@ -111,6 +112,7 @@ export declare const Dict: {
     NotiRegWrong_429: string;
     NotiRegWrong_403: string;
     NotiRegWrong_507: string;
+    Poster: string;
     ErrorRequired: string;
     ErrorRequired_accountName: string;
     ErrorRequired_password: string;

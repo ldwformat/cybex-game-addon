@@ -74,7 +74,7 @@ export const PosterDisplay = withTranslation()(
 
     updateQRImg = async () => {
       let posterBase64 = await import("./../assets/images/poster").then(
-        poster => poster.PosterImgBase64
+        poster => poster[this.props.t(Dict.Poster)]
       );
       let posterImg = document.createElement("img");
       posterImg.src = posterBase64;
