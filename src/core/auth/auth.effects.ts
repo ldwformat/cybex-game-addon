@@ -306,7 +306,7 @@ export const lockTimerEpic: Epic<any, any, any, IEffectDeps> = (
           )
         )
       ).pipe(
-        debounceTime(10 * 1000),
+        debounceTime(5 * 60 * 1000),
         switchMap(_ =>
           state$.pipe(
             take(1),
