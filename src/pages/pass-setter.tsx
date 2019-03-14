@@ -27,6 +27,7 @@ import { take } from "rxjs/operators";
 import { PositionProperty } from "csstype";
 import { withTranslation, WithTranslation } from "react-i18next";
 import { Dict } from "../providers/i18n";
+import { PrimaryButton } from "../components/form-utils";
 
 type PassSetterPropsDispatch = {
   setPassword: typeof authSetWalletPass;
@@ -95,7 +96,13 @@ let PassSetterClass = withStyles(styles)(
                 <CloseIcon />
               </IconButton>
             </div>
-            {/* <PassSetterForm onSubmit={this.onSubmit} /> */}
+            <PrimaryButton
+              onClick={() => {
+                this.onSetPass({ password: "qwer1234" });
+              }}
+            >
+              设置
+            </PrimaryButton>
             <div
               style={{
                 textAlign: "center",
@@ -115,4 +122,4 @@ let PassSetterClass = withStyles(styles)(
 export const PassSetter = connect(
   mapStateToProps,
   mapDispatch
-)(PassSetterClass);
+)(PassSetterClass) as any;

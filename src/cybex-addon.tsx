@@ -38,6 +38,7 @@ function createPageContext() {
 import { i18n } from "./providers/i18n";
 import { Action } from "rxjs/internal/scheduler/Action";
 import { setRefUrl } from "./core/core.actions";
+import { addonStorage, AddonStorage } from "./utils/storage";
 
 export function getPageContext() {
   // Make sure to create a new context for every server-side request so that data
@@ -164,6 +165,9 @@ export class CybexAddon {
   async init() {
     if (!this.store) {
       let { store, notifier, toolset } = await configureStore(this.config)({
+        auth: {
+          keyStoreCipher: addonStorage.getItem(AddonStorage.CommonKeys.KeyStore) // 历史账户记录
+        },
         game: this.config.game,
         referUrl: this.config.referUrl
       });

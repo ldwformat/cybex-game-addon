@@ -27,12 +27,18 @@ export const auth: Reducer<AuthState, AuthAction> = (
         ...state,
         showSetPassword: false
       };
+    case AuthActions.WalletPassSetSuccess:
+      return {
+        ...state,
+        keyStoreCipher: action.payload
+      };
     case AuthActions.Login:
     case AuthActions.RegImpl:
       return {
         ...state,
         keyStore: null,
         isAuthed: false,
+        keyStoreCipher: null,
         account: null,
         accountName: null,
         isLogging: true
@@ -68,6 +74,11 @@ export const auth: Reducer<AuthState, AuthAction> = (
       };
     case AuthActions.Logout:
       return new AuthState();
+    case AuthActions.Lock:
+      return {
+        ...state,
+        keyStore: null
+      };
     case AuthActions.RegGetCaptchaSuccess:
       return {
         ...state,

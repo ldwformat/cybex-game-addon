@@ -8,7 +8,8 @@ import {
   take,
   filter,
   debounceTime,
-  delay
+  delay,
+  mergeMap
 } from "rxjs/operators";
 import {
   AuthActions,
@@ -29,7 +30,24 @@ import {
   authLogin,
   AuthRegImplFailed,
   authRegImplFailed,
-  AuthLoginModalShowAction
+  AuthLoginModalShowAction,
+  AuthWalletPassModalDisplay,
+  authDisplayWalletPassModal,
+  AuthWalletPassSet,
+  authSetWalletPassFailed,
+  authSetWalletPassSuccess,
+  AuthWalletPassSetSuccess,
+  authDismissWalletPassModal,
+  AuthUnlockSuccessAction,
+  AuthUnlockFailedAction,
+  AuthUnlockAction,
+  authUnlockSuccess,
+  authUnlockFailed,
+  AuthLockAction,
+  authUnlock,
+  authLock,
+  authShowModal,
+  AuthUnauthedAction
 } from "./auth.actions";
 import { of, from, interval, NEVER, merge } from "rxjs";
 import assert from "assert";
@@ -39,7 +57,11 @@ import { ActionCorePushNoti, corePushNoti } from "../core.actions";
 import {
   selectAuthSet,
   selectRegCaptcha,
-  selectAuthModal
+  selectAuthModal,
+  selectAuthStatus,
+  selectCurrentKeystore,
+  selectKeyStoreCipher,
+  selectCurrentAccount
 } from "./auth.selectors";
 import { calcValue } from "../../utils/calc";
 import {
@@ -52,6 +74,10 @@ import {
 import { referAdd } from "../refer";
 import { selectGame } from "../core.selectors";
 import { Dict } from "../../providers/i18n";
+import { AuthStatus } from "./auth.models";
+import { AddonStorage } from "../../utils/storage";
+import { encryptKeyStore, decryptKeyStore } from "../../utils/key-utils";
+import { GatewayActions } from "../gateway";
 
 export const loginEpic: Epic<
   any,
@@ -112,15 +138,15 @@ export const updateBalanceEpic: Epic<
     ofType(AuthActions.UpdateBalance),
     switchMap(action =>
       state$.pipe(
-        filter(state => !!selectAuthSet(state)),
+        filter(state => selectAuthStatus(state) !== AuthStatus.NOT_LOGIN),
         take(1),
-        map(selectAuthSet),
-        switchMap(state =>
+        map(selectCurrentAccount),
+        switchMap(accountName =>
           from(
             chainAssisant
               .db_api<Cybex.AccountBalance[]>(
                 "get_named_account_balances",
-                state && state.account,
+                accountName,
                 []
               )
               .catch(err => {
@@ -162,6 +188,160 @@ export const loginFailedEpic: Epic<
   action$.pipe(
     ofType<AuthLoginFailedAction>(AuthActions.LoginFailed),
     map(_ => corePushNoti(Dict.NotiLoginWrongPass, { variant: "error" }))
+  );
+
+export const displaySetPasswordAfterLoginEpic: Epic<
+  AuthLoginSuccessAction,
+  any,
+  any,
+  IEffectDeps
+> = (action$, state$) =>
+  action$.pipe(
+    ofType<AuthLoginSuccessAction>(AuthActions.LoginSuccess),
+    switchMap(_ =>
+      state$.pipe(
+        take(1),
+        filter(state => !selectKeyStoreCipher(state)),
+        map(_ => authDisplayWalletPassModal())
+      )
+    )
+  );
+export const dismissPasswordModalAfterSuccessEpic: Epic<
+  AuthWalletPassSetSuccess,
+  any,
+  any,
+  IEffectDeps
+> = action$ =>
+  action$.pipe(
+    ofType<AuthWalletPassSetSuccess>(AuthActions.WalletPassSetSuccess),
+    map(_ => authDismissWalletPassModal())
+  );
+
+export const setPasswordEpic: Epic<AuthWalletPassSet, any, any, IEffectDeps> = (
+  action$,
+  state$,
+  { storage }
+) =>
+  action$.pipe(
+    ofType<AuthWalletPassSet>(AuthActions.WalletPassSet),
+    switchMap(action =>
+      state$.pipe(
+        filter(state => selectAuthStatus(state) === AuthStatus.LOGIN_NORMAL),
+        take(1),
+        map(state => {
+          let keyStore = selectCurrentKeystore(state);
+          if (!keyStore) {
+            throw new Error("403");
+          }
+          let cipher = encryptKeyStore(action.payload, keyStore);
+          storage.setItem(AddonStorage.CommonKeys.KeyStore, cipher);
+          return authSetWalletPassSuccess(cipher);
+        }),
+        catchError(err => of(authSetWalletPassFailed()))
+      )
+    )
+  );
+
+export const logoutClearCipherEpic: Epic<any, any, any, IEffectDeps> = (
+  action$,
+  state$,
+  { storage }
+) =>
+  action$.pipe(
+    ofType<AuthLogoutAction>(AuthActions.Logout),
+    tap(action => storage.cleanStorage()),
+    map(authCloseModal)
+  );
+export const unauthDisplayLoginEpic: Epic<
+  any,
+  AuthLoginModalShowAction,
+  any,
+  IEffectDeps
+> = (action$, state$, { storage }) =>
+  action$.pipe(
+    ofType<AuthUnauthedAction>(AuthActions.Unauthed),
+    map(authShowModal)
+  );
+
+export const unlockEpic: Epic<
+  any,
+  AuthUnlockSuccessAction | AuthUnlockFailedAction,
+  any,
+  IEffectDeps
+> = (action$, state$, { storage }) =>
+  action$.pipe(
+    ofType<AuthUnlockAction>(AuthActions.Unlock),
+    switchMap(action =>
+      state$.pipe(
+        // filter(state => !!selectKeyStoreCipher(state)),
+        take(1),
+        map(state => {
+          let cipher = selectKeyStoreCipher(state);
+          if (!cipher) {
+            throw new Error("403");
+          }
+          let keyStore = decryptKeyStore(action.payload, cipher);
+          return authUnlockSuccess(keyStore);
+        }),
+        catchError(err => of(authUnlockFailed()))
+      )
+    )
+  );
+
+export const lockTimerEpic: Epic<any, any, any, IEffectDeps> = (
+  action$,
+  state$,
+  { storage }
+) =>
+  action$.pipe(
+    ofType<any>(AuthActions.LoginSuccess, AuthActions.WalletPassSetSuccess),
+    mergeMap(() =>
+      merge(
+        of(1),
+        action$.pipe(
+          ofType<any>(
+            GatewayActions.LoadDepositInfo,
+            GatewayActions.LoadGatewayInfo,
+            GatewayActions.SelectAsset
+          )
+        )
+      ).pipe(
+        debounceTime(10 * 1000),
+        switchMap(_ =>
+          state$.pipe(
+            take(1),
+            filter(state => !!selectKeyStoreCipher(state))
+          )
+        ),
+        takeUntil(action$.pipe(ofType(AuthActions.Logout, AuthActions.Lock))),
+        map(authLock)
+      )
+    )
+  );
+export const unlockSuccessEpic: Epic<
+  any,
+  AuthLoginSuccessAction | AuthUnlockFailedAction,
+  any,
+  IEffectDeps
+> = (action$, state$, { storage }) =>
+  action$.pipe(
+    ofType<AuthUnlockSuccessAction>(AuthActions.UnlockSuccess),
+    map(action => {
+      let keyStore = action.payload;
+      let { account } = keyStore;
+      if (!account || !account.name) {
+        throw new Error("403");
+      }
+      return authLoginSuccess({
+        account,
+        accountName: account.name,
+        keyStore
+      });
+    }),
+    catchError(err => {
+      console.error(err);
+      return of(authUnlockFailed());
+    })
   );
 
 export const regPanelCaptchaEpic: Epic<

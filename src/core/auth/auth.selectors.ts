@@ -1,6 +1,6 @@
 import { createSelector } from "reselect";
 import { CoreState } from "../core.models";
-import { AuthStatus } from "./auth.models";
+import { AuthStatus, LoginPanel } from "./auth.models";
 
 export const selectAuth = (state: CoreState) => state.auth;
 export const selectCurrentAccountInfo = createSelector(
@@ -28,6 +28,11 @@ export const selectAuthStatus = createSelector(
 export const selectAuthIsLogging = createSelector(
   selectAuth,
   auth => auth.isLogging
+);
+
+export const selectKeyStoreCipher = createSelector(
+  selectAuth,
+  auth => auth.keyStoreCipher
 );
 
 export const selectAuthModal = createSelector(
@@ -64,9 +69,11 @@ export const selectBalances = createSelector(
 );
 
 export const selectLoginPanel = createSelector(
+  selectKeyStoreCipher,
   selectAuth,
-  auth => auth.loginPanel
+  (cipher, auth) => (cipher ? LoginPanel.Unlock : auth.loginPanel)
 );
+
 export const selectRegCaptcha = createSelector(
   selectAuth,
   auth => auth.captcha

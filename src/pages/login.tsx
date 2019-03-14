@@ -23,7 +23,8 @@ import {
   FaucetCaptcha,
   authModalSwitchPanel,
   authRegImpl,
-  IAuthParams
+  IAuthParams,
+  authUnlock
 } from "../core/auth";
 import { gatewayLoadGatewayInfo, gatewaySelectAsset } from "../core/gateway";
 import {
@@ -45,10 +46,12 @@ import { PositionProperty } from "csstype";
 import { selectGame } from "../core/core.selectors";
 import { withTranslation, WithTranslation } from "react-i18next";
 import { Dict } from "../providers/i18n";
+import { PassSetter } from "./pass-setter";
 
 type LoginPropsDispatch = {
   login: typeof authLogin;
   logout: typeof authLogout;
+  unlock: typeof authUnlock;
   regImpl: typeof authRegImpl;
   alert: typeof corePushNoti;
   showModal: typeof authShowModal;
@@ -85,6 +88,7 @@ const mapDispatch: MapDispatchToProps<LoginPropsDispatch, {}> = {
   login: authLogin,
   regImpl: authRegImpl,
   logout: authLogout,
+  unlock: authUnlock,
   switchPanel: authModalSwitchPanel,
   alert: corePushNoti,
   closeModal: authCloseModal,
@@ -158,61 +162,70 @@ let LoginClass = withStyles(styles)(
           isModalShowing,
           currentPanel,
           switchPanel,
+          unlock,
           t
         } = this.props;
         return (
-          <Dialog
-            open={isModalShowing}
-            disableBackdropClick
-            classes={classes && { paper: classes.paper }}
-            maxWidth="lg"
-            onClose={closeModal}
-          >
-            <div
-              style={{ position: "absolute", right: 0, top: 0, zIndex: 100 }}
+          <>
+            <Dialog
+              open={isModalShowing}
+              disableBackdropClick
+              classes={classes && { paper: classes.paper }}
+              maxWidth="lg"
+              onClose={closeModal}
             >
-              <IconButton onClick={closeModal}>
-                <CloseIcon />
-              </IconButton>
-            </div>
-            {currentPanel === LoginPanel.Login ? (
-              <LoginForm onSubmit={this.onSubmit} />
-            ) : (
-              <RegForm onSubmit={this.onRegister} />
-            )}
-            {/* <Button onClick={logout}>登出</Button> */}
-            <div
-              style={{
-                textAlign: "center",
-                backgroundColor: "#fff",
-                position: "sticky",
-                padding: "0.5em",
-                bottom: "-8px"
-              }}
-            >
-              <Typography style={{ display: "inline" }} component="span">
-                {currentPanel === LoginPanel.Login
-                  ? t(Dict.HasNoAccountYet)
-                  : t(Dict.HasAccountAlready)}
-              </Typography>
-
-              <a
-                href="javascript:;"
-                style={{ textDecoration: "none" }}
-                onClick={switchPanel}
+              <div
+                style={{ position: "absolute", right: 0, top: 0, zIndex: 100 }}
               >
-                <Typography
-                  style={{ display: "inline" }}
-                  component="span"
-                  color="secondary"
-                >
+                <IconButton onClick={closeModal}>
+                  <CloseIcon />
+                </IconButton>
+              </div>
+              {currentPanel === LoginPanel.Unlock ? (
+                <>
+                  <Button onClick={logout}>登出</Button>
+                  <Button onClick={() => unlock("qwer1234")}>解锁</Button>
+                </>
+              ) : currentPanel === LoginPanel.Login ? (
+                <LoginForm onSubmit={this.onSubmit} />
+              ) : (
+                <RegForm onSubmit={this.onRegister} />
+              )}
+              <div
+                style={{
+                  textAlign: "center",
+                  backgroundColor: "#fff",
+                  position: "sticky",
+                  padding: "0.5em",
+                  bottom: "-8px"
+                }}
+              >
+                <Typography style={{ display: "inline" }} component="span">
                   {currentPanel === LoginPanel.Login
-                    ? t(Dict.AuthRegisterLong)
-                    : t(Dict.LoginLong)}
+                    ? t(Dict.HasNoAccountYet)
+                    : t(Dict.HasAccountAlready)}
                 </Typography>
-              </a>
-            </div>
-          </Dialog>
+
+                <a
+                  href="javascript:;"
+                  style={{ textDecoration: "none" }}
+                  onClick={switchPanel}
+                >
+                  <Typography
+                    style={{ display: "inline" }}
+                    component="span"
+                    color="secondary"
+                  >
+                    {currentPanel === LoginPanel.Login
+                      ? t(Dict.AuthRegisterLong)
+                      : t(Dict.LoginLong)}
+                  </Typography>
+                </a>
+              </div>
+            </Dialog>
+
+            <PassSetter />
+          </>
         );
       }
     }

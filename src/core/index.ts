@@ -1,5 +1,6 @@
 import {
   createStore,
+  compose,
   applyMiddleware,
   combineReducers,
   Reducer,
@@ -26,7 +27,15 @@ import {
   captchaEpic,
   regPanelCaptchaEpic,
   authRegEpic,
-  regFailedEpic
+  regFailedEpic,
+  displaySetPasswordAfterLoginEpic,
+  setPasswordEpic,
+  dismissPasswordModalAfterSuccessEpic,
+  unlockEpic,
+  unlockSuccessEpic,
+  lockTimerEpic,
+  logoutClearCipherEpic,
+  unauthDisplayLoginEpic
 } from "./auth";
 import { MallState, mall, loadCountriesEpic, loadProvincesEpic } from "./mall";
 import {
@@ -58,6 +67,14 @@ const loggerMiddleware = createLogger();
 
 const rootEpic = combineEpics(
   loginEpic,
+  unauthDisplayLoginEpic,
+  displaySetPasswordAfterLoginEpic,
+  dismissPasswordModalAfterSuccessEpic,
+  logoutClearCipherEpic,
+  setPasswordEpic,
+  lockTimerEpic,
+  unlockEpic,
+  unlockSuccessEpic,
   regPanelCaptchaEpic,
   addRefFailedEpic,
   authRegEpic,
@@ -108,14 +125,20 @@ export const configureStore = (config: CybexAddonConfig) => async (
     dependencies: toolset
   });
 
-  let store = createStore(
-    rootReducer,
-    preloadState,
-    applyMiddleware(
-      // loggerMiddleware,
-      epicMiddleware
-    )
+  const composeEnhancers =
+    typeof window === "object" &&
+    (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+      ? (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
+          // Specify extension’s options like name, actionsBlacklist, actionsCreators, serialize...
+        })
+      : compose;
+
+  const enhancer = composeEnhancers(
+    applyMiddleware(loggerMiddleware, epicMiddleware)
+    // other store enhancers if any
   );
+
+  let store = createStore(rootReducer, preloadState, enhancer);
 
   epicMiddleware.run(rootEpic);
   return { store, notifier, toolset };

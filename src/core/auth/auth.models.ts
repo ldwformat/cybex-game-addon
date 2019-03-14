@@ -11,7 +11,8 @@ export type BalanceObj = {
 
 export enum LoginPanel {
   Login,
-  Register
+  Register,
+  Unlock
 }
 export class AuthState {
   isAuthed = false;
@@ -21,6 +22,7 @@ export class AuthState {
   showSetPassword = false;
   accountName: string | null = null;
   keyStore: null | KeyStore = null;
+  keyStoreCipher: string | null = null;
   balances: BalanceObj = {};
   account: Cybex.Account | null = null;
   captcha: FaucetCaptcha | null = null;

@@ -6,6 +6,7 @@ import {
   FaucetCaptcha
 } from "./auth.models";
 import { RegFormData } from "../../components/reg-form";
+import { KeyStore } from "./keystore/keystore";
 
 export enum AuthActions {
   LoginModalShow = "[Auth] LoginModalShow",
@@ -33,6 +34,7 @@ export enum AuthActions {
   WalletPassSetFailed = "[Auth] WalletPassSetFailed",
 
   Unauthed = "[Auth] Unauthed",
+  Lock = "[Auth] Lock",
   Unlock = "[Auth] Unlock",
   UnlockSuccess = "[Auth] UnlockSuccess",
   UnlockFailed = "[Auth] UnlockFailed",
@@ -141,6 +143,7 @@ export class AuthWalletPassSet implements Action {
 }
 export class AuthWalletPassSetSuccess implements Action {
   readonly type = AuthActions.WalletPassSetSuccess;
+  constructor(public payload: string) {}
 }
 export class AuthWalletPassSetFailed implements Action {
   readonly type = AuthActions.WalletPassSetFailed;
@@ -154,21 +157,26 @@ export const authDismissWalletPassModal = () => ({
 export const authSetWalletPass = (password: string) => ({
   ...new AuthWalletPassSet(password)
 });
-export const authSetWalletPassSuccess = (password: string) => ({
-  ...new AuthWalletPassSetSuccess()
+export const authSetWalletPassSuccess = (chiper: string) => ({
+  ...new AuthWalletPassSetSuccess(chiper)
 });
-export const authSetWalletPassFailed = (password: string) => ({
+export const authSetWalletPassFailed = () => ({
   ...new AuthWalletPassSetFailed()
 });
 
 export class AuthUnauthedAction implements Action {
   readonly type = AuthActions.Unauthed;
 }
+export class AuthLockAction implements Action {
+  readonly type = AuthActions.Lock;
+}
 export class AuthUnlockAction implements Action {
   readonly type = AuthActions.Unlock;
+  constructor(public payload: string) {}
 }
 export class AuthUnlockSuccessAction implements Action {
   readonly type = AuthActions.UnlockSuccess;
+  constructor(public payload: KeyStore) {}
 }
 export class AuthUnlockFailedAction implements Action {
   readonly type = AuthActions.UnlockFailed;
@@ -182,11 +190,16 @@ export class AuthUnlockModalDismissAction implements Action {
 export const authUnauthed: () => AuthUnauthedAction = () => ({
   type: AuthActions.Unauthed
 });
-export const authUnlock: () => AuthUnlockAction = () => ({
-  type: AuthActions.Unlock
+export const authLock: () => AuthLockAction = () => ({
+  type: AuthActions.Lock
 });
-export const authUnlockSuccess: () => AuthUnlockSuccessAction = () => ({
-  type: AuthActions.UnlockSuccess
+export const authUnlock: (seed: string) => AuthUnlockAction = seed => ({
+  ...new AuthUnlockAction(seed)
+});
+export const authUnlockSuccess: (
+  keyStore: KeyStore
+) => AuthUnlockSuccessAction = keyStore => ({
+  ...new AuthUnlockSuccessAction(keyStore)
 });
 export const authUnlockFailed: () => AuthUnlockFailedAction = () => ({
   type: AuthActions.UnlockFailed
@@ -232,6 +245,10 @@ export type AuthAction =
   | AuthUpdateBalanceAction
   | AuthUpdateBalanceSuccessAction
   | AuthUnauthedAction
+  | AuthLockAction
+  | AuthUnlockAction
+  | AuthUnlockSuccessAction
+  | AuthUnlockFailedAction
   | AuthUnlockModalDisplayAction
   | AuthUnlockModalDismissAction
   | AuthWalletPassModalDismiss

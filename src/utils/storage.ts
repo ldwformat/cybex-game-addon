@@ -17,7 +17,9 @@ export class AddonStorage {
     item: object | Serializable | string | number | any[]
   ): string | null {
     let toItem =
-      typeof item["serialize"] !== undefined
+      typeof item === "string"
+        ? item
+        : typeof item["serialize"] !== undefined
         ? (item as Serializable).serialize()
         : JSON.stringify(item);
     localStorage.setItem(this.storeKey(key), toItem);
@@ -35,7 +37,7 @@ export class AddonStorage {
   cleanStorage() {
     let keysToBeRemoved: string[] = [];
     for (let i = 0; i < localStorage.length; i++) {
-      let key: string | null = localStorage.key[i];
+      let key: string | null = localStorage.key(i);
       if (!key) {
         continue;
       }
