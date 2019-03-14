@@ -11,7 +11,7 @@ export function encryptKeyStore(password: string, keyStore: KeyStore): string {
       privKey,
       privKey.toPublicKey().toPublicKeyString(),
       null,
-      keyStore.serilize()
+      keyStore.serialize()
     )
   ]).toString("hex");
 }
@@ -25,7 +25,7 @@ export function decryptKeyStore(
   let keyBuf = Buffer.from(keyStoreStr, "hex");
   let pubKey = keyBuf.slice(0, 33);
   assert(pubKey.equals(privKey.toPublicKey().toBuffer(true)), "Wrong Password");
-  return KeyStore.deserilize(
+  return KeyStore.deserialize(
     Aes.decrypt_with_checksum(
       privKey,
       PublicKey.fromBuffer(pubKey),

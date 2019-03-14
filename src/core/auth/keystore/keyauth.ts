@@ -1,4 +1,5 @@
 import PrivateKey from "../../../cybex/ecc/src/PrivateKey";
+import { Serializable } from "../../core.models";
 
 export type AuthRole = "active" | "owner" | "memo";
 export interface IKeyAuth {
@@ -6,7 +7,7 @@ export interface IKeyAuth {
   privKey: PrivateKey | null;
   pubKeyStr: string | null;
 }
-export class KeyAuth {
+export class KeyAuth implements Serializable {
   fullAuth: boolean | null = null;
   privKey: PrivateKey | null = null;
   pubKeyStr: string | null = null;

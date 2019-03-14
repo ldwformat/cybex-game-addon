@@ -7,6 +7,11 @@ import { OptionsObject } from "notistack";
 type NotiOptions = OptionsObject & {
   i18n?: boolean;
 };
+
+export interface Serializable {
+  serialize(): string;
+}
+
 export class Noti {
   key =
     "$" + Date.now() + "|" + (10000000 + Math.floor(Math.random() * 100000000));

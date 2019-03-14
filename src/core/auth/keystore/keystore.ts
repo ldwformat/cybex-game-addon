@@ -1,6 +1,7 @@
 import PrivateKey from "../../../cybex/ecc/src/PrivateKey";
 import { KeyAuth, IKeyAuth } from "./keyauth";
 import assert from "assert";
+import { Serializable } from "../../core.models";
 
 export enum KeyStoreMode {
   Wif,
@@ -12,7 +13,7 @@ export type KeyStoreSeriOptions = {
   identifier?: string;
 };
 
-export class KeyStore {
+export class KeyStore implements Serializable {
   static DefaultIdentifier = "#$KeyStore";
   static DefaultSeriOptions: KeyStoreSeriOptions = {
     identifier: KeyStore.DefaultIdentifier
@@ -72,7 +73,7 @@ export class KeyStore {
     return keyStore;
   }
 
-  static deserilize(walletStr: string): KeyStore {
+  static deserialize(walletStr: string): KeyStore {
     return KeyStore.fromKeyStore(
       JSON.parse(walletStr, (key, value) => {
         switch (key) {
@@ -178,7 +179,7 @@ export class KeyStore {
     };
   }
 
-  serilize(): string {
+  serialize(): string {
     let keyList = this.keyList.map(key => key.toWif());
     let keys = Object.keys(this.keys).reduce(
       (keys, key) => ({ ...keys, [key]: this.keys[key].serialize() }),
