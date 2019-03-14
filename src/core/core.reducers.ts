@@ -33,5 +33,12 @@ export const rootReducer: Reducer<CoreState> = combineReducers({
   gateway,
   app,
   game: (state = "") => state,
-  referUrl: (state = "") => state
+  referUrl: (state = "", action: CoreAction) => {
+    switch (action.type) {
+      case CoreActions.SetRefUrl:
+        return action.payload;
+      default:
+        return state;
+    }
+  }
 });

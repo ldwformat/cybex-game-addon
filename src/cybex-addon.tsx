@@ -36,6 +36,8 @@ function createPageContext() {
 }
 
 import { i18n } from "./providers/i18n";
+import { Action } from "rxjs/internal/scheduler/Action";
+import { setRefUrl } from "./core/core.actions";
 
 export function getPageContext() {
   // Make sure to create a new context for every server-side request so that data
@@ -181,6 +183,12 @@ export class CybexAddon {
 
   async setLang(lang: string) {
     return this.i18n.changeLanguage(lang);
+  }
+  async setRefUrl(url: string) {
+    if (!this.store) {
+      return;
+    }
+    return this.store.dispatch(setRefUrl(url));
   }
 
   async loginPage() {
