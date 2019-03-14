@@ -134,7 +134,8 @@ export const configureStore = (config: CybexAddonConfig) => async (
       : compose;
 
   const enhancer = composeEnhancers(
-    applyMiddleware(loggerMiddleware, epicMiddleware)
+    applyMiddleware(epicMiddleware)
+    // applyMiddleware(loggerMiddleware, epicMiddleware)
     // other store enhancers if any
   );
 

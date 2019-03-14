@@ -15,10 +15,15 @@ module.exports = {
   module: {
     rules: [
       {
+        test: /.css$/,
+        use: ["style-loader", "css-loader"]
+      },
+      {
         test: /\.tsx?$/,
         loader: "awesome-typescript-loader",
         exclude: /node_modules/,
         options: {
+          useCache: true,
           transpileOnly: true
         }
       },

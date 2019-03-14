@@ -47,6 +47,7 @@ import { selectGame } from "../core/core.selectors";
 import { withTranslation, WithTranslation } from "react-i18next";
 import { Dict } from "../providers/i18n";
 import { PassSetter } from "./pass-setter";
+import { Locker } from "../components/locker";
 
 type LoginPropsDispatch = {
   login: typeof authLogin;
@@ -184,44 +185,49 @@ let LoginClass = withStyles(styles)(
               {currentPanel === LoginPanel.Unlock ? (
                 <>
                   <Button onClick={logout}>登出</Button>
+                  <Locker />
                   <Button onClick={() => unlock("qwer1234")}>解锁</Button>
                 </>
-              ) : currentPanel === LoginPanel.Login ? (
-                <LoginForm onSubmit={this.onSubmit} />
               ) : (
-                <RegForm onSubmit={this.onRegister} />
-              )}
-              <div
-                style={{
-                  textAlign: "center",
-                  backgroundColor: "#fff",
-                  position: "sticky",
-                  padding: "0.5em",
-                  bottom: "-8px"
-                }}
-              >
-                <Typography style={{ display: "inline" }} component="span">
-                  {currentPanel === LoginPanel.Login
-                    ? t(Dict.HasNoAccountYet)
-                    : t(Dict.HasAccountAlready)}
-                </Typography>
-
-                <a
-                  href="javascript:;"
-                  style={{ textDecoration: "none" }}
-                  onClick={switchPanel}
-                >
-                  <Typography
-                    style={{ display: "inline" }}
-                    component="span"
-                    color="secondary"
+                <>
+                  {currentPanel === LoginPanel.Login ? (
+                    <LoginForm onSubmit={this.onSubmit} />
+                  ) : (
+                    <RegForm onSubmit={this.onRegister} />
+                  )}
+                  <div
+                    style={{
+                      textAlign: "center",
+                      backgroundColor: "#fff",
+                      position: "sticky",
+                      padding: "0.5em",
+                      bottom: "-8px"
+                    }}
                   >
-                    {currentPanel === LoginPanel.Login
-                      ? t(Dict.AuthRegisterLong)
-                      : t(Dict.LoginLong)}
-                  </Typography>
-                </a>
-              </div>
+                    <Typography style={{ display: "inline" }} component="span">
+                      {currentPanel === LoginPanel.Login
+                        ? t(Dict.HasNoAccountYet)
+                        : t(Dict.HasAccountAlready)}
+                    </Typography>
+
+                    <a
+                      href="javascript:;"
+                      style={{ textDecoration: "none" }}
+                      onClick={switchPanel}
+                    >
+                      <Typography
+                        style={{ display: "inline" }}
+                        component="span"
+                        color="secondary"
+                      >
+                        {currentPanel === LoginPanel.Login
+                          ? t(Dict.AuthRegisterLong)
+                          : t(Dict.LoginLong)}
+                      </Typography>
+                    </a>
+                  </div>
+                </>
+              )}
             </Dialog>
 
             <PassSetter />
