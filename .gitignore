@@ -83,3 +83,4 @@ typings/
 
 lib/
 dist/
+.awcache
