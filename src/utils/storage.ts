@@ -8,7 +8,7 @@ export class AddonStorage {
 
   constructor(public prefix = AddonStorage.DefaultPrefix) {}
 
-  storeKey(key: string) {
+  private storeKey(key: string) {
     return `${this.prefix}_${key}`;
   }
 

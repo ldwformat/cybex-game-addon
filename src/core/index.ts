@@ -52,6 +52,7 @@ import { notifierEpic } from "./core.effects";
 import { rootReducer } from "./core.reducers";
 import { CoreState } from "./core.models";
 import { CybexAddonConfig } from "../config";
+import { addonStorage } from "../utils/storage";
 export * from "./core.models";
 const loggerMiddleware = createLogger();
 
@@ -92,7 +93,7 @@ export const configureStore = (config: CybexAddonConfig) => async (
   let wsConnect = new WsConnection({ url: cybexWs });
   let notifier = new EventEmitter();
   await wsConnect.connect();
-  const toolset = {
+  const toolset: IEffectDeps = {
     fetcher: new ChainFetcher(cybexWs, cybexHttpServer),
     faucet: new FaucetFetcher(faucet),
     mallFetcher: new MallFetcher(mallBackend),
@@ -100,6 +101,7 @@ export const configureStore = (config: CybexAddonConfig) => async (
     backendFetcher: new BackendFetcher(backend),
     referFetcher: new ReferFetcher(referBackend),
     chainAssisant: new CybexAssistant(wsConnect),
+    storage: addonStorage,
     notifier
   };
   const epicMiddleware = createEpicMiddleware({
