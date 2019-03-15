@@ -166,7 +166,12 @@ export class CybexAddon {
     if (!this.store) {
       let { store, notifier, toolset } = await configureStore(this.config)({
         auth: {
-          keyStoreCipher: addonStorage.getItem(AddonStorage.CommonKeys.KeyStore) // 历史账户记录
+          keyStoreCipher: addonStorage.getItem(
+            AddonStorage.CommonKeys.KeyStore
+          ), // 历史账户记录
+          unlockCounter:
+            Number(addonStorage.getItem(AddonStorage.CommonKeys.UnlockCount)) ||
+            undefined // 历史账户记录尝试记录
         },
         game: this.config.game,
         referUrl: this.config.referUrl

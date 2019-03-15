@@ -28,6 +28,7 @@ import { PositionProperty } from "csstype";
 import { withTranslation, WithTranslation } from "react-i18next";
 import { Dict } from "../providers/i18n";
 import { PrimaryButton } from "../components/form-utils";
+import { Locker, LockerType } from "../components/locker";
 
 type PassSetterPropsDispatch = {
   setPassword: typeof authSetWalletPass;
@@ -96,13 +97,7 @@ let PassSetterClass = withStyles(styles)(
                 <CloseIcon />
               </IconButton>
             </div>
-            <PrimaryButton
-              onClick={() => {
-                this.onSetPass({ password: "qwer1234" });
-              }}
-            >
-              设置
-            </PrimaryButton>
+            <Locker type={LockerType.Lock} />
             <div
               style={{
                 textAlign: "center",

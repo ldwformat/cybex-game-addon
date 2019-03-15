@@ -47,12 +47,11 @@ import { selectGame } from "../core/core.selectors";
 import { withTranslation, WithTranslation } from "react-i18next";
 import { Dict } from "../providers/i18n";
 import { PassSetter } from "./pass-setter";
-import { Locker } from "../components/locker";
+import { Locker, LockerType } from "../components/locker";
 
 type LoginPropsDispatch = {
   login: typeof authLogin;
   logout: typeof authLogout;
-  unlock: typeof authUnlock;
   regImpl: typeof authRegImpl;
   alert: typeof corePushNoti;
   showModal: typeof authShowModal;
@@ -89,7 +88,6 @@ const mapDispatch: MapDispatchToProps<LoginPropsDispatch, {}> = {
   login: authLogin,
   regImpl: authRegImpl,
   logout: authLogout,
-  unlock: authUnlock,
   switchPanel: authModalSwitchPanel,
   alert: corePushNoti,
   closeModal: authCloseModal,
@@ -163,7 +161,6 @@ let LoginClass = withStyles(styles)(
           isModalShowing,
           currentPanel,
           switchPanel,
-          unlock,
           t
         } = this.props;
         return (
@@ -184,9 +181,9 @@ let LoginClass = withStyles(styles)(
               </div>
               {currentPanel === LoginPanel.Unlock ? (
                 <>
+                  <Locker type={LockerType.Unlock} />
                   <Button onClick={logout}>登出</Button>
-                  <Locker />
-                  <Button onClick={() => unlock("qwer1234")}>解锁</Button>
+                  {/* <Button onClick={() => unlock("qwer1234")}>解锁</Button> */}
                 </>
               ) : (
                 <>

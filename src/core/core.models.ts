@@ -4,8 +4,9 @@ import { ReferState } from "./refer";
 import { GatewayState } from "./gateway";
 import { OptionsObject } from "notistack";
 
-type NotiOptions = OptionsObject & {
+export type NotiOptions = OptionsObject & {
   i18n?: boolean;
+  transparams?: object;
 };
 
 export interface Serializable {
@@ -15,7 +16,7 @@ export interface Serializable {
 export class Noti {
   key =
     "$" + Date.now() + "|" + (10000000 + Math.floor(Math.random() * 100000000));
-  options: NotiOptions = { i18n: true };
+  options: NotiOptions = { i18n: true, transparams: {} };
   constructor(public message: string, options: NotiOptions = {}) {
     this.options = { ...this.options, ...options };
   }

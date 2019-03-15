@@ -3,7 +3,8 @@ import {
   IAuthParams,
   IAuthResult,
   BalanceObj,
-  FaucetCaptcha
+  FaucetCaptcha,
+  AuthDefaultUnlockCount
 } from "./auth.models";
 import { RegFormData } from "../../components/reg-form";
 import { KeyStore } from "./keystore/keystore";
@@ -139,11 +140,11 @@ export class AuthWalletPassModalDismiss implements Action {
 }
 export class AuthWalletPassSet implements Action {
   readonly type = AuthActions.WalletPassSet;
-  constructor(public payload: string) {}
+  constructor(public payload: { password: string; count: number }) {}
 }
 export class AuthWalletPassSetSuccess implements Action {
   readonly type = AuthActions.WalletPassSetSuccess;
-  constructor(public payload: string) {}
+  constructor(public payload: { cipher: string; count: number }) {}
 }
 export class AuthWalletPassSetFailed implements Action {
   readonly type = AuthActions.WalletPassSetFailed;
@@ -154,11 +155,14 @@ export const authDisplayWalletPassModal = () => ({
 export const authDismissWalletPassModal = () => ({
   ...new AuthWalletPassModalDismiss()
 });
-export const authSetWalletPass = (password: string) => ({
-  ...new AuthWalletPassSet(password)
+export const authSetWalletPass = (
+  password: string,
+  count = AuthDefaultUnlockCount
+) => ({
+  ...new AuthWalletPassSet({ password, count })
 });
-export const authSetWalletPassSuccess = (chiper: string) => ({
-  ...new AuthWalletPassSetSuccess(chiper)
+export const authSetWalletPassSuccess = (cipher: string, count: number) => ({
+  ...new AuthWalletPassSetSuccess({ cipher, count })
 });
 export const authSetWalletPassFailed = () => ({
   ...new AuthWalletPassSetFailed()

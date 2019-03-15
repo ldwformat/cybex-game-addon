@@ -57,7 +57,7 @@ export const Notifier = connect(
             // Display snackbar using notistack
             this.props.enqueueSnackbar(
               notification && notification.options && notification.options.i18n
-                ? t(notification.message)
+                ? t(notification.message, notification.options.transparams || {})
                 : notification.message,
               notification.options
             );

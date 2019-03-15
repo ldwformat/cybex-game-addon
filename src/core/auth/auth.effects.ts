@@ -47,7 +47,8 @@ import {
   authUnlock,
   authLock,
   authShowModal,
-  AuthUnauthedAction
+  AuthUnauthedAction,
+  authLogout
 } from "./auth.actions";
 import { of, from, interval, NEVER, merge } from "rxjs";
 import assert from "assert";
@@ -61,7 +62,8 @@ import {
   selectAuthStatus,
   selectCurrentKeystore,
   selectKeyStoreCipher,
-  selectCurrentAccount
+  selectCurrentAccount,
+  selectUnlockCounter
 } from "./auth.selectors";
 import { calcValue } from "../../utils/calc";
 import {
@@ -233,11 +235,19 @@ export const setPasswordEpic: Epic<AuthWalletPassSet, any, any, IEffectDeps> = (
           if (!keyStore) {
             throw new Error("403");
           }
-          let cipher = encryptKeyStore(action.payload, keyStore);
+          let cipher = encryptKeyStore(action.payload.password, keyStore);
           storage.setItem(AddonStorage.CommonKeys.KeyStore, cipher);
-          return authSetWalletPassSuccess(cipher);
+          storage.setItem(
+            AddonStorage.CommonKeys.UnlockCount,
+            action.payload.count
+          );
+
+          return authSetWalletPassSuccess(cipher, action.payload.count);
         }),
-        catchError(err => of(authSetWalletPassFailed()))
+        catchError(err => {
+          console.error(err);
+          return of(authSetWalletPassFailed());
+        })
       )
     )
   );
@@ -250,7 +260,7 @@ export const logoutClearCipherEpic: Epic<any, any, any, IEffectDeps> = (
   action$.pipe(
     ofType<AuthLogoutAction>(AuthActions.Logout),
     tap(action => storage.cleanStorage()),
-    map(authCloseModal)
+    map(() => corePushNoti(Dict.AuthLogout))
   );
 export const unauthDisplayLoginEpic: Epic<
   any,
@@ -306,7 +316,8 @@ export const lockTimerEpic: Epic<any, any, any, IEffectDeps> = (
           )
         )
       ).pipe(
-        debounceTime(5 * 60 * 1000),
+        debounceTime(15 * 1000),
+        // debounceTime(5 * 60 * 1000),
         switchMap(_ =>
           state$.pipe(
             take(1),
@@ -342,6 +353,33 @@ export const unlockSuccessEpic: Epic<
       console.error(err);
       return of(authUnlockFailed());
     })
+  );
+export const unlockFailedEpic: Epic<
+  any,
+  ActionCorePushNoti | AuthLogoutAction,
+  any,
+  IEffectDeps
+> = (action$, state$, { storage }) =>
+  action$.pipe(
+    ofType<AuthUnlockFailedAction>(AuthActions.UnlockFailed),
+    switchMap(action =>
+      state$.pipe(
+        take(1),
+        map(state => selectUnlockCounter(state)),
+        map(count => {
+          let newCount = count - 1;
+          if (newCount > 0) {
+            console.debug("NewCount: ", newCount);
+            storage.setItem(AddonStorage.CommonKeys.UnlockCount, newCount);
+            return corePushNoti(Dict.UnlockFaileWithCounter, {
+              variant: "error",
+              transparams: { count: newCount }
+            });
+          }
+          return authLogout();
+        })
+      )
+    )
   );
 
 export const regPanelCaptchaEpic: Epic<

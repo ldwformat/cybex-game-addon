@@ -3,7 +3,8 @@ import { Serializable } from "../core";
 export class AddonStorage {
   static DefaultPrefix = "$$CybexAddon";
   static CommonKeys = {
-    KeyStore: "#KeyStore"
+    KeyStore: "#KeyStore",
+    UnlockCount: "#UnlockCount"
   };
 
   constructor(public prefix = AddonStorage.DefaultPrefix) {}
@@ -19,7 +20,7 @@ export class AddonStorage {
     let toItem =
       typeof item === "string"
         ? item
-        : typeof item["serialize"] !== undefined
+        : typeof item["serialize"] !== "undefined"
         ? (item as Serializable).serialize()
         : JSON.stringify(item);
     localStorage.setItem(this.storeKey(key), toItem);

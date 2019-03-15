@@ -1,5 +1,6 @@
 import { KeyStore } from "./keystore/keystore";
 import { resolveNameFromReferUrl } from "../../utils/refer-url";
+export const AuthDefaultUnlockCount = 5;
 
 export type BalanceObj = {
   [asset: string]: {
@@ -20,6 +21,7 @@ export class AuthState {
   showModal = false;
   showUnlock = false;
   showSetPassword = false;
+  unlockCounter = AuthDefaultUnlockCount;
   accountName: string | null = null;
   keyStore: null | KeyStore = null;
   keyStoreCipher: string | null = null;

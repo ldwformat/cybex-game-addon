@@ -1,4 +1,4 @@
-import { AuthState, LoginPanel } from "./auth.models";
+import { AuthState, LoginPanel, AuthDefaultUnlockCount } from "./auth.models";
 import { AuthAction, AuthActions } from "./auth.actions";
 import { Reducer } from "redux";
 
@@ -17,6 +17,11 @@ export const auth: Reducer<AuthState, AuthAction> = (
         ...state,
         showUnlock: false
       };
+    case AuthActions.UnlockFailed:
+      return {
+        ...state,
+        unlockCounter: state.unlockCounter - 1
+      };
     case AuthActions.WalletPassModalDisplay:
       return {
         ...state,
@@ -30,7 +35,8 @@ export const auth: Reducer<AuthState, AuthAction> = (
     case AuthActions.WalletPassSetSuccess:
       return {
         ...state,
-        keyStoreCipher: action.payload
+        unlockCounter: action.payload.count,
+        keyStoreCipher: action.payload.cipher
       };
     case AuthActions.Login:
     case AuthActions.RegImpl:
