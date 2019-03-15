@@ -74,7 +74,7 @@ import {
   LoginPanel
 } from "./index";
 import { referAdd } from "../refer";
-import { selectGame } from "../core.selectors";
+import { selectGame, selectLockupTime } from "../core.selectors";
 import { Dict } from "../../providers/i18n";
 import { AuthStatus } from "./auth.models";
 import { AddonStorage } from "../../utils/storage";
@@ -305,27 +305,34 @@ export const lockTimerEpic: Epic<any, any, any, IEffectDeps> = (
 ) =>
   action$.pipe(
     ofType<any>(AuthActions.LoginSuccess, AuthActions.WalletPassSetSuccess),
-    mergeMap(() =>
-      merge(
-        of(1),
-        action$.pipe(
-          ofType<any>(
-            GatewayActions.LoadDepositInfo,
-            GatewayActions.LoadGatewayInfo,
-            GatewayActions.SelectAsset
+    switchMap(action =>
+      state$.pipe(
+        take(1),
+        mergeMap(state =>
+          merge(
+            of(1),
+            action$.pipe(
+              ofType<any>(
+                GatewayActions.LoadDepositInfo,
+                GatewayActions.LoadGatewayInfo,
+                GatewayActions.SelectAsset
+              )
+            )
+          ).pipe(
+            debounceTime(selectLockupTime(state)),
+            // debounceTime(5 * 60 * 1000),
+            switchMap(_ =>
+              state$.pipe(
+                take(1),
+                filter(state => !!selectKeyStoreCipher(state))
+              )
+            ),
+            takeUntil(
+              action$.pipe(ofType(AuthActions.Logout, AuthActions.Lock))
+            ),
+            map(authLock)
           )
         )
-      ).pipe(
-        debounceTime(15 * 1000),
-        // debounceTime(5 * 60 * 1000),
-        switchMap(_ =>
-          state$.pipe(
-            take(1),
-            filter(state => !!selectKeyStoreCipher(state))
-          )
-        ),
-        takeUntil(action$.pipe(ofType(AuthActions.Logout, AuthActions.Lock))),
-        map(authLock)
       )
     )
   );

@@ -32,6 +32,7 @@ export function withNotiOptions(withNoti: boolean = false): WithNotiOptions {
 
 export class AppState {
   public noties: Noti[] = [];
+  public lockupTime: number = 5 * 60 * 1000;
 }
 
 // RootState

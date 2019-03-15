@@ -22,12 +22,14 @@ export interface CybexAddonConfig {
   game: string;
   lang: string;
   referUrl: string;
+  lockupTime: number;
 }
 export interface CybexAddonConfigOptions {
   apiUrl?: APIURLOptions;
   game?: string;
   lang?: string;
   referUrl?: string;
+  lockupTime?: number;
 }
 
 export const config: CybexAddonConfig = require("../config/config.dev.json");

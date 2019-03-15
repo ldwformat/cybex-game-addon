@@ -9,6 +9,7 @@
     "cybexHttpServer": "https://cybexluck.io"
   },
   "game": "cybexbet",
+  "lockupTime": 300000,
   "lang": "vn",
   "referUrl": "http://localhost:5560"
 }

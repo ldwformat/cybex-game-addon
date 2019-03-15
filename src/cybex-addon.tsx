@@ -173,6 +173,10 @@ export class CybexAddon {
             Number(addonStorage.getItem(AddonStorage.CommonKeys.UnlockCount)) ||
             undefined // 历史账户记录尝试记录
         },
+        app: {
+          lockupTime: this.config.lockupTime,
+          noties: []
+        },
         game: this.config.game,
         referUrl: this.config.referUrl
       });

@@ -50,7 +50,8 @@
         let addon;
         window.addEventListener("load", async function() {
           window.addon = addon = await new CybexAddon.CybexAddon({
-            referUrl: "http://10.18.120.155:5560"
+            referUrl: "http://10.18.120.155:5560",
+            lockupTime: 60 * 1000
           }).init();
           // addon.store.dispatch(
           //   CybexAddon.Actions.authLogin({
