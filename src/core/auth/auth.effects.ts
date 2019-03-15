@@ -361,6 +361,19 @@ export const unlockSuccessEpic: Epic<
       return of(authUnlockFailed());
     })
   );
+export const unlockSuccessNotiEpic: Epic<any, any, any, IEffectDeps> = (
+  action$,
+  state$,
+  { storage }
+) =>
+  action$.pipe(
+    ofType<AuthUnlockSuccessAction>(AuthActions.UnlockSuccess),
+    map(action => corePushNoti(Dict.UnlockSuccess, { variant: "success" })),
+    catchError(err => {
+      console.error(err);
+      return of(authUnlockFailed());
+    })
+  );
 export const unlockFailedEpic: Epic<
   any,
   ActionCorePushNoti | AuthLogoutAction,

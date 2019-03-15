@@ -36,7 +36,8 @@ import {
   lockTimerEpic,
   logoutClearCipherEpic,
   unauthDisplayLoginEpic,
-  unlockFailedEpic
+  unlockFailedEpic,
+  unlockSuccessNotiEpic
 } from "./auth";
 import { MallState, mall, loadCountriesEpic, loadProvincesEpic } from "./mall";
 import {
@@ -77,6 +78,7 @@ const rootEpic = combineEpics(
   unlockEpic,
   unlockSuccessEpic,
   unlockFailedEpic,
+  unlockSuccessNotiEpic,
   regPanelCaptchaEpic,
   addRefFailedEpic,
   authRegEpic,

@@ -22,6 +22,7 @@ export const cnDict = {
   AuthRegisterLong: "注册新账户",
   UnlockFaileWithCounter:
     "密码错误，还可以进行{{count}}次尝试，仍然错误后将登出",
+  UnlockSuccess: "解锁成功",
   AuthLogout: "已登出",
   SetLockTitle: "请设置您的临时解锁手势",
   SetLockAgain: "请再次绘制您的解锁手势",
@@ -108,6 +109,7 @@ export const enDict: Dictionary = {
   AuthRegister: "Register",
   AuthRegisterLong: "Register",
   UnlockFaileWithCounter: "还可以进行{{count}}次尝试，仍然错误后将登出",
+  UnlockSuccess: "解锁成功",
   HasNoAccountYet: "",
   HasAccountAlready: "",
   MyRegisterReferrer: "My Register Inviter",
@@ -184,6 +186,7 @@ export const vnDict: Dictionary = {
   AuthRegister: "Đăng ký tài khoản mới",
   AuthRegisterLong: "Đăng ký tài khoản mới",
   UnlockFaileWithCounter: "还可以进行{{count}}次尝试，仍然错误后将登出",
+  UnlockSuccess: "解锁成功",
   HasNoAccountYet: "",
   HasAccountAlready: "",
   MyRegisterReferrer: "Người mời tôi đăng ký",
