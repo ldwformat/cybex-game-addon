@@ -9,7 +9,8 @@ import {
   gatewayLoadDepositInfoFailed,
   GatewayLoadDepositInfoSuccessAction,
   gatewayLoadDepositInfo,
-  GatewaySelectAssetAction
+  GatewaySelectAssetAction,
+  GatewayLoadDepositInfoFailedAction
 } from "./gateway.actions";
 import {
   switchMap,
@@ -28,6 +29,9 @@ import {
   selectGatewayCoinList,
   selectGatewayCurrentDepositInfo
 } from "./gateway.selectors";
+import { ActionCorePushNoti, corePushNoti } from "../core.actions";
+import { GatewayLoadGatewayInfoFailedAction } from "../../../lib/core/gateway";
+import { Dict } from "../../providers/i18n";
 
 export const loadGatewayInfoEpic: Epic<any, any, CoreState, IEffectDeps> = (
   action$,
@@ -146,4 +150,24 @@ export const loadDepsoitInfoEpic: Epic<any, any, CoreState, IEffectDeps> = (
       console.error(err);
       return of(gatewayLoadGatewayInfoFailed());
     })
+  );
+
+export const gatewayFailedEpic: Epic<
+  any,
+  ActionCorePushNoti,
+  any,
+  IEffectDeps
+> = (action$, state$, { fetcher }) =>
+  action$.pipe(
+    ofType<
+      GatewayLoadDepositInfoFailedAction | GatewayLoadGatewayInfoFailedAction
+    >(
+      GatewayActions.LoadGatewayInfoFailed,
+      GatewayActions.LoadDepositInfoFailed
+    ),
+    map(action =>
+      corePushNoti(Dict.NotiRegWrong_Gateway, {
+        variant: "error"
+      })
+    )
   );
