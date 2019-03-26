@@ -76,6 +76,10 @@ let PassSetterClass = withStyles(styles)(
         PassSetterProps &
         WithTranslation
     > {
+      static defaultProps = {
+        isModalShowing: false
+      };
+
       onSetPass = ({ password }) => {
         return new Promise((resolve, reject) => {
           this.props.setPassword(password);

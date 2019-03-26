@@ -38,7 +38,7 @@ export const cnDict = {
   PatchReferrerHelper:
     "请输入推荐人分享给您的推荐码，推荐人一经填写，将无法修改",
   PatchReferrerAdd: "增加推荐人",
-  MyRefererCode: "您的推荐码",
+  MyRefererCode: "我的推荐码",
   RefererRuleTitle: "赛贝游戏中心：全新邀请机制上线",
   RefererRuleContent_0:
     "各位赛贝游戏中心的用户们~全新邀请机制即日起正式上线，只需通过推荐您的朋友即可获得终身奖励！获得被推荐朋友0.2％的所有投注流水。",

@@ -22,7 +22,11 @@ import {
   Divider,
   Typography,
   Button,
-  SwipeableDrawer
+  SwipeableDrawer,
+  Hidden,
+  Icon,
+  Grid,
+  colors
 } from "@material-ui/core";
 import CopyToClipboard from "react-copy-to-clipboard";
 import { corePushNoti } from "../core/core.actions";
@@ -30,7 +34,10 @@ import {
   FileCopy,
   CloudDownload,
   ExpandLess,
-  ExpandMore
+  ExpandMore,
+  AccountBox,
+  AccountCircle,
+  ShareRounded
 } from "@material-ui/icons";
 import { QRCodeDisplay } from "../components/qrcode";
 import { selectCurrentAccount } from "../core/auth/auth.selectors";
@@ -41,6 +48,12 @@ import { ShareButton } from "../components/share-btn";
 import { ReferModal } from "../components/refer-modal";
 import { Dict } from "../providers/i18n";
 import { withTranslation, WithTranslation } from "react-i18next";
+import { ListPanel, EmptyTip } from "../components/list-panel";
+import { EmptyPrize } from "../icons/empty-prize";
+import { EmptyInvite } from "../icons/empty-invite";
+import { InviteCard } from "../components/invite-card";
+import { Account, EmailOpen, ContentCopy } from "mdi-material-ui";
+import { InviteSummary } from "../components/invite-summary";
 
 type StateProps = {
   accountName: string | null;
@@ -61,6 +74,13 @@ const mapStateToProps: MapStateToProps<StateProps, {}, CoreState> = state => ({
   myGameReferrer: selectMyGameReferrer(state),
   myGameReferral: selectMyGameReferral(state)
 });
+
+const mapDispatchToProps: MapDispatchToProps<
+  { pushNoti: typeof corePushNoti },
+  any
+> = {
+  pushNoti: corePushNoti
+};
 
 const styles: StyleRulesCallback = theme => ({
   root: {
@@ -92,10 +112,25 @@ const styles: StyleRulesCallback = theme => ({
   },
   noShrink: {
     flexShrink: 0
+  },
+  itemV: {
+    padding: "12px 0"
+  },
+  itemH: {
+    padding: "0 12px"
+  },
+  summary: {
+    flexShrink: 0,
+    flexBasis: "auto",
+    height: "255px",
+    flexGrow: 0
   }
 });
 
-export const Refer = connect(mapStateToProps)(
+export const Refer = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(
   withStyles(styles)(
     withTranslation()(
       class Refer extends React.Component<
@@ -107,6 +142,9 @@ export const Refer = connect(mapStateToProps)(
           | "textRight"
           | "accountText"
           | "noShrink"
+          | "itemH"
+          | "itemV"
+          | "summary"
         > &
           StateProps &
           DispatchProps &
@@ -141,7 +179,7 @@ export const Refer = connect(mapStateToProps)(
           }));
         };
 
-        render() {
+        _renderMobile = () => {
           let {
             accountName,
             myGameReferrer,
@@ -151,7 +189,6 @@ export const Refer = connect(mapStateToProps)(
             t
           } = this.props;
           let classes = this.props.classes || {};
-
           return (
             <Paper classes={{ root: classes.root }} square elevation={0}>
               <div style={{ flex: "1 10 auto", overflowY: "auto" }}>
@@ -244,9 +281,7 @@ export const Refer = connect(mapStateToProps)(
                       Refer.Panels.GameRegisterRef
                     )}
                   >
-                    <ListItemText
-                      primary={t(Dict.MyGameReferral)}
-                    />
+                    <ListItemText primary={t(Dict.MyGameReferral)} />
                     {(myGameReferral &&
                       myGameReferral.referrals.length.toString()) ||
                       0}
@@ -280,6 +315,232 @@ export const Refer = connect(mapStateToProps)(
                 </List>
               </div>
               <ShareButton />
+            </Paper>
+          );
+        };
+
+        render() {
+          let {
+            accountName,
+            pushNoti,
+            myGameReferrer,
+            myGameReferral,
+            myRegisterReferrer,
+            myRegisterReferral,
+            t
+          } = this.props;
+          let classes = this.props.classes || {};
+
+          return (
+            <>
+              <Hidden smUp>
+                {/* for Mobile */
+                this._renderMobile()}
+              </Hidden>
+              <Hidden xsDown>
+                <Grid
+                  item
+                  xs
+                  container
+                  direction="column"
+                  alignItems="center"
+                  wrap="nowrap"
+                  className={classes.itemV}
+                  style={{ height: "100%", overflow: "auto" }}
+                >
+                  <Grid
+                    item
+                    xs
+                    container
+                    className={classes.itemV}
+                    classes={{ container: classes.summary }}
+                  >
+                    <Grid item className={classes.itemH} container xs={6}>
+                      <InviteSummary title="Demo" amount="0000" />
+                    </Grid>
+                    <Grid item className={classes.itemH} container xs={6}>
+                      <ListPanel
+                        listData={
+                          (myGameReferral && myGameReferral.referrals) || []
+                        }
+                        emptyComponent={
+                          <EmptyTip
+                            IconComponent={EmptyPrize}
+                            title={t(Dict.MyGameReferral)}
+                          />
+                        }
+                        colConfig={[
+                          {
+                            name: "referral",
+                            header: Dict.MyGameReferral,
+                            align: "left"
+                          },
+                          {
+                            name: "ts",
+                            header: "Time",
+                            cell: ts => formatTime(ts),
+                            align: "right"
+                          }
+                        ]}
+                        title={t(Dict.MyGameReferral)}
+                      />
+                    </Grid>
+                  </Grid>
+                  <Grid
+                    item
+                    container
+                    className={classes.itemV}
+                    style={{ flexShrink: 0 }}
+                  >
+                    <Grid item className={classes.itemH} xs={4}>
+                      <InviteCard
+                        title={t(Dict.MyRefererCode)}
+                        color={colors.purple[300]}
+                        IconComponent={EmailOpen}
+                      >
+                        <Typography
+                          variant="h4"
+                          style={{
+                            overflowWrap: "break-word",
+                            maxWidth: "100%"
+                          }}
+                          align="center"
+                        >
+                          {accountName ? accountName : "-"}
+                        </Typography>
+                        {accountName && (
+                          <CopyToClipboard
+                            text={accountName}
+                            onCopy={() =>
+                              pushNoti(t(Dict.ShareLinkCopied), {
+                                variant: "success"
+                              })
+                            }
+                          >
+                            <PrimaryButton
+                              size="large"
+                              style={{
+                                fontSize: "14px",
+                                marginLeft: "0.2em"
+                              }}
+                            >
+                              <ContentCopy
+                                style={{
+                                  marginRight: "0.3em",
+                                  fontSize: "18px"
+                                }}
+                              />
+                              复制
+                            </PrimaryButton>
+                          </CopyToClipboard>
+                        )}
+                      </InviteCard>
+                    </Grid>
+                    <Grid item className={classes.itemH} xs={4}>
+                      <InviteCard
+                        title={t(Dict.MyRegisterReferrer)}
+                        color={colors.blue[300]}
+                        IconComponent={Account}
+                      >
+                        <Typography variant="h4" align="center">
+                          {(myRegisterReferrer &&
+                            myRegisterReferrer.referrer) ||
+                            "-"}
+                        </Typography>
+                      </InviteCard>
+                    </Grid>
+                    <Grid item className={classes.itemH} xs={4}>
+                      <InviteCard
+                        title={t(Dict.MyGameReferrer)}
+                        color={colors.yellow[700]}
+                        IconComponent={Account}
+                      >
+                        <Typography variant="h4" align="center">
+                          {(myGameReferrer && myGameReferrer.referrer) || (
+                            <PrimaryButton
+                              size="large"
+                              style={{ fontSize: "14px", width: "16em" }}
+                              onClick={this.handleExpand.bind(
+                                this,
+                                Refer.Panels.ReferModal
+                              )}
+                            >
+                              {t(Dict.PatchReferrer)}
+                            </PrimaryButton>
+                          )}
+                        </Typography>
+                      </InviteCard>
+                    </Grid>
+                  </Grid>
+                  <Grid
+                    item
+                    xs
+                    container
+                    className={classes.itemV}
+                    //  spacing={24}
+                    style={{ minHeight: "231px" }}
+                  >
+                    <Grid item className={classes.itemH} container xs={6}>
+                      <ListPanel
+                        listData={
+                          (myRegisterReferral &&
+                            myRegisterReferral.referrals) ||
+                          []
+                        }
+                        emptyComponent={
+                          <EmptyTip
+                            IconComponent={EmptyInvite}
+                            title={t(Dict.MyRegisterReferral)}
+                          />
+                        }
+                        colConfig={[
+                          {
+                            name: "referral",
+                            header: Dict.MyRegisterReferral,
+                            align: "left"
+                          },
+                          {
+                            name: "ts",
+                            header: "Time",
+                            cell: ts => formatTime(ts),
+                            cellStyle: { color: "red" },
+                            align: "right"
+                          }
+                        ]}
+                        title={t(Dict.MyRegisterReferral)}
+                      />
+                    </Grid>
+                    <Grid item className={classes.itemH} container xs={6}>
+                      <ListPanel
+                        listData={
+                          (myGameReferral && myGameReferral.referrals) || []
+                        }
+                        emptyComponent={
+                          <EmptyTip
+                            IconComponent={EmptyInvite}
+                            title={t(Dict.MyGameReferral)}
+                          />
+                        }
+                        colConfig={[
+                          {
+                            name: "referral",
+                            header: Dict.MyGameReferral,
+                            align: "left"
+                          },
+                          {
+                            name: "ts",
+                            header: "Time",
+                            cell: ts => formatTime(ts),
+                            align: "right"
+                          }
+                        ]}
+                        title={t(Dict.MyGameReferral)}
+                      />
+                    </Grid>
+                  </Grid>
+                </Grid>
+              </Hidden>
+
               <ReferModal
                 isModalShowing={this.state[Refer.Panels.ReferModal]}
                 onModalClose={this.handleExpand.bind(
@@ -287,7 +548,7 @@ export const Refer = connect(mapStateToProps)(
                   Refer.Panels.ReferModal
                 )}
               />
-            </Paper>
+            </>
           );
         }
       }
