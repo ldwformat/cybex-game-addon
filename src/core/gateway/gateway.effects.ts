@@ -10,7 +10,8 @@ import {
   GatewayLoadDepositInfoSuccessAction,
   gatewayLoadDepositInfo,
   GatewaySelectAssetAction,
-  GatewayLoadDepositInfoFailedAction
+  GatewayLoadDepositInfoFailedAction,
+  GatewayLoadGatewayInfoFailedAction
 } from "./gateway.actions";
 import {
   switchMap,
@@ -30,7 +31,6 @@ import {
   selectGatewayCurrentDepositInfo
 } from "./gateway.selectors";
 import { ActionCorePushNoti, corePushNoti } from "../core.actions";
-import { GatewayLoadGatewayInfoFailedAction } from "../../../lib/core/gateway";
 import { Dict } from "../../providers/i18n";
 
 export const loadGatewayInfoEpic: Epic<any, any, CoreState, IEffectDeps> = (

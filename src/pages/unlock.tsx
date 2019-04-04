@@ -75,7 +75,7 @@ let UnlockClass = withStyles(styles)(
     > {
       onUnlock = ({ password }) => {
         return new Promise((resolve, reject) => {
-          this.props.unlockImpl();
+          this.props.unlockImpl(password);
         });
       };
 
