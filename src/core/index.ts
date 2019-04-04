@@ -14,7 +14,8 @@ import {
   BackendFetcher,
   ReferFetcher,
   GatewayFetcher,
-  FaucetFetcher
+  FaucetFetcher,
+  PriceFetcher
 } from "../utils/fetcher";
 import {
   AuthState,
@@ -46,7 +47,8 @@ import {
   loadReferInfoEpic,
   addReferEpic,
   addReferAfterLoginEpic,
-  addRefFailedEpic
+  addRefFailedEpic,
+  loadReferRebateEpic
 } from "./refer";
 import {
   GatewayState,
@@ -59,7 +61,7 @@ import { IEffectDeps } from "./modes";
 import { CybexAssistant } from "../utils/cybex-assistant";
 import { WsConnection } from "../utils/connect";
 import { EventEmitter } from "events";
-import { notifierEpic } from "./core.effects";
+import { notifierEpic, loadPriceListEpic } from "./core.effects";
 import { rootReducer } from "./core.reducers";
 import { CoreState } from "./core.models";
 import { CybexAddonConfig } from "../config";
@@ -89,8 +91,10 @@ const rootEpic = combineEpics(
   loadCountriesEpic,
   loadProvincesEpic,
   loadReferInfoEpic,
+  loadReferRebateEpic,
   loadDepsoitInfoEpic,
   loadDpstAfterSelAssetEpic,
+  loadPriceListEpic,
   authUpdateBalanceEpic,
   updateBalanceEpic,
   loadGatewayInfoEpic,
@@ -117,6 +121,7 @@ export const configureStore = (config: CybexAddonConfig) => async (
   const toolset: IEffectDeps = {
     fetcher: new ChainFetcher(cybexWs, cybexHttpServer),
     faucet: new FaucetFetcher(faucet),
+    priceFetcher: new PriceFetcher(),
     mallFetcher: new MallFetcher(mallBackend),
     gatewayFetcher: new GatewayFetcher(gateway),
     backendFetcher: new BackendFetcher(backend),

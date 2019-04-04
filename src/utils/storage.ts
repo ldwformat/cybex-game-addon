@@ -4,7 +4,8 @@ export class AddonStorage {
   static DefaultPrefix = "$$CybexAddon";
   static CommonKeys = {
     KeyStore: "#KeyStore",
-    UnlockCount: "#UnlockCount"
+    UnlockCount: "#UnlockCount",
+    PriceList: "#PriceList"
   };
 
   constructor(public prefix = AddonStorage.DefaultPrefix) {}

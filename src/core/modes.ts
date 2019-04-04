@@ -4,7 +4,8 @@ import {
   BackendFetcher,
   GatewayFetcher,
   ReferFetcher,
-  FaucetFetcher
+  FaucetFetcher,
+  PriceFetcher
 } from "../utils/fetcher";
 import { CybexAssistant } from "../utils/cybex-assistant";
 import { EventEmitter } from "events";
@@ -12,6 +13,7 @@ import { AddonStorage } from "../utils/storage";
 
 export interface IEffectDeps {
   backendFetcher: BackendFetcher;
+  priceFetcher: PriceFetcher;
   chainAssisant: CybexAssistant;
   fetcher: ChainFetcher;
   faucet: FaucetFetcher;

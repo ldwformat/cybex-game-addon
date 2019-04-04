@@ -211,3 +211,18 @@ describe("Test class GatewayFetcher", () => {
     done();
   });
 });
+
+describe("测试Rebate接口", () => {
+  let fetcher: ReferFetcher;
+  let accountName = "g5188";
+  let action = "bet";
+
+  beforeAll(() => (fetcher = new ReferFetcher(config.apiUrl.referBackend)));
+
+  test("取得Bet接口明细", async done => {
+    let rebate = await fetcher.getRebateDetails(accountName, action);
+    console.log(rebate);
+    expect(rebate.length).not.toBeNull();
+    done();
+  }, 5000);
+});

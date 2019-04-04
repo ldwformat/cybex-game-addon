@@ -8,7 +8,11 @@ import {
   selectMyRegisterReferral,
   selectMyGameReferrer,
   Referrer,
-  TypesReferral
+  TypesReferral,
+  selectTotalRebatesByAsset,
+  selectReferRebates,
+  ReferSingleRebateWithValue,
+  SummaryAsset
 } from "../core/refer";
 import {
   withStyles,
@@ -54,13 +58,16 @@ import { EmptyInvite } from "../icons/empty-invite";
 import { InviteCard } from "../components/invite-card";
 import { Account, EmailOpen, ContentCopy } from "mdi-material-ui";
 import { InviteSummary } from "../components/invite-summary";
+import { normalizeAssetName } from "../utils/asset-name";
 
 type StateProps = {
   accountName: string | null;
+  totalRebate: number;
   myRegisterReferrer: Referrer | undefined;
   myRegisterReferral: TypesReferral | undefined;
   myGameReferrer: Referrer | undefined;
   myGameReferral: TypesReferral | undefined;
+  rebates: ReferSingleRebateWithValue[];
 };
 type DispatchProps = {
   selectAsset: typeof gatewaySelectAsset;
@@ -69,10 +76,12 @@ type DispatchProps = {
 
 const mapStateToProps: MapStateToProps<StateProps, {}, CoreState> = state => ({
   accountName: selectCurrentAccount(state),
+  totalRebate: selectTotalRebatesByAsset(SummaryAsset.USDT)(state),
   myRegisterReferrer: selectMyRegisterReferrer(state),
   myRegisterReferral: selectMyRegisterReferral(state),
   myGameReferrer: selectMyGameReferrer(state),
-  myGameReferral: selectMyGameReferral(state)
+  myGameReferral: selectMyGameReferral(state),
+  rebates: selectReferRebates(state)
 });
 
 const mapDispatchToProps: MapDispatchToProps<
@@ -186,13 +195,20 @@ export const Refer = connect(
             myGameReferral,
             myRegisterReferrer,
             myRegisterReferral,
+            totalRebate,
             t
           } = this.props;
           let classes = this.props.classes || {};
           return (
             <Paper classes={{ root: classes.root }} square elevation={0}>
               <div style={{ flex: "1 10 auto", overflowY: "auto" }}>
-                <ReferCode code={accountName as string} />
+                {/* <ReferCode code={accountName as string} /> */}
+                <div
+                  className="wrapper"
+                  style={{ margin: "16px", width: "calc(100% - 32px)" }}
+                >
+                  <InviteSummary title="Demo" amount={totalRebate} />
+                </div>
                 <List>
                   <ListItem divider>
                     <ListItemText
@@ -322,11 +338,13 @@ export const Refer = connect(
         render() {
           let {
             accountName,
+            totalRebate,
             pushNoti,
             myGameReferrer,
             myGameReferral,
             myRegisterReferrer,
             myRegisterReferral,
+            rebates,
             t
           } = this.props;
           let classes = this.props.classes || {};
@@ -356,33 +374,37 @@ export const Refer = connect(
                     classes={{ container: classes.summary }}
                   >
                     <Grid item className={classes.itemH} container xs={6}>
-                      <InviteSummary title="Demo" amount="0000" />
+                      <InviteSummary title="Demo" amount={totalRebate} />
                     </Grid>
                     <Grid item className={classes.itemH} container xs={6}>
                       <ListPanel
-                        listData={
-                          (myGameReferral && myGameReferral.referrals) || []
-                        }
+                        listData={rebates}
                         emptyComponent={
                           <EmptyTip
                             IconComponent={EmptyPrize}
-                            title={t(Dict.MyGameReferral)}
+                            title={t(Dict.EmptyRebate)}
                           />
                         }
                         colConfig={[
                           {
-                            name: "referral",
-                            header: Dict.MyGameReferral,
-                            align: "left"
+                            name: "asset",
+                            header: Dict.AssetType,
+                            align: "left",
+                            cell: (asset: Cybex.Asset) =>
+                              normalizeAssetName(asset.symbol)
                           },
                           {
-                            name: "ts",
-                            header: "Time",
-                            cell: ts => formatTime(ts),
+                            name: "transferredValue",
+                            header: Dict.Cleard,
+                            align: "right"
+                          },
+                          {
+                            name: "should_transferValue",
+                            header: Dict.ToBeCleard,
                             align: "right"
                           }
                         ]}
-                        title={t(Dict.MyGameReferral)}
+                        title={t(Dict.RebateDetail)}
                       />
                     </Grid>
                   </Grid>
@@ -430,7 +452,7 @@ export const Refer = connect(
                                   fontSize: "18px"
                                 }}
                               />
-                              复制
+                              {t(Dict.Copy)}
                             </PrimaryButton>
                           </CopyToClipboard>
                         )}
@@ -490,7 +512,7 @@ export const Refer = connect(
                         emptyComponent={
                           <EmptyTip
                             IconComponent={EmptyInvite}
-                            title={t(Dict.MyRegisterReferral)}
+                            title={t(Dict.EmptyRegisterReferral)}
                           />
                         }
                         colConfig={[
@@ -501,9 +523,8 @@ export const Refer = connect(
                           },
                           {
                             name: "ts",
-                            header: "Time",
+                            header: Dict.InviteTime,
                             cell: ts => formatTime(ts),
-                            cellStyle: { color: "red" },
                             align: "right"
                           }
                         ]}
@@ -518,7 +539,7 @@ export const Refer = connect(
                         emptyComponent={
                           <EmptyTip
                             IconComponent={EmptyInvite}
-                            title={t(Dict.MyGameReferral)}
+                            title={t(Dict.EmptyGameReferral)}
                           />
                         }
                         colConfig={[
@@ -529,7 +550,7 @@ export const Refer = connect(
                           },
                           {
                             name: "ts",
-                            header: "Time",
+                            header: Dict.InviteTime,
                             cell: ts => formatTime(ts),
                             align: "right"
                           }

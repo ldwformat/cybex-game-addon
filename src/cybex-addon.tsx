@@ -60,9 +60,12 @@ export function getPageContext() {
 }
 
 export function getTheme() {
+  console.debug("New MUI Theme");
   return createMuiTheme({
     typography: {
-      useNextVariants: true
+      useNextVariants: true,
+      fontSize: 11.2
+      // htmlFontSize: 32
     },
     palette: {
       primary: {
@@ -125,19 +128,7 @@ export class UIHelper {
 export class CybexAddon {
   static EVENT_ACTION = EVENT_ACTION;
   i18n = i18n;
-  theme = createMuiTheme({
-    typography: {
-      useNextVariants: true
-    },
-    palette: {
-      primary: {
-        main: "rgb(255,98,165)"
-      },
-      secondary: {
-        main: "rgb(255,155,85)"
-      }
-    }
-  });
+  theme = getTheme();
   store: Store<CoreState> | null = null;
   notifier: EventEmitter | null = null;
   toolset: IEffectDeps | null = null;
@@ -172,10 +163,6 @@ export class CybexAddon {
           unlockCounter:
             Number(addonStorage.getItem(AddonStorage.CommonKeys.UnlockCount)) ||
             undefined // 历史账户记录尝试记录
-        },
-        app: {
-          lockupTime: this.config.lockupTime,
-          noties: []
         },
         game: this.config.game,
         referUrl: this.config.referUrl

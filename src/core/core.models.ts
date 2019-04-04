@@ -3,6 +3,7 @@ import { MallState } from "./mall";
 import { ReferState } from "./refer";
 import { GatewayState } from "./gateway";
 import { OptionsObject } from "notistack";
+import { AssetPrice } from "../utils/fetcher";
 
 export type NotiOptions = OptionsObject & {
   i18n?: boolean;
@@ -31,6 +32,7 @@ export function withNotiOptions(withNoti: boolean = false): WithNotiOptions {
 }
 
 export class AppState {
+  public priceList: AssetPrice[] = [];
   public noties: Noti[] = [];
   public lockupTime: number = 5 * 60 * 1000;
 }

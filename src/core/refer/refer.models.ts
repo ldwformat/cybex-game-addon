@@ -6,6 +6,19 @@ export interface ReferResult {
   referrals: TypesReferral[];
 }
 
+export interface ReferSingleRebate {
+  transferred: number;
+  should_transfer: number;
+  asset_id: number;
+}
+
+export interface ReferSingleRebateWithValue extends ReferSingleRebate {
+  transferredValue: number;
+  should_transferValue: number;
+  asset_id: number;
+  asset: Cybex.Asset;
+}
+
 export interface TypesReferral {
   action: string;
   referrals: Referral[];
@@ -31,4 +44,8 @@ export class ReferState {
   isLoading = false;
   referrers: Referrer[] = [];
   referrals: TypesReferral[] = [];
+  rebates: ReferSingleRebateWithValue[] = [];
+}
+export enum SummaryAsset {
+  USDT = "USDT"
 }

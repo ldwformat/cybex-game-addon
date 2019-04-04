@@ -11,6 +11,11 @@ export const app: Reducer<AppState, CoreAction> = (
   action
 ) => {
   switch (action.type) {
+    case CoreActions.LoadPriceListSuccess:
+      return {
+        ...state,
+        priceList: action.payload
+      };
     case CoreActions.PushNoti:
       return {
         ...state,

@@ -17,7 +17,7 @@ import {
   set_refer
 } from "../cybex/serializer/src/operations";
 import { IRegistInfo, IRegistRes, FaucetCaptcha } from "../core/auth";
-import { ReferResult } from "../core/refer";
+import { ReferResult, ReferSingleRebate } from "../core/refer";
 
 const simpleCache = {};
 const getKey = (...args) => JSON.stringify(args);
@@ -388,8 +388,14 @@ export class ReferFetcher {
   };
 
   getRefer = async (account: string) => {
-    return this.fetch<ReferResult>(`refer/?account=${account}&&action=all`);
+    return this.fetch<ReferResult>(`refer/?account=${account}&action=all`);
   };
+
+  async getRebateDetails(account: string, action: string) {
+    return this.fetch<ReferSingleRebate[]>(
+      `rebate/?account=g5188&action=${action}`
+    );
+  }
 }
 
 //// Gateway
@@ -489,5 +495,26 @@ export class FaucetFetcher {
   async postRegistInfo(regInfo: IRegistInfo) {
     let body = regInfo;
     return this.fetch<IRegistRes>("register", body);
+  }
+}
+
+//
+export type AssetPrice = {
+  name: string;
+  value: number;
+  time: number;
+};
+
+export class PriceFetcher {
+  constructor(public priceUrl = "https://app.cybex.io/price") {}
+  async fetchPrices(): Promise<AssetPrice[]> {
+    return fetch(this.priceUrl)
+      .then(res => res.json())
+      .then(res => {
+        if (res.code !== 0) {
+          throw new Error("400");
+        }
+        return res.prices;
+      });
   }
 }

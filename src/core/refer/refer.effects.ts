@@ -8,7 +8,9 @@ import {
   referAddSuccess,
   referAddFailed,
   ReferAddSuccessAction,
-  ReferAddFailedAction
+  ReferAddFailedAction,
+  referLoadRebateSuccess,
+  ReferLoadRebateAction
 } from "./refer.actions";
 import {
   switchMap,
@@ -30,6 +32,9 @@ import {
 } from "../auth";
 import { ActionCorePushNoti, corePushNoti } from "../core.actions";
 import { Dict } from "../../providers/i18n";
+import { selectGame } from "../core.selectors";
+import { ReferSingleRebateWithValue } from "./refer.models";
+import { calcValue } from "../../utils/calc";
 
 export const loadReferInfoEpic: Epic<any, any, CoreState, IEffectDeps> = (
   action$,
@@ -55,6 +60,64 @@ export const loadReferInfoEpic: Epic<any, any, CoreState, IEffectDeps> = (
           return from(referFetcher.getRefer(authSet.account)).pipe(
             map(referLoadReferInfoSuccess)
           );
+        })
+      )
+    ),
+    catchError(err => {
+      console.error(err);
+      return of(referLoadReferInfoFailed());
+    })
+  );
+
+export const loadReferRebateEpic: Epic<any, any, CoreState, IEffectDeps> = (
+  action$,
+  state$,
+  { referFetcher, fetcher }
+) =>
+  action$.pipe(
+    ofType<
+      AuthLoginSuccessAction | ReferLoadRebateAction | ReferAddSuccessAction
+    >(
+      AuthActions.LoginSuccess,
+      ReferActions.LoadRebate,
+      ReferActions.AddSuccess
+    ),
+    switchMap(() =>
+      state$.pipe(
+        take(1),
+        switchMap(state => {
+          let authSet = selectAuthSet(state);
+          let game = selectGame(state);
+          if (!authSet) {
+            return of(authUnauthed());
+          }
+          return from(
+            referFetcher.getRebateDetails(authSet.account, game).then(details =>
+              Promise.all(
+                details.map(detail =>
+                  fetcher.fetchAsset(detail.asset_id).then(
+                    asset =>
+                      ({
+                        ...detail,
+                        should_transferValue: calcValue(
+                          detail.should_transfer,
+                          asset.precision
+                        ),
+                        transferredValue: calcValue(
+                          detail.transferred,
+                          asset.precision
+                        ),
+                        asset
+                      } as ReferSingleRebateWithValue)
+                  )
+                )
+              )
+            )
+          ).pipe(map(referLoadRebateSuccess));
+        }),
+        catchError(err => {
+          console.error(err);
+          return of(referLoadReferInfoFailed());
         })
       )
     ),

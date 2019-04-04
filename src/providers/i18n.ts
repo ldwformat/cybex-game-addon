@@ -76,7 +76,17 @@ export const cnDict = {
   ErrorRequired_captcha: "请填写验证码",
   ErrorRequired_referrer: "请填写推荐码",
   ErrorMatch: "密码确认不匹配",
-  ErrorAccountExists: "该账户名已被占用，请尝试其他账户名"
+  ErrorAccountExists: "该账户名已被占用，请尝试其他账户名",
+  TotalRebates: "返现总额(USDT)",
+  RebateDetail: "奖励发放",
+  EmptyRebate: "暂无奖励",
+  EmptyRegisterReferral: "暂无注册推荐",
+  EmptyGameReferral: "暂无游戏推荐",
+  AssetType: "资产类型",
+  Cleard: "已发放",
+  ToBeCleard: "待发放",
+  Copy: "复制",
+  InviteTime: "推荐时间"
 };
 type Dictionary = typeof cnDict;
 
@@ -163,7 +173,17 @@ export const enDict: Dictionary = {
   ErrorRequired_referrer: "Enter invitation code",
   ErrorMatch: "Inconsistent passwords",
   ErrorAccountExists:
-    "The account name has been taken. Please try another account name"
+    "The account name has been taken. Please try another account name",
+  TotalRebates: "返现总额(USDT)",
+  RebateDetail: "奖励发放",
+  EmptyRebate: "暂无奖励",
+  EmptyRegisterReferral: "暂无注册推荐",
+  EmptyGameReferral: "暂无游戏推荐",
+  AssetType: "资产类型",
+  Cleard: "已发放",
+  Copy: "复制",
+  ToBeCleard: "待发放",
+  InviteTime: "推荐时间"
 };
 export const vnDict: Dictionary = {
   LoginSubmit: "Đăng nhập",
@@ -243,7 +263,17 @@ export const vnDict: Dictionary = {
   ErrorRequired_referrer: "Vui lòng điền mã giới thiệu",
   ErrorMatch: "Mật khẩu không đồng nhất",
   ErrorAccountExists:
-    "Tên tài khoản đã được sử dụng, vui lòng chọn tên tài khoản khác"
+    "Tên tài khoản đã được sử dụng, vui lòng chọn tên tài khoản khác",
+  TotalRebates: "返现总额(USDT)",
+  RebateDetail: "奖励发放",
+  EmptyRebate: "暂无奖励",
+  EmptyRegisterReferral: "暂无注册推荐",
+  EmptyGameReferral: "暂无游戏推荐",
+  AssetType: "资产类型",
+  Cleard: "已发放",
+  Copy: "复制",
+  ToBeCleard: "待发放",
+  InviteTime: "推荐时间"
 };
 
 // have a look at the Quick start guide

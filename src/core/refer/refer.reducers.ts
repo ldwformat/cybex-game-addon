@@ -20,6 +20,8 @@ export const refer: Reducer<ReferState, ReferAction> = (
       };
     case ReferActions.LoadReferInfoSuccess:
       return { ...state, ...action.payload };
+    case ReferActions.LoadRebateSuccess:
+      return { ...state, rebates: action.payload };
     default:
       return state;
   }

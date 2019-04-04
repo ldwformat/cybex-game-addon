@@ -65,10 +65,28 @@ type ListPanelProps = {
 
 const listPanelStyle: StyleRulesCallback = theme => ({
   card: {},
+  cardHeader: {
+    padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px`,
+    boxSizing: "border-box",
+    height: "48px"
+  },
   th: {
     position: "sticky",
     background: theme.palette.grey[100],
+    color: theme.palette.text.primary,
+    fontSize: "14px",
     top: 0
+  },
+  trh: {
+    height: "40px"
+  },
+  tr: {
+    height: "48px"
+  },
+  td: {
+    fontSize: "14px",
+    border: 0,
+    boxShadow: "inset 0 -1px 0 0 #f8f8f8"
   }
 });
 
@@ -81,6 +99,7 @@ export const ListPanel = withStyles(listPanelStyle)(
     emptyComponent
   }: ListPanelProps & StyledComponentProps) => {
     const { t, i18n } = useTranslation();
+    classes = classes || {};
     return (
       <Grid
         component={Card}
@@ -90,15 +109,20 @@ export const ListPanel = withStyles(listPanelStyle)(
         xs
         style={{ height: "100%", ...RoundedCardWithShadow }}
       >
-        <CardHeader title={title} titleTypographyProps={{ variant: "h6" }} />
+        <CardHeader
+          classes={{ root: classes.cardHeader }}
+          title={title}
+          titleTypographyProps={{ variant: "h6" }}
+        />
         <Divider light />
         <Grid item xs container style={{ overflow: "auto" }}>
           {listData.length ? (
             <Table>
               <TableHead>
-                <TableRow>
+                <TableRow classes={{ root: classes.trh }}>
                   {colConfig.map(col => (
                     <TableCell
+                      padding="dense"
                       classes={{ root: classes && classes.th }}
                       key={col.name}
                       align={col.align}
@@ -110,9 +134,11 @@ export const ListPanel = withStyles(listPanelStyle)(
               </TableHead>
               <TableBody>
                 {listData.map((item, i) => (
-                  <TableRow key={i}>
+                  <TableRow key={i} classes={{ root: (classes as any).tr }}>
                     {colConfig.map(col => (
                       <TableCell
+                        padding="dense"
+                        classes={{ root: (classes as any).td }}
                         style={col.cellStyle}
                         align={col.align}
                         key={col.name}

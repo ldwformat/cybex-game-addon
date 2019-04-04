@@ -10,6 +10,7 @@ import {
   StyleRulesCallback
 } from "@material-ui/core";
 import { RoundedCardWithShadow } from "./styles";
+import { Dict } from "../providers/i18n";
 type InviteSummaryProps = {
   amount: string | number;
   title: string;
@@ -37,6 +38,7 @@ export const InviteSummary = withStyles(styles)(
     classes
   }: InviteSummaryProps & StyledComponentProps<"container" | "font">) => {
     classes = classes || {};
+    let { t, i18n } = useTranslation();
     return (
       <Grid
         classes={{ container: classes.container }}
@@ -49,14 +51,15 @@ export const InviteSummary = withStyles(styles)(
         alignItems="center"
       >
         <Typography classes={{ root: classes.font }} component="p" variant="h6">
-          {title}
+          {t(Dict.TotalRebates)}
         </Typography>
         <Typography
           classes={{ root: classes.font }}
           component="h1"
           variant="h1"
+          style={{ fontWeight: 500 }}
         >
-          {amount}
+          {Number(amount).toFixed(2)}
         </Typography>
       </Grid>
     );
