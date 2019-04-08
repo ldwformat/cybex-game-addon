@@ -1,6 +1,6 @@
 import * as React from "react";
 import { QRCode } from "./../utils/qrcode";
-import { Button, Grid, Typography } from "@material-ui/core";
+import { Button, Grid, Typography, Dialog, DialogContent } from "@material-ui/core";
 import { CloudDownload } from "@material-ui/icons";
 import { Dict } from "../providers/i18n";
 import { withTranslation, WithTranslation } from "react-i18next";
@@ -170,4 +170,18 @@ export const PosterDisplay = withTranslation()(
       );
     }
   }
+);
+
+export const Poster = ({open, onClose, posterLink, filename}) => (
+  <Dialog
+    open={open}
+    onClose={onClose}
+  >
+    <DialogContent style={{ padding: "2em", paddingBottom: "0.5em" }}>
+      <PosterDisplay
+        text={posterLink}
+        filename={filename}
+      />
+    </DialogContent>
+  </Dialog>
 );

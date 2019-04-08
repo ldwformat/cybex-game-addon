@@ -1,15 +1,17 @@
 import { Selector, createSelector } from "reselect";
 import { CoreState } from "..";
 import { ReferState } from "./refer.models";
-import { selectAuthSet } from "../auth/auth.selectors";
+import { selectAuthSet, selectCurrentAccount } from "../auth/auth.selectors";
 import {
   selectGame,
   selectPriceList,
-  selectPriceListByAsset
+  selectPriceListByAsset,
+  selectReferUrl
 } from "../core.selectors";
 import { NAME_OF_ACTION_REGISTER } from "../auth";
 import BN from "bignumber.js";
 import { normalizeAssetName } from "../../utils/asset-name";
+import { getReferUrl } from "../../utils/refer-url";
 
 export const selectRefer: Selector<CoreState, ReferState> = state =>
   state.refer;
@@ -64,4 +66,11 @@ export const selectMyGameReferral = createSelector(
   selectRefer,
   selectGame,
   (refer, game) => refer.referrals.find(referrer => referrer.action === game)
+);
+
+export const selectAccountReferUrl = createSelector(
+  selectCurrentAccount,
+  selectReferUrl,
+  (accountName, urlPrefix) =>
+    accountName ? getReferUrl(urlPrefix, accountName).trim() : null
 );

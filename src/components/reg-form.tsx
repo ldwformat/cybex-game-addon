@@ -21,8 +21,9 @@ import {
 } from "../core/auth";
 import { CoreState } from "../core";
 import { Form, Field } from "react-final-form";
-import { withTranslation } from "react-i18next";
+import { withTranslation, useTranslation } from "react-i18next";
 import { Dict } from "../providers/i18n";
+import { unstable_useMediaQuery } from "@material-ui/core/useMediaQuery";
 
 export type RegFormData = {
   accountName: string | null;
@@ -100,181 +101,151 @@ const mapDispatch: MapDispatchToProps<LoginPropsDispatch, {}> = {
 };
 
 // Register Form
-export const RegForm = withTranslation()(
-  withToolset(
-    connect(
-      mapStateToProps,
-      mapDispatch
-    )(
-      class RegForm extends React.Component<
-        any,
-        { showPassword: boolean; showConfirm: boolean }
-      > {
-        form: HTMLFormElement | null = null;
-        state = {
-          showPassword: false,
-          showConfirm: false
-        };
-
-        render() {
-          const {
-            onSubmit,
-            invalid,
-            getCaptcha,
-            captcha,
-            defaultReferer,
-            t
-          } = this.props;
-          const styleOfContent = {
-            width: "90%",
-            minWidth: "60vw",
-            maxWidth: "90vw",
-            padding: 0,
-            margin: "10px auto"
-          };
-          return (
-            <Form
-              onSubmit={onSubmit}
-              validate={validate}
-              initialValues={
-                {
-                  accountName: "",
-                  password: "",
-                  confirm: "",
-                  referer: defaultReferer,
-                  captcha: ""
-                } as RegFormData
-              }
-              render={({ handleSubmit, submitting, pristine, values }) => (
-                <form ref={form => (this.form = form)} onSubmit={handleSubmit}>
-                  <DialogContent style={styleOfContent}>
-                    <div style={{ marginBottom: "0.5em" }}>
-                      <Field
-                        autoFocus
-                        style={{ width: "100%" }}
-                        name="accountName"
-                        component={renderTextField as any}
-                        validate={usernameAvailable(this.props.toolset)}
-                        autoFocusd
-                        label={t(Dict.AuthAccountName)}
-                        helperText={t(Dict.AuthRegAccountNameHelper)}
-                      />
-                    </div>
-                    <div style={{ marginBottom: "0.5em" }}>
-                      <Field
-                        style={{ width: "100%" }}
-                        component={renderTextField as any}
-                        name="password"
-                        type={this.state.showPassword ? "text" : "password"}
-                        label={t(Dict.AuthPassword)}
-                        helperText={t(Dict.AuthRegPasswordHelper)}
-                        InputProps={{
-                          endAdornment: (
-                            <InputAdornment position="end">
-                              <IconButton
-                                tabIndex={-1}
-                                onClick={() =>
-                                  this.setState(prev => ({
-                                    showPassword: !prev.showPassword
-                                  }))
-                                }
-                              >
-                                {this.state.showPassword ? (
-                                  <VisibilityOff />
-                                ) : (
-                                  <Visibility />
-                                )}
-                              </IconButton>
-                            </InputAdornment>
-                          )
-                        }}
-                      />
-                    </div>
-                    <div style={{ marginBottom: "0.5em" }}>
-                      <Field
-                        style={{ width: "100%" }}
-                        component={renderTextField as any}
-                        name="confirm"
-                        label={t(Dict.AuthPasswordConfirm)}
-                        helperText={t(Dict.AuthRegConfirmHelper)}
-                        type={this.state.showConfirm ? "text" : "password"}
-                        InputProps={{
-                          endAdornment: (
-                            <InputAdornment position="end">
-                              <IconButton
-                                tabIndex={-1}
-                                onClick={() =>
-                                  this.setState(prev => ({
-                                    showConfirm: !prev.showConfirm
-                                  }))
-                                }
-                              >
-                                {this.state.showConfirm ? (
-                                  <VisibilityOff />
-                                ) : (
-                                  <Visibility />
-                                )}
-                              </IconButton>
-                            </InputAdornment>
-                          )
-                        }}
-                      />
-                    </div>
-                    <div style={{ marginBottom: "0.5em" }}>
-                      <Field
-                        style={{ width: "100%" }}
-                        component={renderTextField as any}
-                        name="captcha"
-                        type="text"
-                        label={t(Dict.AuthCaptcha)}
-                        helperText={t(Dict.AuthCaptchaHelper)}
-                        InputProps={{
-                          endAdornment: (
-                            <InputAdornment position="end">
-                              {captcha && (
-                                <SVGInline
-                                  svg={(captcha as FaucetCaptcha).data.replace(
-                                    "#4AA0E2",
-                                    "#FFFFFF"
-                                  )}
-                                  onClick={getCaptcha}
-                                />
-                              )}
-                            </InputAdornment>
-                          )
-                        }}
-                      />
-                    </div>
-                    <div style={{ marginBottom: "0.5em" }}>
-                      <Field
-                        style={{ width: "100%" }}
-                        name="referer"
-                        component={renderTextField as any}
-                        disabled={!!defaultReferer}
-                        label={t(Dict.AuthReferrer)}
-                        helperText={t(Dict.AuthReferrerHelper)}
-                      />
-                    </div>
-                  </DialogContent>
-                  <DialogContent style={styleOfContent}>
-                    {this.props.children}
-                  </DialogContent>
-                  <DialogActions style={{ margin: "8px 12px" }}>
-                    <PrimaryButton
-                      color="primary"
-                      fullWidth
-                      type="submit"
-                      disabled={pristine || submitting || invalid}
-                    >
-                      {t(Dict.AuthRegister)}
-                    </PrimaryButton>
-                  </DialogActions>
-                </form>
-              )}
-            />
-          );
+export const RegForm = withToolset(
+  connect(
+    mapStateToProps,
+    mapDispatch
+  )(props => {
+    const [showPassword, switchPassword] = React.useState(false);
+    const [showConfirm, switchConfirm] = React.useState(false);
+    const { t, i18n } = useTranslation();
+    const matches = unstable_useMediaQuery("(min-width:600px)");
+    const styleOfContent = {
+      padding: 0,
+      margin: `10px ${matches ? 48 : 16}px`
+    };
+    const {
+      onSubmit,
+      invalid,
+      getCaptcha,
+      captcha,
+      defaultReferer,
+      children,
+      toolset
+    } = props;
+    return (
+      <Form
+        onSubmit={onSubmit}
+        validate={validate}
+        initialValues={
+          {
+            accountName: "",
+            password: "",
+            confirm: "",
+            referer: defaultReferer,
+            captcha: ""
+          } as RegFormData
         }
-      }
-    )
-  )
+        render={({ handleSubmit, submitting, pristine, values }) => (
+          <form onSubmit={handleSubmit}>
+            <DialogContent style={styleOfContent}>
+              <div style={{ marginBottom: "0.5em" }}>
+                <Field
+                  autoFocus
+                  style={{ width: "100%" }}
+                  name="accountName"
+                  component={renderTextField as any}
+                  validate={usernameAvailable(toolset)}
+                  autoFocusd
+                  label={t(Dict.AuthAccountName)}
+                  helperText={t(Dict.AuthRegAccountNameHelper)}
+                />
+              </div>
+              <div style={{ marginBottom: "0.5em" }}>
+                <Field
+                  style={{ width: "100%" }}
+                  component={renderTextField as any}
+                  name="password"
+                  type={showPassword ? "text" : "password"}
+                  label={t(Dict.AuthPassword)}
+                  helperText={t(Dict.AuthRegPasswordHelper)}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          tabIndex={-1}
+                          onClick={() => switchPassword(!showPassword)}
+                        >
+                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    )
+                  }}
+                />
+              </div>
+              <div style={{ marginBottom: "0.5em" }}>
+                <Field
+                  style={{ width: "100%" }}
+                  component={renderTextField as any}
+                  name="confirm"
+                  label={t(Dict.AuthPasswordConfirm)}
+                  helperText={t(Dict.AuthRegConfirmHelper)}
+                  type={showConfirm ? "text" : "password"}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          tabIndex={-1}
+                          onClick={() => switchConfirm(!showConfirm)}
+                        >
+                          {showConfirm ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    )
+                  }}
+                />
+              </div>
+              <div style={{ marginBottom: "0.5em" }}>
+                <Field
+                  style={{ width: "100%" }}
+                  component={renderTextField as any}
+                  name="captcha"
+                  type="text"
+                  label={t(Dict.AuthCaptcha)}
+                  helperText={t(Dict.AuthCaptchaHelper)}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        {captcha && (
+                          <SVGInline
+                            svg={(captcha as FaucetCaptcha).data.replace(
+                              "#4AA0E2",
+                              "#FFFFFF"
+                            )}
+                            onClick={getCaptcha}
+                          />
+                        )}
+                      </InputAdornment>
+                    )
+                  }}
+                />
+              </div>
+              <div style={{ marginBottom: "0.5em" }}>
+                <Field
+                  style={{ width: "100%" }}
+                  name="referer"
+                  component={renderTextField as any}
+                  disabled={!!defaultReferer}
+                  label={t(Dict.AuthReferrer)}
+                  helperText={t(Dict.AuthReferrerHelper)}
+                />
+              </div>
+            </DialogContent>
+            <DialogContent style={styleOfContent}>{children}</DialogContent>
+            <DialogActions style={{ margin: `8px ${matches ? 42 : 12}px` }}>
+              <PrimaryButton
+                color="primary"
+                fullWidth
+                type="submit"
+                style={{ height: "48px", fontSize: "16px" }}
+                disabled={pristine || submitting || invalid}
+              >
+                {t(Dict.AuthRegister)}
+              </PrimaryButton>
+            </DialogActions>
+          </form>
+        )}
+      />
+    );
+  })
 );

@@ -11,6 +11,8 @@ import {
 } from "@material-ui/core";
 import { RoundedCardWithShadow } from "./styles";
 import { Dict } from "../providers/i18n";
+import { InviteBg } from "./../assets/images/invite-bg";
+
 type InviteSummaryProps = {
   amount: string | number;
   title: string;
@@ -19,7 +21,7 @@ type InviteSummaryProps = {
 const styles: StyleRulesCallback = theme => ({
   container: {
     height: "231px",
-    background: `url(${require("../assets/images/invite-bg.svg")})`,
+    background: `url(${InviteBg})`,
     backgroundSize: "cover",
     backgroundPosition: "center",
     backgroundRepeat: "no-repeat",

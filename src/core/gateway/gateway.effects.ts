@@ -24,8 +24,13 @@ import {
 import { of, from, NEVER } from "rxjs";
 import { IEffectDeps } from "../modes";
 import { CoreState } from "..";
-import { selectAuthSet } from "../auth/auth.selectors";
-import { authUnauthed, AuthLoginSuccessAction, AuthActions } from "../auth";
+import { selectAuthSet, selectAuthStatus } from "../auth/auth.selectors";
+import {
+  authUnauthed,
+  AuthLoginSuccessAction,
+  AuthActions,
+  AuthStatus
+} from "../auth";
 import {
   selectGatewayCoinList,
   selectGatewayCurrentDepositInfo
@@ -45,11 +50,10 @@ export const loadGatewayInfoEpic: Epic<any, any, CoreState, IEffectDeps> = (
     ),
     switchMap(() =>
       state$.pipe(
-        filter(state => !!selectAuthSet(state)),
+        filter(state => selectAuthStatus(state) === AuthStatus.LOGIN_NORMAL),
         take(1),
         switchMap(state => {
-          let authSet = selectAuthSet(state);
-          if (!authSet) {
+          if (!(selectAuthStatus(state) === AuthStatus.LOGIN_NORMAL)) {
             return of(authUnauthed());
           }
           return from(gatewayFetcher.getCoinList()).pipe(

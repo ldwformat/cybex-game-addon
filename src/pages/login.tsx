@@ -101,7 +101,20 @@ const styles = theme => ({
     position: "relative" as PositionProperty,
     margin: 0,
     width: "90vw",
-    padding: "16px 0 8px 0"
+    maxWidth: "536px",
+    padding: "32px 0 32px 0"
+  },
+  header: {
+    position: "absolute" as PositionProperty,
+    right: "36px",
+    top: 0,
+    zIndex: 100,
+    [theme.breakpoints.down("sm")]: {
+      right: 0
+    },
+    [theme.breakpoints.up("sm")]: {
+      right: "36px"
+    }
   }
 });
 
@@ -112,7 +125,7 @@ type LoginProps = {
 let LoginClass = withStyles(styles)(
   withTranslation()(
     class Login extends React.Component<
-      StyledComponentProps<"paper"> &
+      StyledComponentProps<"paper" | "header"> &
         LoginPropsDispatch &
         LoginPropsState &
         LoginProps &
@@ -163,18 +176,17 @@ let LoginClass = withStyles(styles)(
           switchPanel,
           t
         } = this.props;
+        classes = classes || {};
         return (
           <>
             <Dialog
               open={isModalShowing}
               disableBackdropClick
               classes={classes && { paper: classes.paper }}
-              maxWidth="lg"
+              // maxWidth="lg"
               onClose={closeModal}
             >
-              <div
-                style={{ position: "absolute", right: 0, top: 0, zIndex: 100 }}
-              >
+              <div className={classes.header}>
                 <IconButton onClick={closeModal}>
                   <CloseIcon />
                 </IconButton>
@@ -201,7 +213,10 @@ let LoginClass = withStyles(styles)(
                       bottom: "-8px"
                     }}
                   >
-                    <Typography style={{ display: "inline" }} component="span">
+                    <Typography
+                      style={{ display: "inline", fontSize: "14px" }}
+                      component="span"
+                    >
                       {currentPanel === LoginPanel.Login
                         ? t(Dict.HasNoAccountYet)
                         : t(Dict.HasAccountAlready)}
@@ -213,7 +228,7 @@ let LoginClass = withStyles(styles)(
                       onClick={switchPanel}
                     >
                       <Typography
-                        style={{ display: "inline" }}
+                        style={{ display: "inline", fontSize: "14px" }}
                         component="span"
                         color="secondary"
                       >

@@ -12,7 +12,8 @@ import {
   selectTotalRebatesByAsset,
   selectReferRebates,
   ReferSingleRebateWithValue,
-  SummaryAsset
+  SummaryAsset,
+  selectAccountReferUrl
 } from "../core/refer";
 import {
   withStyles,
@@ -59,10 +60,14 @@ import { InviteCard } from "../components/invite-card";
 import { Account, EmailOpen, ContentCopy } from "mdi-material-ui";
 import { InviteSummary } from "../components/invite-summary";
 import { normalizeAssetName } from "../utils/asset-name";
+import { Colors } from "../components/colors";
+import { InviteBtnPC } from "../components/invite-btn-pc";
+import { selectReferUrl } from "../core/core.selectors";
 
 type StateProps = {
   accountName: string | null;
   totalRebate: number;
+  accountReferUrl: string | null;
   myRegisterReferrer: Referrer | undefined;
   myRegisterReferral: TypesReferral | undefined;
   myGameReferrer: Referrer | undefined;
@@ -75,6 +80,7 @@ type DispatchProps = {
 };
 
 const mapStateToProps: MapStateToProps<StateProps, {}, CoreState> = state => ({
+  accountReferUrl: selectAccountReferUrl(state),
   accountName: selectCurrentAccount(state),
   totalRebate: selectTotalRebatesByAsset(SummaryAsset.USDT)(state),
   myRegisterReferrer: selectMyRegisterReferrer(state),
@@ -345,6 +351,7 @@ export const Refer = connect(
             myRegisterReferrer,
             myRegisterReferral,
             rebates,
+            accountReferUrl,
             t
           } = this.props;
           let classes = this.props.classes || {};
@@ -394,14 +401,17 @@ export const Refer = connect(
                               normalizeAssetName(asset.symbol)
                           },
                           {
-                            name: "transferredValue",
-                            header: Dict.Cleard,
-                            align: "right"
-                          },
-                          {
                             name: "should_transferValue",
                             header: Dict.ToBeCleard,
                             align: "right"
+                          },
+                          {
+                            name: "transferredValue",
+                            header: Dict.Cleard,
+                            align: "right",
+                            cellStyle: {
+                              color: Colors.primary
+                            }
                           }
                         ]}
                         title={t(Dict.RebateDetail)}
@@ -434,7 +444,7 @@ export const Refer = connect(
                           <CopyToClipboard
                             text={accountName}
                             onCopy={() =>
-                              pushNoti(t(Dict.ShareLinkCopied), {
+                              pushNoti(t(Dict.ReferCodeCopied), {
                                 variant: "success"
                               })
                             }
@@ -560,8 +570,18 @@ export const Refer = connect(
                     </Grid>
                   </Grid>
                 </Grid>
+                <InviteBtnPC
+                  copyText={`${t(Dict.CopyShareLinkPrefix)} ${accountReferUrl}`}
+                  accountName={accountName}
+                  accountReferUrl={accountReferUrl}
+                  onCopyLinkClick={() =>
+                    pushNoti(t(Dict.ShareLinkCopied), {
+                      variant: "success"
+                    })
+                  }
+                  onHelpClick={() => void 0}
+                />
               </Hidden>
-
               <ReferModal
                 isModalShowing={this.state[Refer.Panels.ReferModal]}
                 onModalClose={this.handleExpand.bind(

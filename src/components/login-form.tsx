@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Form, Field } from "react-final-form";
-
+import { unstable_useMediaQuery as useMediaQuery } from "@material-ui/core/useMediaQuery";
+import { useTheme } from "@material-ui/styles";
 import { PrimaryButton, renderTextField } from "../components/form-utils";
 import {
   DialogContent,
@@ -24,96 +25,81 @@ const validate = values => {
   });
   return errors;
 };
-export const LoginForm = withTranslation()(
-  class LoginForm extends React.Component<
-    any,
-    {
-      showPassword: boolean;
-    }
-  > {
-    state = {
-      showPassword: false
-    };
-    render() {
-      const { onSubmit, t } = this.props as any;
-      const styleOfContent = {
-        minWidth: "70vw",
-        padding: 0,
-        margin: "10px 16px"
-      };
-      return (
-        <Form
-          onSubmit={onSubmit}
-          validate={validate}
-          render={({
-            handleSubmit,
-            reset,
-            submitting,
-            pristine,
-            values,
-            invalid
-          }) => (
-            <form onSubmit={handleSubmit}>
-              <DialogContent style={styleOfContent}>
-                <div style={{ marginBottom: "1em" }}>
-                  <Field
-                    fullWidth
-                    autoFocus
-                    name="accountName"
-                    component={renderTextField as any}
-                    type="text"
-                    label={t(Dict.AuthAccountName)}
-                    helperText={t(Dict.AuthAccountNameHelper)}
-                  />
-                </div>
-                <div style={{ marginBottom: "1em" }}>
-                  <Field
-                    style={{ width: "100%" }}
-                    fullWidth
-                    name="password"
-                    type={this.state.showPassword ? "text" : "password"}
-                    label={t(Dict.AuthPassword)}
-                    helperText={t(Dict.AuthLoginPasswordHelper)}
-                    component={renderTextField as any}
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          <IconButton
-                            onClick={() =>
-                              this.setState(prev => ({
-                                showPassword: !prev.showPassword
-                              }))
-                            }
-                          >
-                            {this.state.showPassword ? (
-                              <VisibilityOff />
-                            ) : (
-                              <Visibility />
-                            )}
-                          </IconButton>
-                        </InputAdornment>
-                      )
-                    }}
-                  />
-                </div>
-              </DialogContent>
-              <DialogContent style={styleOfContent}>
-                {this.props.children}
-              </DialogContent>
-              <DialogActions style={{ margin: "8px 12px" }}>
-                <PrimaryButton
-                  color="primary"
-                  fullWidth
-                  type="submit"
-                  disabled={pristine || submitting || invalid}
-                >
-                  {t(Dict.LoginSubmit)}
-                </PrimaryButton>
-              </DialogActions>
-            </form>
-          )}
-        />
-      );
-    }
-  }
-);
+
+export const LoginForm = ({
+  onSubmit,
+  children
+}: {
+  onSubmit: any;
+  children?: any;
+}) => {
+  const [showPassword, switchPassword] = React.useState(false);
+  const { t, i18n } = useTranslation();
+  const matches = useMediaQuery("(min-width:600px)");
+  const styleOfContent = {
+    padding: 0,
+    margin: `10px ${matches ? 48 : 16}px`
+  };
+  return (
+    <Form
+      onSubmit={onSubmit}
+      validate={validate}
+      render={({
+        handleSubmit,
+        reset,
+        submitting,
+        pristine,
+        values,
+        invalid
+      }) => (
+        <form onSubmit={handleSubmit}>
+          <DialogContent style={styleOfContent}>
+            <div style={{ marginBottom: "1em" }}>
+              <Field
+                fullWidth
+                autoFocus
+                name="accountName"
+                component={renderTextField as any}
+                type="text"
+                label={t(Dict.AuthAccountName)}
+                helperText={t(Dict.AuthAccountNameHelper)}
+              />
+            </div>
+            <div style={{ marginBottom: "1em" }}>
+              <Field
+                style={{ width: "100%" }}
+                fullWidth
+                name="password"
+                type={showPassword ? "text" : "password"}
+                label={t(Dict.AuthPassword)}
+                helperText={t(Dict.AuthLoginPasswordHelper)}
+                component={renderTextField as any}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton onClick={() => switchPassword(!showPassword)}>
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  )
+                }}
+              />
+            </div>
+          </DialogContent>
+          <DialogContent style={styleOfContent}>{children}</DialogContent>
+          <DialogActions style={{ margin: `8px ${matches ? 42 : 12}px` }}>
+            <PrimaryButton
+              color="primary"
+              style={{ height: "48px", fontSize: "16px" }}
+              fullWidth
+              type="submit"
+              disabled={pristine || submitting || invalid}
+            >
+              {t(Dict.LoginSubmit)}
+            </PrimaryButton>
+          </DialogActions>
+        </form>
+      )}
+    />
+  );
+};

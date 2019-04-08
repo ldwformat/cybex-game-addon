@@ -95,6 +95,12 @@ export const renderTextField = ({
     <TextField
       label={label}
       // placeholder={label}
+      InputProps={{
+        style: { fontSize: "16px" }
+      }}
+      InputLabelProps={{
+        style: { fontSize: "16px" }
+      }}
       error={touched && invalid}
       helperText={(touched && t(error)) || helperText}
       {...input}

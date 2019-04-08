@@ -25,7 +25,8 @@ import { selectReferUrl } from "../core/core.selectors";
 import { getReferUrl } from "../utils/refer-url";
 import { withTranslation, WithTranslation } from "react-i18next";
 import { Dict } from "../providers/i18n";
-import { PosterDisplay } from "./poster";
+import { PosterDisplay, Poster } from "./poster";
+import { selectAccountReferUrl } from "../core/refer";
 
 const ShareItem = ({
   IconComponent,
@@ -60,7 +61,7 @@ const ShareItem = ({
 
 type StateProps = {
   accountName: string | null;
-  referUrl: string | null;
+  accountReferUrl: string | null;
 };
 
 type DispatchProps = {
@@ -69,7 +70,7 @@ type DispatchProps = {
 
 const mapStateToProps: MapStateToProps<StateProps, {}, CoreState> = state => ({
   accountName: selectCurrentAccount(state),
-  referUrl: selectReferUrl(state)
+  accountReferUrl: selectAccountReferUrl(state)
 });
 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = {
@@ -87,6 +88,11 @@ const styles: StyleRulesCallback = theme => ({
   }
 });
 
+export enum Panels {
+  Drawer = "Drawer",
+  QRCode = "QRCode"
+}
+
 export const ShareButton = connect(
   mapStateToProps,
   mapDispatchToProps
@@ -99,14 +105,9 @@ export const ShareButton = connect(
           DispatchProps &
           WithTranslation
       > {
-        static Panels = {
-          Drawer: "Drawer",
-          QRCode: "QRCode"
-        };
-
         state = {
-          [ShareButton.Panels.Drawer]: false,
-          [ShareButton.Panels.QRCode]: false
+          [Panels.Drawer]: false,
+          [Panels.QRCode]: false
         };
 
         handleExpand = (panel: string) => {
@@ -117,41 +118,23 @@ export const ShareButton = connect(
 
         render() {
           let classes = this.props.classes || {};
-          let {
-            pushNoti,
-            accountName,
-            referUrl: referUrlPrefix,
-            t
-          } = this.props;
-          let referUrl = getReferUrl(
-            referUrlPrefix as string,
-            accountName as string
-          );
+          let { pushNoti, accountName, accountReferUrl, t } = this.props;
           return (
             <>
               <PrimaryButton
-                onClick={this.handleExpand.bind(
-                  this,
-                  ShareButton.Panels.Drawer
-                )}
+                onClick={this.handleExpand.bind(this, Panels.Drawer)}
                 size="large"
                 classes={{ root: classes.buttonRoot }}
                 fullWidth
               >
                 {t(Dict.ShareLink)}
               </PrimaryButton>
-              {referUrl && accountName && (
+              {accountReferUrl && accountName && (
                 <SwipeableDrawer
                   classes={{ paper: classes.drawerRoot }}
-                  open={this.state[ShareButton.Panels.Drawer]}
-                  onOpen={this.handleExpand.bind(
-                    this,
-                    ShareButton.Panels.Drawer
-                  )}
-                  onClose={this.handleExpand.bind(
-                    this,
-                    ShareButton.Panels.Drawer
-                  )}
+                  open={this.state[Panels.Drawer]}
+                  onOpen={this.handleExpand.bind(this, Panels.Drawer)}
+                  onClose={this.handleExpand.bind(this, Panels.Drawer)}
                   anchor="bottom"
                 >
                   <Grid
@@ -160,11 +143,11 @@ export const ShareButton = connect(
                     alignItems="center"
                     justify="space-around"
                   >
-                    {referUrl && accountName && (
+                    {accountReferUrl && (
                       <CopyToClipboard
                         text={`${t(
                           Dict.CopyShareLinkPrefix
-                        )} ${referUrl.trim()}`}
+                        )} ${accountReferUrl}`}
                         onCopy={() =>
                           pushNoti(t(Dict.ShareLinkCopied), {
                             variant: "success"
@@ -176,10 +159,7 @@ export const ShareButton = connect(
                           title={t(Dict.CopyShareLink)}
                           // style={{ width: "50%", textAlign: "center" }}
                           color={colors.orange[300]}
-                          onClick={this.handleExpand.bind(
-                            this,
-                            ShareButton.Panels.Drawer
-                          )}
+                          onClick={this.handleExpand.bind(this, Panels.Drawer)}
                         />
                       </CopyToClipboard>
                     )}
@@ -189,29 +169,20 @@ export const ShareButton = connect(
                       title={t(Dict.ShareQRCode)}
                       // style={{ width: "50%", textAlign: "center" }}
                       onClick={() => {
-                        this.handleExpand(ShareButton.Panels.QRCode);
-                        this.handleExpand(ShareButton.Panels.Drawer);
+                        this.handleExpand(Panels.QRCode);
+                        this.handleExpand(Panels.Drawer);
                       }}
                     />
                   </Grid>
                 </SwipeableDrawer>
               )}
-              <Dialog
-                open={this.state[ShareButton.Panels.QRCode]}
-                onClose={this.handleExpand.bind(
-                  this,
-                  ShareButton.Panels.QRCode
-                )}
-              >
-                <DialogContent
-                  style={{ padding: "2em", paddingBottom: "0.5em" }}
-                >
-                  <PosterDisplay
-                    text={referUrl}
-                    filename={`cybex_invite_${accountName}.png`}
-                  />
-                </DialogContent>
-              </Dialog>
+
+              <Poster
+                open={this.state[Panels.QRCode]}
+                onClose={this.handleExpand.bind(this, Panels.QRCode)}
+                posterLink={accountReferUrl}
+                filename={`cybex_invite_${accountName}.png`}
+              />
             </>
           );
         }

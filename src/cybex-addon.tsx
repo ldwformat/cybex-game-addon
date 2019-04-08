@@ -74,6 +74,13 @@ export function getTheme() {
       secondary: {
         main: "rgb(255,155,85)"
       }
+    },
+    overrides: {
+      MuiPaper: {
+        rounded: {
+          borderRadius: "8px"
+        }
+      }
     }
   });
 }
