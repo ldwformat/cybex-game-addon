@@ -7,7 +7,11 @@ import {
   Typography
 } from "@material-ui/core";
 import { ShareButton } from "../components/share-btn";
-import { withTranslation, WithTranslation } from "react-i18next";
+import {
+  withTranslation,
+  WithTranslation,
+  useTranslation
+} from "react-i18next";
 import { Dict } from "../providers/i18n";
 
 const styles: StyleRulesCallback = theme => ({
@@ -18,7 +22,7 @@ const styles: StyleRulesCallback = theme => ({
   }
 });
 
-const Paragraph = ({
+export const Paragraph = ({
   title,
   contents = []
 }: {
@@ -34,12 +38,28 @@ const Paragraph = ({
       {title}
     </Typography>
     {contents.map((p, i) => (
-      <Typography style={{marginTop: "1em", textAlign: "justify"}} key={i} variant="body2">
+      <Typography
+        style={{ marginTop: "1em", textAlign: "justify" }}
+        key={i}
+        variant="body2"
+      >
         {p}
       </Typography>
     ))}
   </>
 );
+
+export const Rules = () => {
+  const { t, i18n } = useTranslation();
+  return (
+    <Paragraph
+      title={t(Dict.RefererRuleTitle)}
+      contents={[0, 1, 2, 3, 4, 5].map(num =>
+        t(Dict["RefererRuleContent_" + num])
+      )}
+    />
+  );
+};
 
 export const ReferRule = withStyles(styles)(
   withTranslation()(

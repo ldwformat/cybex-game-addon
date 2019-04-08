@@ -11,6 +11,8 @@ import color from "@material-ui/core/colors/yellow";
 import CopyToClipboard from "react-copy-to-clipboard";
 import { Poster } from "./poster";
 import { ShareButton, Panels } from "./share-btn";
+import { DialogWrapper } from "./dialog-wrapper";
+import { Paragraph, Rules } from "../pages/refer-rule";
 
 function getObservables(domItem) {
   const mouseEventToCoordinate = mouseEvent => {
@@ -109,6 +111,7 @@ export const HelpBtn = withStyles(helpBtnStyle)(
   }) => (
     <Fab
       className={classes.root}
+      onClick={onClick}
       style={open ? menuBtnStyle(-104, -0) : menuBtnStyle(0, 0)}
     >
       <HelpOutline style={{ color: "white" }} fontSize="large" />
@@ -131,7 +134,8 @@ export class InviteBtnPC extends React.Component<
 
   state = {
     [Panels.Drawer]: false,
-    [Panels.QRCode]: false
+    [Panels.QRCode]: false,
+    [Panels.RefReadme]: false
   };
 
   componentDidMount() {
@@ -235,8 +239,18 @@ export class InviteBtnPC extends React.Component<
             <Link style={{ color: "white" }} fontSize="large" />
           </Fab>
         </CopyToClipboard>
-        <HelpBtn open={menuOpen} onClick={this.props.onHelpClick} />
+        <HelpBtn
+          open={menuOpen}
+          onClick={this.handleExpand.bind(this, Panels.RefReadme)}
+        />
         <MenuBtn open={menuOpen} onClick={this.switchMenu} />
+        <DialogWrapper
+          hideHeader
+          open={this.state[Panels.RefReadme]}
+          onCloseClick={this.handleExpand.bind(this, Panels.RefReadme)}
+        >
+          <Rules />
+        </DialogWrapper>
         <Poster
           open={this.state[Panels.QRCode]}
           onClose={this.handleExpand.bind(this, Panels.QRCode)}

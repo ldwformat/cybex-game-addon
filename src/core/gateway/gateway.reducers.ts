@@ -12,6 +12,16 @@ export const gateway: Reducer<GatewayState, GatewayAction | AuthAction> = (
   action
 ) => {
   switch (action.type) {
+    case GatewayActions.GatewayModalShow:
+      return {
+        ...state,
+        showModal: true
+      };
+    case GatewayActions.GatewayModalClose:
+      return {
+        ...state,
+        showModal: false
+      };
     case AuthActions.Login:
     case AuthActions.RegImpl:
       return new GatewayState();

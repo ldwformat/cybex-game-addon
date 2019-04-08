@@ -39,6 +39,7 @@ import { i18n } from "./providers/i18n";
 import { Action } from "rxjs/internal/scheduler/Action";
 import { setRefUrl } from "./core/core.actions";
 import { addonStorage, AddonStorage } from "./utils/storage";
+import { gatewayModalShow } from "./core/gateway";
 
 export function getPageContext() {
   // Make sure to create a new context for every server-side request so that data
@@ -211,6 +212,22 @@ export class CybexAddon {
         Login =>
           new Promise(resolve =>
             (this.uiHelper as UIHelper).patchPage(Login, resolve)
+          )
+      );
+  }
+  async depositModal() {
+    if (!this.uiHelper) {
+      await this.init();
+    }
+    if (this.store) {
+      this.store.dispatch(gatewayModalShow());
+    }
+    return import("./pages/deposit-modal")
+      .then(module => module.DepositModal)
+      .then(
+        modal =>
+          new Promise(resolve =>
+            (this.uiHelper as UIHelper).patchPage(modal, resolve)
           )
       );
   }

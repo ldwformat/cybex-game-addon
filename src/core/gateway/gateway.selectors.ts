@@ -6,6 +6,10 @@ import { selectAuthSet } from "../auth/auth.selectors";
 export const selectGateway: Selector<CoreState, GatewayState> = state =>
   state.gateway;
 
+export const selectGatewayModalShow = createSelector(
+  selectGateway,
+  gateway => gateway.showModal
+);
 export const selectGatewayCoinList = createSelector(
   selectGateway,
   gateway =>

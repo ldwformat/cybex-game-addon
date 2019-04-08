@@ -91,7 +91,8 @@ const styles: StyleRulesCallback = theme => ({
 
 export enum Panels {
   Drawer = "Drawer",
-  QRCode = "QRCode"
+  QRCode = "QRCode",
+  RefReadme = "RefReadme"
 }
 
 export const ShareButton = connect(

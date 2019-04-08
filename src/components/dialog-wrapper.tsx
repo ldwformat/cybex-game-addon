@@ -17,6 +17,7 @@ import { TypographyProps } from "@material-ui/core/Typography";
 type DialogWrapperProps = {
   title?: string;
   open: boolean;
+  hideHeader?: boolean;
   onCloseClick: any;
   children?: any;
   titleProps?: Partial<TypographyProps>;
@@ -51,6 +52,7 @@ export const DialogWrapper = ({
   open,
   onCloseClick,
   children,
+  hideHeader,
   dialogProps,
   titleProps,
   ...rest
@@ -68,44 +70,46 @@ export const DialogWrapper = ({
       onClose={onCloseClick}
       {...dialogProps}
     >
-      <div
-        style={{
-          padding: matches ? "16px 48px 0 48px" : 0,
-          boxShadow: matches ? "inset 0 -1px 0 0 #f8f9fb" : "unset"
-        }}
-      >
-        {matches ? (
-          <Grid
-            container
-            style={{ height: "64px" }}
-            justify="space-between"
-            alignItems="center"
-          >
-            <Typography
-              variant="h4"
-              style={{ fontSize: "26px", fontWeight: 600 }}
-              {...titleProps}
+      {!hideHeader && (
+        <div
+          style={{
+            padding: matches ? "16px 48px 0 48px" : 0,
+            boxShadow: matches ? "inset 0 -1px 0 0 #f8f9fb" : "unset"
+          }}
+        >
+          {matches ? (
+            <Grid
+              container
+              style={{ height: "64px" }}
+              justify="space-between"
+              alignItems="center"
             >
-              {title ? t(title) : null}
-            </Typography>
-            <IconButton onClick={onCloseClick}>
-              <CloseIcon />
-            </IconButton>
-          </Grid>
-        ) : (
-          <div
-            className={classes.header}
-            style={{ right: matches ? "36px" : 0 }}
-          >
-            <IconButton onClick={onCloseClick}>
-              <CloseIcon />
-            </IconButton>
-          </div>
-        )}
-      </div>
+              <Typography
+                variant="h4"
+                style={{ fontSize: "26px", fontWeight: 600 }}
+                {...titleProps}
+              >
+                {title ? t(title) : null}
+              </Typography>
+              <IconButton style={{ right: "-12px" }} onClick={onCloseClick}>
+                <CloseIcon />
+              </IconButton>
+            </Grid>
+          ) : (
+            <div
+              className={classes.header}
+              style={{ right: matches ? "36px" : 0 }}
+            >
+              <IconButton onClick={onCloseClick}>
+                <CloseIcon />
+              </IconButton>
+            </div>
+          )}
+        </div>
+      )}
       <div
         style={{
-          padding: matches ? "0 48px 32px 48px" : "16px"
+          padding: matches ? `${hideHeader ? 32 : 0}px 48px 32px 48px` : "16px"
         }}
       >
         {children}

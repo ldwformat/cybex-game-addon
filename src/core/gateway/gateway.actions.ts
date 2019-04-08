@@ -2,6 +2,8 @@ import { Action, ActionCreator } from "redux";
 import { CoinInfo, GetDepositAddress } from "../../utils/fetcher";
 
 export enum GatewayActions {
+  GatewayModalShow = "[Gateway] GatewayModalShow",
+  GatewayModalClose = "[Gateway] GatewayModalClose",
   LoadGatewayInfo = "[Gateway] LoadGatewayInfo",
   LoadGatewayInfoSuccess = "[Gateway] LoadGatewayInfoSuccess",
   LoadGatewayInfoFailed = "[Gateway] LoadGatewayInfoFailed",
@@ -9,6 +11,13 @@ export enum GatewayActions {
   LoadDepositInfoSuccess = "[Gateway] LoadDepositInfoSuccess",
   LoadDepositInfoFailed = "[Gateway] LoadDepositInfoFailed",
   SelectAsset = "[Gateway] SelectAsset"
+}
+
+export class GatewayModalShowAction implements Action {
+  readonly type = GatewayActions.GatewayModalShow;
+}
+export class GatewayModalCloseAction implements Action {
+  readonly type = GatewayActions.GatewayModalClose;
 }
 
 export class GatewaySelectAssetAction implements Action {
@@ -37,6 +46,12 @@ export class GatewayLoadDepositInfoFailedAction implements Action {
   readonly type = GatewayActions.LoadDepositInfoFailed;
 }
 
+export const gatewayModalShow: () => GatewayModalShowAction = () => ({
+  type: GatewayActions.GatewayModalShow
+});
+export const gatewayModalClose: () => GatewayModalCloseAction = () => ({
+  type: GatewayActions.GatewayModalClose
+});
 export const gatewayLoadGatewayInfo: () => GatewayLoadGatewayInfoAction = () => ({
   type: GatewayActions.LoadGatewayInfo
 });
@@ -72,6 +87,8 @@ export const gatewaySelectAsset: (
 });
 
 export type GatewayAction =
+  | GatewayModalShowAction
+  | GatewayModalCloseAction
   | GatewaySelectAssetAction
   | GatewayLoadGatewayInfoAction
   | GatewayLoadGatewayInfoSuccessAction

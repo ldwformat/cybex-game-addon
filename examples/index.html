@@ -41,6 +41,7 @@
     <button id="loginPage0" data-ref="root0">登录页</button>
     <button id="logout" data-ref="root0">登出</button>
     <button id="deposit" data-ref="root1">充值页</button>
+    <button id="depositModal" data-ref="root1">充值弹窗</button>
     <button id="refer" data-ref="root2">邀请页</button>
     <button id="referRule" data-ref="root3">邀请规则页</button>
     <button id="invite" data-ref="root4">邀请按钮</button>
@@ -83,6 +84,11 @@
             let depositPage = await addon.depositPage(
               document.getElementById(`root1`)
             );
+          });
+        document
+          .getElementById("depositModal")
+          .addEventListener("click", async e => {
+            let depositModal = await addon.depositModal();
           });
         document.getElementById("refer").addEventListener("click", async e => {
           let referPage = await addon.referPage(

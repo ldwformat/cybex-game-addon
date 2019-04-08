@@ -50,7 +50,6 @@ import { Dict } from "../providers/i18n";
 import { PassSetter } from "./pass-setter";
 import { Locker, LockerType } from "../components/locker";
 import { DialogWrapper } from "../components/dialog-wrapper";
-import { cnDict } from "../../lib/providers/i18n";
 
 type LoginPropsDispatch = {
   login: typeof authLogin;
