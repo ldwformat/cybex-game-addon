@@ -218,7 +218,7 @@ export class InviteBtnPC extends React.Component<
         }}
       >
         <Fab
-          onClick={this.handleExpand.bind(this, Panels.QRCode}
+          onClick={this.handleExpand.bind(this, Panels.QRCode)}
           color="secondary"
           style={menuOpen ? menuBtnStyle(-66, -66) : menuBtnStyle(0, 0)}
         >
