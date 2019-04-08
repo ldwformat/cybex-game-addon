@@ -142,7 +142,7 @@ export const enDict: Dictionary = {
   RefererRuleContent_5:
     "Notice: Wagers later than the fill-in of invitation code will be counted only.",
   PatchReferrer: "Add Inviter",
-  PatchReferrerLabel: "invitation code",
+  PatchReferrerLabel: "Invitation code",
   PatchReferrerHelper:
     "Enter invitation code from the inviter. The inviter is unable to be modified once confirmed!",
   PatchReferrerAdd: "Add Inviter",

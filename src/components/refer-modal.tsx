@@ -31,7 +31,13 @@ import {
 import { selectGame } from "../core/core.selectors";
 import { Form, Field } from "react-final-form";
 import { Dict } from "../providers/i18n";
-import { withTranslation, WithTranslation } from "react-i18next";
+import {
+  withTranslation,
+  WithTranslation,
+  useTranslation
+} from "react-i18next";
+import { unstable_useMediaQuery } from "@material-ui/core/useMediaQuery";
+import { DialogWrapper } from "./dialog-wrapper";
 
 const validate = values => {
   const errors: any = {};
@@ -44,58 +50,56 @@ const validate = values => {
   return errors;
 };
 
-export const ReferModalForm = withTranslation()(
-  class ReferModalForm extends React.Component<any> {
-    render() {
-      const { onSubmit, t } = this.props as any;
-      const styleOfContent = {
-        width: "90%",
-        minWidth: "70vw",
-        padding: 0,
-        margin: "10px 16px"
-      };
-      return (
-        <Form
-          onSubmit={onSubmit}
-          validate={validate}
-          render={({
-            handleSubmit,
-            reset,
-            submitting,
-            pristine,
-            invalid,
-            values
-          }) => (
-            <form onSubmit={handleSubmit}>
-              <DialogContent style={styleOfContent}>
-                <div style={{ marginBottom: "1em" }}>
-                  <Field
-                    autoFocus
-                    style={{ width: "100%" }}
-                    component={renderTextField as any}
-                    name="referrer"
-                    label={t(Dict.PatchReferrerLabel)}
-                    helperText={t(Dict.PatchReferrerHelper)}
-                  />
-                </div>
-              </DialogContent>
-              <DialogActions style={{ margin: "8px 12px" }}>
-                <PrimaryButton
-                  color="primary"
-                  fullWidth
-                  type="submit"
-                  disabled={pristine || submitting || invalid}
-                >
-                  {t(Dict.PatchReferrerAdd)}
-                </PrimaryButton>
-              </DialogActions>
-            </form>
-          )}
-        />
-      );
-    }
-  }
-);
+export const ReferModalForm = props => {
+  const { t, i18n } = useTranslation();
+  const matches = unstable_useMediaQuery("(min-width:600px)");
+  const styleOfContent = {
+    padding: 0,
+    margin: "16px 0"
+  };
+
+  const { onSubmit } = props as any;
+  return (
+    <Form
+      onSubmit={onSubmit}
+      validate={validate}
+      render={({
+        handleSubmit,
+        reset,
+        submitting,
+        pristine,
+        invalid,
+        values
+      }) => (
+        <form onSubmit={handleSubmit}>
+          <DialogContent style={styleOfContent}>
+            <div style={{ marginBottom: "1em" }}>
+              <Field
+                autoFocus
+                style={{ width: "100%" }}
+                component={renderTextField as any}
+                name="referrer"
+                label={t(Dict.PatchReferrerLabel)}
+                helperText={t(Dict.PatchReferrerHelper)}
+              />
+            </div>
+          </DialogContent>
+          <DialogActions style={{ margin: 0 }}>
+            <PrimaryButton
+              color="primary"
+              fullWidth
+              style={{ height: "48px", fontSize: "16px", margin: 0 }}
+              type="submit"
+              disabled={pristine || submitting || invalid}
+            >
+              {t(Dict.PatchReferrerAdd)}
+            </PrimaryButton>
+          </DialogActions>
+        </form>
+      )}
+    />
+  );
+};
 
 ////////////
 
@@ -175,20 +179,14 @@ let ReferModalClass = withStyles(styles)(
         myGameReferrer
       } = this.props;
       return (
-        <Dialog
+        <DialogWrapper
           open={isModalShowing && !myGameReferrer}
-          // disableBackdropClick
-          classes={classes && { paper: classes.paper }}
-          maxWidth="lg"
-          onClose={onModalClose}
+          onCloseClick={onModalClose}
+          title={Dict.PatchReferrerAdd}
+          titleProps={{ variant: "h6" }}
         >
-          <div style={{ position: "absolute", right: 0, top: 0, zIndex: 100 }}>
-            <IconButton onClick={onModalClose}>
-              <CloseIcon />
-            </IconButton>
-          </div>
           <ReferModalForm onSubmit={this.onSubmit} />
-        </Dialog>
+        </DialogWrapper>
       );
     }
   }
