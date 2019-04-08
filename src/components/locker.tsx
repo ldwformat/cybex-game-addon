@@ -1,6 +1,6 @@
 import * as React from "react";
 import PatternLock from "patternlock";
-import "patternlock/dist/patternlock.css";
+// import "patternlock/dist/patternlock.css";
 import {
   withStyles,
   StyledComponentProps,
@@ -26,6 +26,11 @@ const styles: StyleRulesCallback = theme => ({
   locker: {
     background: "transparent",
     margin: "auto",
+    "&.patt-hidden ": {
+      "& .patt-lines": {
+        display: "none"
+      }
+    },
     "&.patt-error": {
       "& .patt-circ.hovered": {
         border: `3px solid ${theme.palette.error.main}`,
@@ -38,15 +43,34 @@ const styles: StyleRulesCallback = theme => ({
       }
     },
     "& .patt-wrap": {
-      margin: 0
+      margin: 0,
+      position: "relative",
+      cursor: "pointer",
+      "& ul, & li": {
+        listStyle: "none",
+        margin: 0,
+        padding: 0
+      }
     },
     "& .patt-dots": {
-      background: Colors.btnBgPrimary
+      background: Colors.btnBgPrimary,
+      width: "10px",
+      height: "10px",
+      borderRadius: "5px",
+      position: "absolute",
+      top: "50%",
+      left: "50%",
+      marginTop: "-5px",
+      marginLeft: "-5px"
       // background: theme.palette.secondary.main
     },
     "& .patt-lines": {
       background: Colors.btnBgPrimary,
-      opacity: 0.5
+      opacity: 0.5,
+      borderRadius: "5px",
+      height: "10px",
+      position: "absolute",
+      transformOrigin: "5px 5px"
     },
     "& .patt-circ.hovered": {
       boxShadow: `0 0 3px ${theme.palette.secondary.main}, inset 0 0 3px ${
@@ -55,6 +79,9 @@ const styles: StyleRulesCallback = theme => ({
       border: `3px solid ${theme.palette.secondary.main}`
     },
     "& .patt-circ": {
+      position: "relative",
+      float: "left",
+      boxSizing: "border-box",
       transition: "0.3s all",
       color: "transparent"
     }
