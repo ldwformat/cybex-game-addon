@@ -19,8 +19,8 @@ type DialogWrapperProps = {
   open: boolean;
   onCloseClick: any;
   children?: any;
-  titleProps?: TypographyProps;
-  dialogProps?: DialogProps;
+  titleProps?: Partial<TypographyProps>;
+  dialogProps?: Partial<DialogProps>;
 };
 
 const useStyles = makeStyles(
@@ -81,7 +81,11 @@ export const DialogWrapper = ({
             justify="space-between"
             alignItems="center"
           >
-            <Typography variant="h4" {...titleProps}>
+            <Typography
+              variant="h4"
+              style={{ fontSize: "26px", fontWeight: 600 }}
+              {...titleProps}
+            >
               {title ? t(title) : null}
             </Typography>
             <IconButton onClick={onCloseClick}>

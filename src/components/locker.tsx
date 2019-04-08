@@ -170,18 +170,22 @@ export const Locker = withStyles(styles)(
           let { t, type } = this.props;
           return (
             <>
-              {type === LockerType.Lock && (
-                <Typography align="center" variant="body1">
-                  {t(Dict.SetLockTitle)}
-                </Typography>
-              )}
               <div
                 id="patternLocker"
                 className={classes.locker}
                 ref={wrapper => (this.wrapper = wrapper)}
               />
               {type === LockerType.Lock && (
-                <div style={{ height: "2em" }}>
+                <div style={{ padding: "0 48px" }}>
+                  {this.props.type === LockerType.Lock && !this.state.current && (
+                    <Typography
+                      align="center"
+                      variant="body1"
+                      color="secondary"
+                    >
+                      {t(Dict.SetLockTitle)}
+                    </Typography>
+                  )}
                   {this.state.current && !this.state.notMatchError && (
                     <Typography
                       align="center"

@@ -24,7 +24,8 @@ export const cnDict = {
     "密码错误，还可以进行{{count}}次尝试，仍然错误后将登出",
   UnlockSuccess: "解锁成功",
   AuthLogout: "已登出",
-  SetLockTitle: "请设置您的临时解锁手势",
+  SetLockTitle:
+    "请设置您的临时解锁手势。在登出账户前，可使用该手势快速解锁账号",
   SetLockAgain: "请再次绘制您的解锁手势",
   SetLockError: "两次手势不一致，请重新设置",
   HasNoAccountYet: "还没有Cybex云账户？",
@@ -87,6 +88,9 @@ export const cnDict = {
   Cleard: "已发放",
   ToBeCleard: "待发放",
   Copy: "复制",
+  Login: "登录",
+  Unlock: "解锁",
+  Register: "注册",
   InviteTime: "推荐时间"
 };
 type Dictionary = typeof cnDict;
@@ -184,6 +188,9 @@ export const enDict: Dictionary = {
   AssetType: "资产类型",
   Cleard: "已发放",
   Copy: "复制",
+  Login: "登录",
+  Register: "注册",
+  Unlock: "解锁",
   ToBeCleard: "待发放",
   InviteTime: "推荐时间"
 };
@@ -275,6 +282,9 @@ export const vnDict: Dictionary = {
   AssetType: "资产类型",
   Cleard: "已发放",
   Copy: "复制",
+  Login: "登录",
+  Unlock: "解锁",
+  Register: "注册",
   ToBeCleard: "待发放",
   InviteTime: "推荐时间"
 };

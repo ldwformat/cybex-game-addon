@@ -59,7 +59,8 @@ const styles = theme => ({
     position: "relative" as PositionProperty,
     margin: 0,
     width: "90vw",
-    padding: "16px 0 8px 0"
+    padding: "16px 0 8px 0",
+    maxWidth: "536px",
   }
 });
 

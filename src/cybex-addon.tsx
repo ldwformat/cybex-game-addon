@@ -146,17 +146,17 @@ export class CybexAddon {
     public pageContext = getPageContext()
   ) {
     this.config = merge({}, defaultConfig, config);
-    if (typeof window !== undefined) {
-      window.addEventListener("popstate", e => {
-        Array.from(document.body.children)
-          .filter(
-            node =>
-              node.attributes["role"].value === "presentation" ||
-              node.attributes["role"].value === "dialog"
-          )
-          .forEach(node => node.remove());
-      });
-    }
+    // if (typeof window !== undefined) {
+    //   window.addEventListener("popstate", e => {
+    //     Array.from(document.body.children)
+    //       .filter(
+    //         node =>
+    //           node.attributes["role"].value === "presentation" ||
+    //           node.attributes["role"].value === "dialog"
+    //       )
+    //       .forEach(node => node.remove());
+    //   });
+    // }
     i18n.changeLanguage(this.config.lang);
   }
 

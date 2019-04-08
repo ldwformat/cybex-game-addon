@@ -11,7 +11,8 @@ import {
   Avatar,
   colors,
   Dialog,
-  DialogContent
+  DialogContent,
+  Drawer
 } from "@material-ui/core";
 import CopyToClipboard from "react-copy-to-clipboard";
 import { corePushNoti } from "../core/core.actions";
@@ -130,10 +131,10 @@ export const ShareButton = connect(
                 {t(Dict.ShareLink)}
               </PrimaryButton>
               {accountReferUrl && accountName && (
-                <SwipeableDrawer
+                <Drawer
                   classes={{ paper: classes.drawerRoot }}
                   open={this.state[Panels.Drawer]}
-                  onOpen={this.handleExpand.bind(this, Panels.Drawer)}
+                  // onOpen={this.handleExpand.bind(this, Panels.Drawer)}
                   onClose={this.handleExpand.bind(this, Panels.Drawer)}
                   anchor="bottom"
                 >
@@ -174,7 +175,7 @@ export const ShareButton = connect(
                       }}
                     />
                   </Grid>
-                </SwipeableDrawer>
+                </Drawer>
               )}
 
               <Poster

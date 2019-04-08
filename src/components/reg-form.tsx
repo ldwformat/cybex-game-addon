@@ -112,7 +112,7 @@ export const RegForm = withToolset(
     const matches = unstable_useMediaQuery("(min-width:600px)");
     const styleOfContent = {
       padding: 0,
-      margin: `10px ${matches ? 48 : 16}px`
+      margin: "16px 0"
     };
     const {
       onSubmit,
@@ -232,12 +232,12 @@ export const RegForm = withToolset(
               </div>
             </DialogContent>
             <DialogContent style={styleOfContent}>{children}</DialogContent>
-            <DialogActions style={{ margin: `8px ${matches ? 42 : 12}px` }}>
+            <DialogActions style={{ margin: 0 }}>
               <PrimaryButton
                 color="primary"
                 fullWidth
                 type="submit"
-                style={{ height: "48px", fontSize: "16px" }}
+                style={{ height: "48px", fontSize: "16px", margin: 0 }}
                 disabled={pristine || submitting || invalid}
               >
                 {t(Dict.AuthRegister)}

@@ -38,7 +38,7 @@ export const LoginForm = ({
   const matches = useMediaQuery("(min-width:600px)");
   const styleOfContent = {
     padding: 0,
-    margin: `10px ${matches ? 48 : 16}px`
+    margin: "16px 0"
   };
   return (
     <Form
@@ -87,10 +87,10 @@ export const LoginForm = ({
             </div>
           </DialogContent>
           <DialogContent style={styleOfContent}>{children}</DialogContent>
-          <DialogActions style={{ margin: `8px ${matches ? 42 : 12}px` }}>
+          <DialogActions style={{ margin: 0 }}>
             <PrimaryButton
               color="primary"
-              style={{ height: "48px", fontSize: "16px" }}
+              style={{ height: "48px", fontSize: "16px", margin: 0 }}
               fullWidth
               type="submit"
               disabled={pristine || submitting || invalid}

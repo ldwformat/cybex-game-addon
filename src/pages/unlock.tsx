@@ -55,6 +55,7 @@ const styles = theme => ({
   paper: {
     position: "relative" as PositionProperty,
     margin: 0,
+    maxWidth: "536px",
     width: "90vw",
     padding: "16px 0 8px 0"
   }

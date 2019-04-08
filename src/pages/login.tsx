@@ -34,7 +34,8 @@ import {
   StyledComponentProps,
   IconButton,
   Typography,
-  DialogActions
+  DialogActions,
+  Grid
 } from "@material-ui/core";
 import { Close as CloseIcon } from "@material-ui/icons";
 import { corePushNoti } from "../core/core.actions";
@@ -48,6 +49,8 @@ import { withTranslation, WithTranslation } from "react-i18next";
 import { Dict } from "../providers/i18n";
 import { PassSetter } from "./pass-setter";
 import { Locker, LockerType } from "../components/locker";
+import { DialogWrapper } from "../components/dialog-wrapper";
+import { cnDict } from "../../lib/providers/i18n";
 
 type LoginPropsDispatch = {
   login: typeof authLogin;
@@ -139,6 +142,12 @@ let LoginClass = withStyles(styles)(
         }
       };
 
+      componentWillUnmount() {
+        if (this.props.closeModal) {
+          this.props.closeModal();
+        }
+      }
+
       onSubmit = _data => {
         let data: IAuthParams = {
           ..._data,
@@ -179,24 +188,24 @@ let LoginClass = withStyles(styles)(
         classes = classes || {};
         return (
           <>
-            <Dialog
+            <DialogWrapper
               open={isModalShowing}
-              disableBackdropClick
-              classes={classes && { paper: classes.paper }}
-              // maxWidth="lg"
-              onClose={closeModal}
+              dialogProps={{ disableBackdropClick: true }}
+              onCloseClick={closeModal}
+              title={
+                currentPanel === LoginPanel.Unlock
+                  ? Dict.Unlock
+                  : currentPanel === LoginPanel.Register
+                  ? Dict.Register
+                  : Dict.Login
+              }
             >
-              <div className={classes.header}>
-                <IconButton onClick={closeModal}>
-                  <CloseIcon />
-                </IconButton>
-              </div>
               {currentPanel === LoginPanel.Unlock ? (
-                <>
+                <Grid container direction="column" alignItems="center">
                   <Locker type={LockerType.Unlock} />
                   <Button onClick={logout}>登出</Button>
                   {/* <Button onClick={() => unlock("qwer1234")}>解锁</Button> */}
-                </>
+                </Grid>
               ) : (
                 <>
                   {currentPanel === LoginPanel.Login ? (
@@ -210,6 +219,7 @@ let LoginClass = withStyles(styles)(
                       backgroundColor: "#fff",
                       position: "sticky",
                       padding: "0.5em",
+                      marginTop: "16px",
                       bottom: "-8px"
                     }}
                   >
@@ -240,7 +250,7 @@ let LoginClass = withStyles(styles)(
                   </div>
                 </>
               )}
-            </Dialog>
+            </DialogWrapper>
 
             <PassSetter />
           </>
