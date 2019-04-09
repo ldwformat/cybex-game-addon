@@ -528,7 +528,7 @@ export const Refer = connect(
                         colConfig={[
                           {
                             name: "referral",
-                            header: Dict.MyRegisterReferral,
+                            header: Dict.ReferralName,
                             align: "left"
                           },
                           {
@@ -538,7 +538,11 @@ export const Refer = connect(
                             align: "right"
                           }
                         ]}
-                        title={t(Dict.MyRegisterReferral)}
+                        title={`${t(
+                          Dict.MyRegisterReferral
+                        )} (${(myRegisterReferral &&
+                          myRegisterReferral.referrals.length) ||
+                          0}${t(Dict.PeopleUnit)})`}
                       />
                     </Grid>
                     <Grid item className={classes.itemH} container xs={6}>
@@ -555,7 +559,7 @@ export const Refer = connect(
                         colConfig={[
                           {
                             name: "referral",
-                            header: Dict.MyGameReferral,
+                            header: Dict.ReferralName,
                             align: "left"
                           },
                           {
@@ -565,7 +569,9 @@ export const Refer = connect(
                             align: "right"
                           }
                         ]}
-                        title={t(Dict.MyGameReferral)}
+                        title={`${t(Dict.MyGameReferral)} (${(myGameReferral &&
+                          myGameReferral.referrals.length) ||
+                          0}${t(Dict.PeopleUnit)})`}
                       />
                     </Grid>
                   </Grid>
