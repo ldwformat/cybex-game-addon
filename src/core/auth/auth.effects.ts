@@ -238,6 +238,10 @@ export const setPasswordEpic: Epic<AuthWalletPassSet, any, any, IEffectDeps> = (
           let cipher = encryptKeyStore(action.payload.password, keyStore);
           storage.setItem(AddonStorage.CommonKeys.KeyStore, cipher);
           storage.setItem(
+            AddonStorage.CommonKeys.AccountName,
+            (keyStore.account && keyStore.account.name) || ""
+          );
+          storage.setItem(
             AddonStorage.CommonKeys.UnlockCount,
             action.payload.count
           );

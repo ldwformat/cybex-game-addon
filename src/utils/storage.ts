@@ -4,6 +4,7 @@ export class AddonStorage {
   static DefaultPrefix = "$$CybexAddon";
   static CommonKeys = {
     KeyStore: "#KeyStore",
+    AccountName: "#AccountName",
     UnlockCount: "#UnlockCount",
     PriceList: "#PriceList"
   };

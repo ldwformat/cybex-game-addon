@@ -165,6 +165,9 @@ export class CybexAddon {
     if (!this.store) {
       let { store, notifier, toolset } = await configureStore(this.config)({
         auth: {
+          accountName: addonStorage.getItem(
+            AddonStorage.CommonKeys.AccountName
+          ),
           keyStoreCipher: addonStorage.getItem(
             AddonStorage.CommonKeys.KeyStore
           ), // 历史账户记录
