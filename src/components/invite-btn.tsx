@@ -2,6 +2,7 @@ import * as React from "react";
 import { Subscription } from "indefinite-observable";
 import { fromEvent, merge, NEVER, zip } from "rxjs";
 import { map, takeUntil, switchMap } from "rxjs/operators";
+import { IconShare } from "../assets/images/icon-share";
 
 function getObservables(domItem) {
   const mouseEventToCoordinate = mouseEvent => {
@@ -37,9 +38,9 @@ function getObservables(domItem) {
   const touchMoves = fromEvent(domItem, "touchmove").pipe(
     map(touchEventToCoordinate)
   );
-  const touchEnds = merge(
-    fromEvent(domItem, "touchend")
-  ).pipe(map(touchEventToCoordinate));
+  const touchEnds = merge(fromEvent(domItem, "touchend")).pipe(
+    map(touchEventToCoordinate)
+  );
 
   const starts$ = merge(mouseDowns, touchStarts);
   const moves$ = merge(mouseMoves, touchMoves);
@@ -64,9 +65,7 @@ export class InviteBtn extends React.Component<any> {
         }
       });
       starts$
-        .pipe(
-          switchMap(startP => ends$.pipe(map(endP => ({ startP, endP }))))
-        )
+        .pipe(switchMap(startP => ends$.pipe(map(endP => ({ startP, endP })))))
         .subscribe(({ startP, endP }) => {
           if (
             Math.pow(startP.x - endP.x, 2) + Math.pow(startP.y - endP.y, 2) <
@@ -77,7 +76,7 @@ export class InviteBtn extends React.Component<any> {
             }
           }
         });
-      
+
       this.subscription = starts$
         .pipe(
           switchMap(startE => {
@@ -129,11 +128,14 @@ export class InviteBtn extends React.Component<any> {
           height: 46,
           borderRadius: "46px",
           opacity: 0.8,
-          background: "lightsteelblue",
-          boxShadow: "rgb(255, 255, 255) 0px 0px 8px",
-          position: "fixed"
+          background: "rgba(247,248,250)",
+          boxShadow: "0px 8px 8px -4px rgba(120,129,154,0.2)",
+          position: "fixed",
+          textAlign: "center"
         }}
-      />
+      >
+        <img src={IconShare} style={{ padding: "8px", width: "30px" }} />
+      </div>
     );
   }
 }

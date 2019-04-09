@@ -146,6 +146,7 @@ export const DepositModal = connect(
                     </InputLabel>
                     <Select
                       fullWidth
+                      displayEmpty
                       value={gateway.currentAsset}
                       input={<Input name="currentAsset" id="currentAsset" />}
                       onChange={e => selectAsset(e.target.value)}
