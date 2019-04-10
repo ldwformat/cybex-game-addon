@@ -12,6 +12,7 @@ import { MapDispatchToProps, connect } from "react-redux";
 import { authSetWalletPass, authUnlock } from "../core/auth";
 import { withTranslation, WithTranslation } from "react-i18next";
 import { Dict } from "../providers/i18n";
+import { unstable_useMediaQuery } from "@material-ui/core/useMediaQuery";
 
 type LockerPropsDispatch = {
   setPassword: typeof authSetWalletPass;
@@ -91,7 +92,13 @@ export enum LockerType {
   Lock,
   Unlock
 }
-export const Locker = withStyles(styles)(
+
+export enum Size {
+  Big,
+  Small
+}
+
+export const LockerInner = withStyles(styles)(
   connect(
     null,
     mapDispatch
@@ -101,6 +108,7 @@ export const Locker = withStyles(styles)(
         WithTranslation &
           StyledComponentProps<"locker"> & {
             type: LockerType;
+            size: Size;
           } & Partial<LockerPropsDispatch>
       > {
         static defaultProps = { type: LockerType.Lock };
@@ -155,6 +163,8 @@ export const Locker = withStyles(styles)(
             let lock = (this.lock = new PatternLock(`#patternLocker`, {
               allowRepeat: true,
               enableSetPattern: true,
+              margin: this.props.size === Size.Big ? 20 : 17,
+              radius: this.props.size === Size.Big ? 25 : 15,
               onDraw:
                 this.props.type === LockerType.Lock ? this.setPass : this.unlock
             }));
@@ -209,3 +219,9 @@ export const Locker = withStyles(styles)(
     )
   )
 );
+
+export const Locker = ({ type }: { type: LockerType }) => {
+  let size = unstable_useMediaQuery("(max-width: 599px)") ? Size.Small : Size.Big;
+
+  return <LockerInner type={type} size={size} />;
+};
