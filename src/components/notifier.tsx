@@ -64,7 +64,7 @@ export const Notifier = connect(
             // Keep track of snackbars that we've displayed
             this.storeDisplayed(notification.key);
             // Dispatch action to remove snackbar from redux store
-            this.props.removeSnackbar(notification.key);
+            // this.props.removeSnackbar(notification.key);
           });
         }
 

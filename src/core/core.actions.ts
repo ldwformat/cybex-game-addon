@@ -36,11 +36,12 @@ export const loadPriceListSuccess = (priceList: AssetPrice[]) => ({
   ...new ActionCoreLoadPriceListSuccess(priceList)
 });
 
-export const corePushNoti = (noti: string, options: NotiOptions = {}) =>
-  ({
+export const corePushNoti = (noti: string, options: NotiOptions = {}) => {
+  return {
     type: CoreActions.PushNoti,
     payload: { ...new Noti(noti, options) }
-  } as ActionCorePushNoti);
+  } as ActionCorePushNoti;
+};
 export const coreRemoveNoti = (key: string) =>
   ({ type: CoreActions.RemoveNoti, payload: key } as ActionCoreRemoveNoti);
 export const setRefUrl = (url: string) => ({ ...new ActionSetRefUrl(url) });

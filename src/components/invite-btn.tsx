@@ -134,7 +134,7 @@ export class InviteBtn extends React.Component<any> {
           textAlign: "center"
         }}
       >
-        <img src={IconShare} style={{ padding: "8px", width: "30px" }} />
+        <img src={IconShare} style={{ margin: "8px", width: "30px" }} />
       </div>
     );
   }
