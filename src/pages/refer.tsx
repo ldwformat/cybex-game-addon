@@ -31,7 +31,12 @@ import {
   Hidden,
   Icon,
   Grid,
-  colors
+  colors,
+  Table,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody
 } from "@material-ui/core";
 import CopyToClipboard from "react-copy-to-clipboard";
 import { corePushNoti } from "../core/core.actions";
@@ -63,6 +68,7 @@ import { normalizeAssetName } from "../utils/asset-name";
 import { Colors } from "../components/colors";
 import { InviteBtnPC } from "../components/invite-btn-pc";
 import { selectReferUrl } from "../core/core.selectors";
+import { TextAlignProperty } from "csstype";
 
 type StateProps = {
   accountName: string | null;
@@ -142,6 +148,28 @@ const styles: StyleRulesCallback = theme => ({
   }
 });
 
+const RebatesCol = [
+  {
+    name: "asset",
+    header: Dict.AssetType,
+    align: "left" as any,
+    cell: (asset: Cybex.Asset) => normalizeAssetName(asset.symbol)
+  },
+  {
+    name: "should_transferValue",
+    header: Dict.ToBeCleard,
+    align: "right" as any
+  },
+  {
+    name: "transferredValue",
+    header: Dict.Cleard,
+    align: "right" as any,
+    cellStyle: {
+      color: Colors.primary
+    }
+  }
+];
+
 export const Refer = connect(
   mapStateToProps,
   mapDispatchToProps
@@ -169,6 +197,7 @@ export const Refer = connect(
           RegisterRef: "RegisterRef",
           GameRegisterRef: "GameRegisterRef",
           Drawer: "Drawer",
+          Rebates: "Rebates",
           ReferModal: "ReferModal"
         };
 
@@ -202,6 +231,7 @@ export const Refer = connect(
             myRegisterReferrer,
             myRegisterReferral,
             totalRebate,
+            rebates,
             t
           } = this.props;
           let classes = this.props.classes || {};
@@ -216,6 +246,68 @@ export const Refer = connect(
                   <InviteSummary title="Demo" amount={totalRebate} />
                 </div>
                 <List>
+                  {/* Rebates */}
+                  <ListItem
+                    button
+                    divider
+                    onClick={this.handleExpand.bind(this, Refer.Panels.Rebates)}
+                  >
+                    <ListItemText primary={t(Dict.RebateDetail)} />
+                    {this.state[Refer.Panels.Rebates] ? (
+                      <ExpandLess />
+                    ) : (
+                      <ExpandMore />
+                    )}
+                  </ListItem>
+                  <Collapse
+                    in={this.state[Refer.Panels.Rebates]}
+                    timeout="auto"
+                    unmountOnExit
+                  >
+                    <Table>
+                      <TableHead>
+                        <TableRow
+                          //  classes={{ root: classes.trh }}
+                          style={{ height: "40px", opacity: 0.5 }}
+                        >
+                          {RebatesCol.map(col => (
+                            <TableCell
+                              padding="dense"
+                              // classes={{ root: classes && classes.th }}
+                              key={col.name}
+                              align={col.align}
+                            >
+                              {t(col.header as string)}
+                            </TableCell>
+                          ))}
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {rebates.map((item, i) => (
+                          <TableRow
+                            key={i}
+                            classes={{ root: (classes as any).tr }}
+                            style={{ height: "40px", opacity: 0.8 }}
+                          >
+                            {RebatesCol.map(col => (
+                              <TableCell
+                                padding="dense"
+                                classes={{ root: (classes as any).td }}
+                                style={col.cellStyle}
+                                align={col.align}
+                                key={col.name}
+                              >
+                                {col.cell
+                                  ? col.cell(item[col.name])
+                                  : item[col.name]}
+                              </TableCell>
+                            ))}
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </Collapse>
+
                   <ListItem divider>
                     <ListItemText
                       style={{ flexShrink: 0 }}
@@ -392,28 +484,7 @@ export const Refer = connect(
                             title={t(Dict.EmptyRebate)}
                           />
                         }
-                        colConfig={[
-                          {
-                            name: "asset",
-                            header: Dict.AssetType,
-                            align: "left",
-                            cell: (asset: Cybex.Asset) =>
-                              normalizeAssetName(asset.symbol)
-                          },
-                          {
-                            name: "should_transferValue",
-                            header: Dict.ToBeCleard,
-                            align: "right"
-                          },
-                          {
-                            name: "transferredValue",
-                            header: Dict.Cleard,
-                            align: "right",
-                            cellStyle: {
-                              color: Colors.primary
-                            }
-                          }
-                        ]}
+                        colConfig={RebatesCol}
                         title={t(Dict.RebateDetail)}
                       />
                     </Grid>
