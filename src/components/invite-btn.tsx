@@ -128,7 +128,7 @@ export class InviteBtn extends React.Component<any> {
           height: 46,
           borderRadius: "46px",
           opacity: 0.8,
-          background: "rgba(247,248,250)",
+          background: "rgb(247,248,250)",
           boxShadow: "0px 8px 8px -4px rgba(120,129,154,0.2)",
           position: "fixed",
           textAlign: "center"

@@ -57,14 +57,19 @@ export const Notifier = connect(
             // Display snackbar using notistack
             this.props.enqueueSnackbar(
               notification && notification.options && notification.options.i18n
-                ? t(notification.message, notification.options.transparams || {})
+                ? t(
+                    notification.message,
+                    notification.options.transparams || {}
+                  )
                 : notification.message,
               notification.options
             );
             // Keep track of snackbars that we've displayed
             this.storeDisplayed(notification.key);
             // Dispatch action to remove snackbar from redux store
-            // this.props.removeSnackbar(notification.key);
+            setTimeout(() => {
+              this.props.removeSnackbar(notification.key);
+            }, 500);
           });
         }
 
