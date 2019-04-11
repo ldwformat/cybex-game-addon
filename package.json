@@ -1,6 +1,6 @@
 {
   "name": "cybex-game-addon",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "description": "A plugin can be integrated into another Cybex dapp",
   "repository": {
     "type": "git",
