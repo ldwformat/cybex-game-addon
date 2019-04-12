@@ -27,6 +27,8 @@ export const Notifier = connect(
       > {
         displayed: string[] = [];
 
+
+
         storeDisplayed = id => {
           this.displayed = [...this.displayed, id];
         };

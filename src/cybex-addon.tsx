@@ -40,6 +40,7 @@ import { Action } from "rxjs/internal/scheduler/Action";
 import { setRefUrl, coreRefreshLockup } from "./core/core.actions";
 import { addonStorage, AddonStorage } from "./utils/storage";
 import { gatewayModalShow } from "./core/gateway";
+import { resolveNameFromReferUrl } from "./utils/refer-url";
 
 export function getPageContext() {
   // Make sure to create a new context for every server-side request so that data
@@ -173,6 +174,7 @@ export class CybexAddon {
           accountName: addonStorage.getItem(
             AddonStorage.CommonKeys.AccountName
           ),
+          defaultReferer: resolveNameFromReferUrl(location.search) || null,
           keyStoreCipher: addonStorage.getItem(
             AddonStorage.CommonKeys.KeyStore
           ), // 历史账户记录
