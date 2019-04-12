@@ -202,7 +202,7 @@ let LoginClass = withStyles(styles)(
               {currentPanel === LoginPanel.Unlock ? (
                 <Grid container direction="column" alignItems="center">
                   <Locker type={LockerType.Unlock} />
-                  <Button onClick={logout}>{t(Dict.AuthLogout)}</Button>
+                  <Button onClick={logout}>{t(Dict.Logout)}</Button>
                   {/* <Button onClick={() => unlock("qwer1234")}>解锁</Button> */}
                 </Grid>
               ) : (
