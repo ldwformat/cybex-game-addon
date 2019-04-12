@@ -35,7 +35,7 @@ export class AppState {
   public priceList: AssetPrice[] = [];
   public noties: Noti[] = [];
   // TODO: TIME
-  public lockupTime: number = 0.5 * 60 * 1000;
+  public lockupTime: number = 5 * 60 * 1000;
 }
 
 // RootState
