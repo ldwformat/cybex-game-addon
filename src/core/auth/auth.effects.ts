@@ -54,7 +54,7 @@ import { of, from, interval, NEVER, merge } from "rxjs";
 import assert from "assert";
 import { authCheckFromSeed, getKeyStore, getKeySet } from "../../utils/auth";
 import { IEffectDeps } from "../modes";
-import { ActionCorePushNoti, corePushNoti } from "../core.actions";
+import { ActionCorePushNoti, corePushNoti, CoreActions } from "../core.actions";
 import {
   selectAuthSet,
   selectRegCaptcha,
@@ -317,6 +317,7 @@ export const lockTimerEpic: Epic<any, any, any, IEffectDeps> = (
             of(1),
             action$.pipe(
               ofType<any>(
+                CoreActions.RefreshLockup,
                 GatewayActions.LoadDepositInfo,
                 GatewayActions.LoadGatewayInfo,
                 GatewayActions.SelectAsset
@@ -324,7 +325,6 @@ export const lockTimerEpic: Epic<any, any, any, IEffectDeps> = (
             )
           ).pipe(
             debounceTime(selectLockupTime(state)),
-            // debounceTime(5 * 60 * 1000),
             switchMap(_ =>
               state$.pipe(
                 take(1),

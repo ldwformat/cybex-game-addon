@@ -8,11 +8,15 @@ export enum CoreActions {
   LoadPriceList = "[CoreActions] LoadPriceList",
   LoadPriceListSuccess = "[CoreActions] LoadPriceListSuccess",
   LoadPriceListFailed = "[CoreActions] LoadPriceListFailed",
+  RefreshLockup = "[CoreActions] RefreshLockup",
   PushNoti = "[CoreActions] PushNoti",
   RemoveNoti = "[CoreActions] RemoveNoti"
 }
 export class ActionCoreLoadPriceList implements Action {
   readonly type = CoreActions.LoadPriceList;
+}
+export class ActionCoreRefreshLockup implements Action {
+  readonly type = CoreActions.RefreshLockup;
 }
 export class ActionCoreLoadPriceListSuccess implements Action {
   readonly type = CoreActions.LoadPriceListSuccess;
@@ -32,6 +36,7 @@ export class ActionSetRefUrl implements Action {
 }
 
 export const loadPriceList = () => ({ ...new ActionCoreLoadPriceList() });
+export const coreRefreshLockup = () => ({ ...new ActionCoreRefreshLockup() });
 export const loadPriceListSuccess = (priceList: AssetPrice[]) => ({
   ...new ActionCoreLoadPriceListSuccess(priceList)
 });
@@ -51,4 +56,5 @@ export type CoreAction =
   | ActionCoreLoadPriceListSuccess
   | ActionCorePushNoti
   | ActionCoreRemoveNoti
+  | ActionCoreRefreshLockup
   | ActionSetRefUrl;

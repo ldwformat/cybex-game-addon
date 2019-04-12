@@ -37,7 +37,7 @@ function createPageContext() {
 
 import { i18n } from "./providers/i18n";
 import { Action } from "rxjs/internal/scheduler/Action";
-import { setRefUrl } from "./core/core.actions";
+import { setRefUrl, coreRefreshLockup } from "./core/core.actions";
 import { addonStorage, AddonStorage } from "./utils/storage";
 import { gatewayModalShow } from "./core/gateway";
 
@@ -158,6 +158,11 @@ export class CybexAddon {
     //       .forEach(node => node.remove());
     //   });
     // }
+    if (typeof window !== undefined) {
+      window.addEventListener("click", e => {
+        this.refreshLockupTime();
+      });
+    }
     i18n.changeLanguage(this.config.lang);
   }
 
@@ -218,6 +223,7 @@ export class CybexAddon {
           )
       );
   }
+
   async depositModal() {
     if (!this.uiHelper) {
       await this.init();
@@ -234,9 +240,16 @@ export class CybexAddon {
           )
       );
   }
+
   logout() {
     if (this.store) {
       this.store.dispatch(authLogout());
+    }
+  }
+
+  refreshLockupTime() {
+    if (this.store) {
+      this.store.dispatch(coreRefreshLockup());
     }
   }
 
