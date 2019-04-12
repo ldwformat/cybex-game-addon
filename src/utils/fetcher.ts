@@ -394,7 +394,6 @@ export class ReferFetcher {
   async getRebateDetails(account: string, action: string) {
     return this.fetch<ReferSingleRebate[]>(
       `rebate/?account=${account}&action=${action}`
-      // `rebate/?account=${account}&action=${action}`
     );
   }
 }

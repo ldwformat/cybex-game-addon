@@ -158,7 +158,7 @@ const RebatesCol = [
   {
     name: "should_transferValue",
     header: Dict.ToBeCleard,
-    align: "right" as any
+    align: "center" as any
   },
   {
     name: "transferredValue",
@@ -374,17 +374,19 @@ export const Refer = connect(
                   >
                     <List style={{ opacity: 0.5 }} disablePadding>
                       {myRegisterReferral &&
-                        myRegisterReferral.referrals.map(refer => (
-                          <ListItem key={refer.referral} divider>
-                            <ListItemText
-                              classes={{ primary: classes.accountText }}
-                              primary={refer.referral}
-                            />
-                            <Typography style={{ flexShrink: 0 }}>
-                              {formatTime(refer.ts)}
-                            </Typography>
-                          </ListItem>
-                        ))}
+                        myRegisterReferral.referrals
+                          .sort((prev, next) => (prev.ts > next.ts ? -1 : 1))
+                          .map(refer => (
+                            <ListItem key={refer.referral} divider>
+                              <ListItemText
+                                classes={{ primary: classes.accountText }}
+                                primary={refer.referral}
+                              />
+                              <Typography style={{ flexShrink: 0 }}>
+                                {formatTime(refer.ts)}
+                              </Typography>
+                            </ListItem>
+                          ))}
                     </List>
                   </Collapse>
                   <ListItem
@@ -413,17 +415,19 @@ export const Refer = connect(
                   >
                     <List style={{ opacity: 0.5 }} disablePadding>
                       {myGameReferral &&
-                        myGameReferral.referrals.map(refer => (
-                          <ListItem divider key={refer.referral}>
-                            <ListItemText
-                              classes={{ primary: classes.accountText }}
-                              primary={refer.referral}
-                            />
-                            <Typography style={{ flexShrink: 0 }}>
-                              {formatTime(refer.ts)}
-                            </Typography>
-                          </ListItem>
-                        ))}
+                        myGameReferral.referrals
+                          .sort((prev, next) => (prev.ts > next.ts ? -1 : 1))
+                          .map(refer => (
+                            <ListItem divider key={refer.referral}>
+                              <ListItemText
+                                classes={{ primary: classes.accountText }}
+                                primary={refer.referral}
+                              />
+                              <Typography style={{ flexShrink: 0 }}>
+                                {formatTime(refer.ts)}
+                              </Typography>
+                            </ListItem>
+                          ))}
                     </List>
                   </Collapse>
                 </List>

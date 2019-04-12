@@ -10,17 +10,34 @@ export const selectGatewayModalShow = createSelector(
   selectGateway,
   gateway => gateway.showModal
 );
+
+const PrimaryCoins = ["USDT", "ETH", "MT", "BTC"];
+function findCoinIndex(coin: string) {
+  let index = PrimaryCoins.indexOf(coin);
+  return index === -1 ? coin : index;
+}
+function cmp(a: string | number, b: string | number) {
+  if (typeof a === "string" && typeof b === "number") {
+    return 1;
+  }
+  if (typeof a === "number" && typeof b === "string") {
+    return -1;
+  }
+  if (a > b) {
+    return 1;
+  }
+  if (a < b) {
+    return -1;
+  }
+  return 0;
+}
 export const selectGatewayCoinList = createSelector(
   selectGateway,
   gateway =>
     gateway.info
       .filter(info => !info.isDisabled)
       .sort((prev, next) =>
-        prev.currency > next.currency
-          ? 1
-          : prev.currency < next.currency
-          ? -1
-          : 0
+        cmp(findCoinIndex(prev.currency), findCoinIndex(next.currency))
       )
 );
 export const selectGatewayCurrentAsset = createSelector(
