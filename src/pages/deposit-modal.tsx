@@ -5,7 +5,8 @@ import {
   gateway,
   GatewayState,
   gatewaySelectAsset,
-  gatewayModalClose
+  gatewayModalClose,
+  gatewaySelectFirstAsset
 } from "../core/gateway";
 import {
   selectGateway,
@@ -51,6 +52,7 @@ type DepositStateProps = {
 type DepositDispatchProps = {
   closeModal: typeof gatewayModalClose;
   selectAsset: typeof gatewaySelectAsset;
+  selectFirstAsset: typeof gatewaySelectFirstAsset;
   pushNoti: typeof corePushNoti;
 };
 
@@ -66,6 +68,7 @@ const mapStateToProps: MapStateToProps<
 });
 const mapDispatchToProps: MapDispatchToProps<DepositDispatchProps, {}> = {
   selectAsset: gatewaySelectAsset,
+  selectFirstAsset: gatewaySelectFirstAsset,
   closeModal: gatewayModalClose,
   pushNoti: corePushNoti
 };
@@ -101,8 +104,8 @@ export const DepositModal = connect(
           WithTranslation
       > {
         componentDidMount() {
-          if (!this.props.currentDeposit && this.props.coinList.length) {
-            this.props.selectAsset(this.props.coinList[0].asset);
+          if (!this.props.currentDeposit) {
+            this.props.selectFirstAsset();
           }
         }
 

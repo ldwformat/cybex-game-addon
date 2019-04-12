@@ -10,7 +10,8 @@ export enum GatewayActions {
   LoadDepositInfo = "[Gateway] LoadDepositInfo",
   LoadDepositInfoSuccess = "[Gateway] LoadDepositInfoSuccess",
   LoadDepositInfoFailed = "[Gateway] LoadDepositInfoFailed",
-  SelectAsset = "[Gateway] SelectAsset"
+  SelectAsset = "[Gateway] SelectAsset",
+  SelectFirstAsset = "[Gateway] SelectFirstAsset"
 }
 
 export class GatewayModalShowAction implements Action {
@@ -23,6 +24,9 @@ export class GatewayModalCloseAction implements Action {
 export class GatewaySelectAssetAction implements Action {
   readonly type = GatewayActions.SelectAsset;
   constructor(public payload: string) {}
+}
+export class GatewaySelectFirstAssetAction implements Action {
+  readonly type = GatewayActions.SelectFirstAsset;
 }
 export class GatewayLoadGatewayInfoAction implements Action {
   readonly type = GatewayActions.LoadGatewayInfo;
@@ -85,11 +89,15 @@ export const gatewaySelectAsset: (
   type: GatewayActions.SelectAsset,
   payload: asset
 });
+export const gatewaySelectFirstAsset = () => ({
+  ...new GatewaySelectFirstAssetAction()
+});
 
 export type GatewayAction =
   | GatewayModalShowAction
   | GatewayModalCloseAction
   | GatewaySelectAssetAction
+  | GatewaySelectFirstAssetAction
   | GatewayLoadGatewayInfoAction
   | GatewayLoadGatewayInfoSuccessAction
   | GatewayLoadGatewayInfoFailedAction

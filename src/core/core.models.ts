@@ -34,7 +34,8 @@ export function withNotiOptions(withNoti: boolean = false): WithNotiOptions {
 export class AppState {
   public priceList: AssetPrice[] = [];
   public noties: Noti[] = [];
-  public lockupTime: number = 5 * 60 * 1000;
+  // TODO: TIME
+  public lockupTime: number = 0.5 * 60 * 1000;
 }
 
 // RootState

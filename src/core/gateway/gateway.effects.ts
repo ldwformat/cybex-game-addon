@@ -11,7 +11,9 @@ import {
   gatewayLoadDepositInfo,
   GatewaySelectAssetAction,
   GatewayLoadDepositInfoFailedAction,
-  GatewayLoadGatewayInfoFailedAction
+  GatewayLoadGatewayInfoFailedAction,
+  GatewaySelectFirstAssetAction,
+  gatewaySelectAsset
 } from "./gateway.actions";
 import {
   switchMap,
@@ -29,7 +31,9 @@ import {
   authUnauthed,
   AuthLoginSuccessAction,
   AuthActions,
-  AuthStatus
+  AuthStatus,
+  AuthLoginAction,
+  AuthUnlockAction
 } from "../auth";
 import {
   selectGatewayCoinList,
@@ -44,22 +48,14 @@ export const loadGatewayInfoEpic: Epic<any, any, CoreState, IEffectDeps> = (
   { gatewayFetcher }
 ) =>
   action$.pipe(
-    ofType<AuthLoginSuccessAction | GatewayLoadGatewayInfoAction>(
-      AuthActions.LoginSuccess,
+    ofType<AuthUnlockAction | AuthLoginAction | GatewayLoadGatewayInfoAction>(
+      AuthActions.Unlock,
+      AuthActions.Login,
       GatewayActions.LoadGatewayInfo
     ),
     switchMap(() =>
-      state$.pipe(
-        filter(state => selectAuthStatus(state) === AuthStatus.LOGIN_NORMAL),
-        take(1),
-        switchMap(state => {
-          if (!(selectAuthStatus(state) === AuthStatus.LOGIN_NORMAL)) {
-            return of(authUnauthed());
-          }
-          return from(gatewayFetcher.getCoinList()).pipe(
-            map(gatewayLoadGatewayInfoSuccess)
-          );
-        }),
+      from(gatewayFetcher.getCoinList()).pipe(
+        map(gatewayLoadGatewayInfoSuccess),
         catchError(err => {
           console.error(err);
           return of(gatewayLoadGatewayInfoFailed());
@@ -81,6 +77,7 @@ export const loadDpstAfterSelAssetEpic: Epic<
     ofType<GatewaySelectAssetAction>(GatewayActions.SelectAsset),
     switchMap(action =>
       state$.pipe(
+        filter(state => !!selectGatewayCoinList(state).length),
         take(1),
         switchMap(state => {
           let authSet = selectAuthSet(state);
@@ -98,6 +95,36 @@ export const loadDpstAfterSelAssetEpic: Epic<
             return NEVER;
           }
           return of(gatewayLoadDepositInfo(coinInfo.asset));
+        }),
+        catchError(err => {
+          console.error(err);
+          return of(gatewayLoadGatewayInfoFailed());
+        })
+      )
+    ),
+    catchError(err => {
+      console.error(err);
+      return of(gatewayLoadGatewayInfoFailed());
+    })
+  );
+export const selFirstAssetEpic: Epic<any, any, CoreState, IEffectDeps> = (
+  action$,
+  state$,
+  { gatewayFetcher }
+) =>
+  action$.pipe(
+    ofType<GatewaySelectFirstAssetAction>(GatewayActions.SelectFirstAsset),
+    switchMap(action =>
+      state$.pipe(
+        filter(state => !!selectGatewayCoinList(state).length),
+        take(1),
+        switchMap(state => {
+          let authSet = selectAuthSet(state);
+          if (!authSet) {
+            return of(authUnauthed());
+          }
+          let coinInfo = selectGatewayCoinList(state)[0];
+          return of(gatewaySelectAsset(coinInfo.asset));
         }),
         catchError(err => {
           console.error(err);

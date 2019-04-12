@@ -1,7 +1,7 @@
 import * as React from "react";
 import { MapStateToProps, connect, MapDispatchToProps } from "react-redux";
 import { CoreState } from "../core";
-import { gateway, GatewayState, gatewaySelectAsset } from "../core/gateway";
+import { gateway, GatewayState, gatewaySelectAsset, gatewaySelectFirstAsset} from "../core/gateway";
 import {
   selectGateway,
   selectGatewayCurrentAsset,
@@ -38,6 +38,7 @@ type DepositStateProps = {
   currentDeposit: GetDepositAddress | undefined;
 };
 type DepositDispatchProps = {
+  selectFirstAsset: typeof gatewaySelectFirstAsset,
   selectAsset: typeof gatewaySelectAsset;
   pushNoti: typeof corePushNoti;
 };
@@ -52,6 +53,7 @@ const mapStateToProps: MapStateToProps<
   coinList: selectGatewayCoinList(state)
 });
 const mapDispatchToProps: MapDispatchToProps<DepositDispatchProps, {}> = {
+  selectFirstAsset: gatewaySelectFirstAsset,
   selectAsset: gatewaySelectAsset,
   pushNoti: corePushNoti
 };
@@ -87,8 +89,8 @@ export const Deposit = connect(
           WithTranslation
       > {
         componentDidMount() {
-          if (!this.props.currentDeposit && this.props.coinList.length) {
-            this.props.selectAsset(this.props.coinList[0].asset);
+          if (!this.props.currentDeposit) {
+            this.props.selectFirstAsset();
           }
         }
 

@@ -55,7 +55,8 @@ import {
   gateway,
   loadDepsoitInfoEpic,
   loadDpstAfterSelAssetEpic,
-  loadGatewayInfoEpic
+  loadGatewayInfoEpic,
+  selFirstAssetEpic
 } from "./gateway";
 import { IEffectDeps } from "./modes";
 import { CybexAssistant } from "../utils/cybex-assistant";
@@ -94,6 +95,7 @@ const rootEpic = combineEpics(
   loadReferRebateEpic,
   loadDepsoitInfoEpic,
   loadDpstAfterSelAssetEpic,
+  selFirstAssetEpic,
   loadPriceListEpic,
   authUpdateBalanceEpic,
   updateBalanceEpic,
