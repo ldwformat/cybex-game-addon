@@ -10,8 +10,7 @@ const mapStateToProps = state => ({
   notifications: selectNoties(state)
 });
 
-const mapDispatchToProps = dispatch =>
-  bindActionCreators({ removeSnackbar: coreRemoveNoti }, dispatch);
+const mapDispatchToProps = { removeSnackbar: coreRemoveNoti };
 
 export const Notifier = connect(
   mapStateToProps,
@@ -26,9 +25,6 @@ export const Notifier = connect(
         } & WithTranslation
       > {
         displayed: string[] = [];
-
-
-
         storeDisplayed = id => {
           this.displayed = [...this.displayed, id];
         };
