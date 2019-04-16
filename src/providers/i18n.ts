@@ -35,6 +35,8 @@ export const cnDict = {
   MyRegisterReferral: "我的注册推荐",
   MyGameReferrer: "我的游戏推荐人",
   MyGameReferral: "我的游戏推荐",
+  PasswordBackupTip:
+    "我确认已妥善备份即将创建的账户名称及其密码，并知晓一旦密码遗忘，将无法找回，也无法再次登录相应账户或使用账户内资金。",
   PatchReferrer: "补充推荐人",
   PatchReferrerLabel: "推荐码",
   PatchReferrerHelper:
@@ -141,6 +143,8 @@ export const enDict: Dictionary = {
     "If your invitee has played in Cybex Game Center, you can ask him/her to enter your invitation code through [My Game Inviter] page, then you can also enjoy 0.2% of your invitee’s wagers. Please note that your account must have a bet record that is earlier than your invitee’s one, or the invitation will consider invalid.",
   RefererRuleContent_5:
     "Notice: Wagers later than the fill-in of invitation code will be counted only.",
+  PasswordBackupTip:
+    "I confirm I have properly backed up the name and password of the account to be created. I know once the password is forgotten, it cannot be retrieved, and I cannot log in the account or use the funds in it.",
   PatchReferrer: "Add Inviter",
   PatchReferrerLabel: "Invitation code",
   PatchReferrerHelper:
@@ -236,6 +240,8 @@ export const vnDict: Dictionary = {
     "Nếu người bạn  giới thiệu là người dùng cũ: Người dùng cũ nhập mã lời mời giới thiệu của bạn trong phần [Người giới thiệu trò chơi cho tôi], bạn sẽ được hưởng 0,2% tiền thưởng từ số tiền đặt cược của họ, xin lưu ý rằng tài khoản của bạn cần Chơi CybexBet trước tài khoản giới thiệu của trò chơi, nếu không, nó sẽ bị coi là không hợp lệ;",
   RefererRuleContent_5:
     "Lưu ý: Số tiền thưởng chỉ được tính sau khi đã điền mã mời.",
+  PasswordBackupTip:
+    "Tôi xác nhận rằng tôi đã sao lưu đúng tên tài khoản và mật khẩu mà tôi sắp tạo. Tôi biết rằng một khi quên mật khẩu, tôi sẽ không thể lấy lại được và tôi sẽ không thể đăng nhập vào tài khoản hoặc sử dụng tiền trong tài khoản đó nữa.",
   PatchReferrer: "Thêm người giới thiệu",
   PatchReferrerLabel: "Thêm người giới thiệu",
   PatchReferrerHelper:

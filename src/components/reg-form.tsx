@@ -5,7 +5,9 @@ import {
   DialogContent,
   DialogActions,
   InputAdornment,
-  IconButton
+  IconButton,
+  Checkbox,
+  FormControlLabel
 } from "@material-ui/core";
 import { withToolset } from "../providers/toolset";
 import { ChainValidation } from "../cybex/chain";
@@ -35,7 +37,14 @@ export type RegFormData = {
 
 const validate = values => {
   const errors: any = {};
-  const requiredFields = ["accountName", "password", "confirm", "captcha"];
+  const requiredFields = [
+    "accountName",
+    "password",
+    "confirm",
+    "captcha",
+    "agreement"
+  ];
+  console.debug("Values: ", values);
   requiredFields.forEach(field => {
     if (!values[field]) {
       errors[field] = Dict[`ErrorRequired_${field}`] || Dict.ErrorRequired;
@@ -88,6 +97,7 @@ const mapStateToProps: MapStateToPropsParam<
     password: "",
     confirm: "",
     captcha: "",
+    agreement: false,
     referer: selectDefaultReferer(state) || ""
   }
 });
@@ -119,6 +129,7 @@ export const RegForm = withToolset(
       invalid,
       getCaptcha,
       captcha,
+      valid,
       defaultReferer,
       children,
       toolset
@@ -133,10 +144,18 @@ export const RegForm = withToolset(
             password: "",
             confirm: "",
             referer: defaultReferer,
+            agreement: false,
             captcha: ""
           } as RegFormData
         }
-        render={({ handleSubmit, submitting, pristine, values }) => (
+        render={({
+          handleSubmit,
+          submitting,
+          pristine,
+          values,
+          invalid,
+          valid
+        }) => (
           <form onSubmit={handleSubmit}>
             <DialogContent style={styleOfContent}>
               <div style={{ marginBottom: "0.5em" }}>
@@ -220,7 +239,7 @@ export const RegForm = withToolset(
                   }}
                 />
               </div>
-              <div style={{ marginBottom: "0.5em" }}>
+              <div style={{ marginBottom: "1em" }}>
                 <Field
                   style={{ width: "100%" }}
                   name="referer"
@@ -228,6 +247,27 @@ export const RegForm = withToolset(
                   disabled={!!defaultReferer}
                   label={t(Dict.AuthReferrer)}
                   helperText={t(Dict.AuthReferrerHelper)}
+                />
+              </div>
+              <div>
+                <Field
+                  name="agreement"
+                  component={({ input }) => (
+                    <FormControlLabel
+                      style={{ marginRight: 0, textAlign: "justify" }}
+                      htmlFor="agreement"
+                      onClick={() => input.onChange(!input.value as any)}
+                      control={
+                        <Checkbox
+                          id="agreement"
+                          checked={input.value ? true : false}
+                          onChange={input.onChange}
+                        />
+                      }
+                      label={t(Dict.PasswordBackupTip)}
+                    />
+                  )}
+                  type="checkbox"
                 />
               </div>
             </DialogContent>
