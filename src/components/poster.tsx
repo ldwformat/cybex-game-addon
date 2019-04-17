@@ -85,7 +85,8 @@ export const PosterDisplay = withTranslation()(
       let posterSpace = findFirstEmptyZone(
         posterCtx,
         posterCanvas.width,
-        posterCanvas.height
+        posterCanvas.height,
+        50
       );
       if (!posterSpace) {
         if (this.qrcode && this.qrcodeImg) {

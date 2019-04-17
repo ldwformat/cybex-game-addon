@@ -43,17 +43,13 @@ export const cnDict = {
     "请输入推荐人分享给您的推荐码，推荐人一经填写，将无法修改",
   PatchReferrerAdd: "增加推荐人",
   MyRefererCode: "我的推荐码",
-  RefererRuleTitle: "赛贝游戏中心：全新邀请机制上线",
+  RefererRuleTitle: "<strong>如何查看我的返现</strong>",
   RefererRuleContent_0:
-    "各位赛贝游戏中心的用户们~全新邀请机制即日起正式上线，只需通过推荐您的朋友即可获得终身奖励！获得被推荐朋友0.2％的所有投注流水。",
+    "您可以在<strong>【奖励发放】</strong>里看到各个资产的返现金额，包含<strong>【待发放】</strong>和<strong>【已发放】</strong>",
   RefererRuleContent_1:
     "所有奖励我们都会在每周一统一发出。您只需复制您的邀请码链接并分享给您的所有朋友！",
-  RefererRuleContent_2: "您可以通过以下方式参与到邀请机制：",
-  RefererRuleContent_3:
-    "如果您推荐的朋友是新用户：您可以将您的邀请分享链接直接分享给新用户，新用户注册后玩CybexBet，您方可享受0.2%的流水奖励；",
-  RefererRuleContent_4:
-    "如果您推荐的朋友是老用户：您也可以让老用户在【我的游戏推荐人】选项中，输入您的邀请码，您将享受他所有流水的0.2%，请注意，您的账号需在游戏推荐人账号前玩CybexBet，否则视为无效；",
-  RefererRuleContent_5: "注意：活动发放的流水计算自填写推荐起生效；",
+  RefererRuleContent_2:
+    "<strong>【返现总额】</strong>将显示您所有返现的总额，并折合成USDT方便显示计算，数据会进行实时更新，如您有任何问题，请及时反馈给CybexBet小助手（微信号：cybexgame-1)。",
   PeopleUnit: "人",
   CopyAddress: "复制地址",
   AddressCopied: "充值地址已复制到剪贴板",
@@ -131,19 +127,11 @@ export const enDict: Dictionary = {
   MyRegisterReferral: "My Register Invitees",
   MyGameReferrer: "My Game Inviter",
   MyGameReferral: "My Game Invitees",
-  RefererRuleTitle: "Cybex Game Center: New Referral System",
-  RefererRuleContent_0:
-    "Dear players, Cybex Game Center updated the referral system. You will get a lifetime reward once successfully inviting others--0.2% of all your invitee’s wagers.",
-  RefererRuleContent_1:
-    "All rewards will be issued every Monday. Copy your invitation code and share it out!",
+  RefererRuleTitle: "<strong>How to check my cash back</strong>",
+  RefererRuleContent_0: "",
+  RefererRuleContent_1: `You can see cash back of each asset in <strong>Reward Release</strong> including <strong>Pending</strong> and <strong>Distributed</strong>; `,
   RefererRuleContent_2:
-    "You can join the brand new referral system in the following ways:",
-  RefererRuleContent_3:
-    "If your invitee is new to Cybex Game Center, you will enjoy 0.2% of the invitee’s wagers once him/her successfully registered.",
-  RefererRuleContent_4:
-    "If your invitee has played in Cybex Game Center, you can ask him/her to enter your invitation code through [My Game Inviter] page, then you can also enjoy 0.2% of your invitee’s wagers. Please note that your account must have a bet record that is earlier than your invitee’s one, or the invitation will consider invalid.",
-  RefererRuleContent_5:
-    "Notice: Wagers later than the fill-in of invitation code will be counted only.",
+    "<strong>Total cash back</strong> will show the total amount of your all cash backs and convert them into USDT for the convenience. The data will be updated in real time. Any questions, please give feedback to CybexBet assistant. (Wechat: cybexgame-1)",
   PasswordBackupTip:
     "I confirm I have properly backed up the name and password of the account to be created. I know once the password is forgotten, it cannot be retrieved, and I cannot log in the account or use the funds in it.",
   PatchReferrer: "Add Inviter",
@@ -230,18 +218,13 @@ export const vnDict: Dictionary = {
   MyRegisterReferral: "Người tôi mời đăng ký",
   MyGameReferrer: "Người giới thiệu trò chơi cho tôi",
   MyGameReferral: "Người được tôi giới thiệu trò chơi",
-  RefererRuleTitle: "Cybex Game Center: Ra mắt cơ chế mời hoàn toàn mới mới",
+  RefererRuleTitle:
+    "<strong>Làm thế nào để kiểm tra số tiền hoàn lại của tôi</strong>",
   RefererRuleContent_0:
-    "Thân gửi  các người dùng của Cybex Game Center ~ Cơ chế mời mới sẽ được chính thức ra mắt kể từ ngày hôm nay. Bạn có thể nhận ngay các phần thưởng bằng cách giới thiệu cho bạn bè của ình! Ngoài ra bạn còn có thể nhận được 0.2% số tiền đặt cược từ người bạn đã giới thiệu nữa đó.",
+    "Bạn có thể thấy số tiền rút tiền mặt của từng tài sản trong <strong>Phát tiền thưởng</strong>, bao gồm <strong>Đang chờ xử lý</strong> và <strong>Đã phát</strong>.",
   RefererRuleContent_1:
-    "Tất cả các phần thưởng sẽ được phát vào thứ hai tuần kế tiếp. Bạn chỉ cần sao chép rồi gửi đường link chia sẻ mã giới thiệu với bạn bè của mình là có thể tham gia rồi.",
-  RefererRuleContent_2: "Bạn có thể tham gia vào cơ chế mời theo các cách sau:",
-  RefererRuleContent_3:
-    "Nếu người bạn mà bạn giới thiệu là người dùng mới: Bạn có thể trực tiếp chia sẻ liên kết chia sẻ lời mời của mình với người dùng mới. Sau khi người dùng mới đăng ký và chơi CybexBet, bạn có thể thưởng phần thưởng 0,2% từ số tiền đặt cược của họ;",
-  RefererRuleContent_4:
-    "Nếu người bạn  giới thiệu là người dùng cũ: Người dùng cũ nhập mã lời mời giới thiệu của bạn trong phần [Người giới thiệu trò chơi cho tôi], bạn sẽ được hưởng 0,2% tiền thưởng từ số tiền đặt cược của họ, xin lưu ý rằng tài khoản của bạn cần Chơi CybexBet trước tài khoản giới thiệu của trò chơi, nếu không, nó sẽ bị coi là không hợp lệ;",
-  RefererRuleContent_5:
-    "Lưu ý: Số tiền thưởng chỉ được tính sau khi đã điền mã mời.",
+    "<strong>Tổng tiền hoàn lại</strong> sẽ hiển thị tổng số tiền hoàn lại của bạn và chuyển đổi thành USDT để tính toán hiển thị. Dữ liệu sẽ được cập nhật theo thời gian thực. Nếu bạn có bất kỳ câu hỏi nào khác, xin vui lòng gửi phản hồi cho các trợ lý CybexBet (Wechat: cybexgame-1).",
+  RefererRuleContent_2: "",
   PasswordBackupTip:
     "Tôi xác nhận rằng tôi đã sao lưu đúng tên tài khoản và mật khẩu mà tôi sắp tạo. Tôi biết rằng một khi quên mật khẩu, tôi sẽ không thể lấy lại được và tôi sẽ không thể đăng nhập vào tài khoản hoặc sử dụng tiền trong tài khoản đó nữa.",
   PatchReferrer: "Thêm người giới thiệu",
@@ -270,7 +253,7 @@ export const vnDict: Dictionary = {
     "Đăng ký thất bại. Số lần đăng ký quá nhiều, vui lòng thử lại sau",
   NotiRegWrong_403: "Lỗi mã xác minh",
   NotiRegWrong_507: "Đăng ký không thành công, vui lòng thử lại sau",
-  Poster: "PosterImgBase64EN",
+  Poster: "PosterImgBase64VN",
   ErrorRequired: "Mục cần phải điền",
   ErrorRequired_accountName: "Vui lòng điền tên tài khoản",
   ErrorRequired_password: "Vui lòng điền mật khẩu",

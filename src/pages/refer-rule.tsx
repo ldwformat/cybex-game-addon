@@ -34,17 +34,15 @@ export const Paragraph = ({
       variant="body1"
       style={{ marginTop: "1em", marginBottom: "0.5em" }}
       color="secondary"
-    >
-      {title}
-    </Typography>
+      dangerouslySetInnerHTML={{ __html: title }}
+    />
     {contents.map((p, i) => (
       <Typography
         style={{ marginTop: "1em", textAlign: "justify" }}
         key={i}
         variant="body2"
-      >
-        {p}
-      </Typography>
+        dangerouslySetInnerHTML={{ __html: p }}
+      />
     ))}
   </>
 );
