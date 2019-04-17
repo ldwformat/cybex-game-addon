@@ -129,7 +129,7 @@ export const DepositModal = connect(
               open={showModal}
               dialogProps={{ disableBackdropClick: true }}
               onCloseClick={closeModal}
-              title={"充值"}
+              title={t(Dict.Deposit)}
             >
               <Paper classes={{ root: classes.root }} square elevation={0}>
                 <Grid
