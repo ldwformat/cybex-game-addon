@@ -39,7 +39,7 @@ import { i18n } from "./providers/i18n";
 import { Action } from "rxjs/internal/scheduler/Action";
 import { setRefUrl, coreRefreshLockup } from "./core/core.actions";
 import { addonStorage, AddonStorage } from "./utils/storage";
-import { gatewayModalShow } from "./core/gateway";
+import { gatewayModalShow, gatewayWithdrawModalShow } from "./core/gateway";
 import { resolveNameFromReferUrl } from "./utils/refer-url";
 
 export function getPageContext() {

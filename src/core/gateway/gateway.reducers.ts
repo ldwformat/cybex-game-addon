@@ -41,6 +41,38 @@ export const gateway: Reducer<GatewayState, GatewayAction | AuthAction> = (
       };
     case GatewayActions.LoadGatewayInfoSuccess:
       return { ...state, info: action.payload };
+    case GatewayActions.VerifyAddressSuccess:
+      return {
+        ...state,
+        addressVerifyResult: {
+          ...state.addressVerifyResult,
+          [action.payload.coinType]: {
+            ...state.addressVerifyResult[action.payload.coinType],
+            [action.payload.address]: true
+          }
+        }
+      };
+    case GatewayActions.VerifyAddressFailed:
+      return {
+        ...state,
+        addressVerifyResult: {
+          ...state.addressVerifyResult,
+          [action.payload.coinType]: {
+            ...state.addressVerifyResult[action.payload.coinType],
+            [action.payload.address]: false
+          }
+        }
+      };
+    case GatewayActions.GatewayWithdrawModalShow:
+      return {
+        ...state,
+        showWithdrawModal: true
+      };
+    case GatewayActions.GatewayWithdrawModalClose:
+      return {
+        ...state,
+        showWithdrawModal: false
+      };
     default:
       return state;
   }

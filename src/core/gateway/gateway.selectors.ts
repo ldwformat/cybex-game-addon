@@ -1,6 +1,10 @@
 import { Selector, createSelector } from "reselect";
 import { CoreState } from "..";
-import { GatewayState } from "./gateway.models";
+import {
+  GatewayState,
+  AddressVerifyState,
+  GatewayModalState
+} from "./gateway.models";
 import { selectAuthSet } from "../auth/auth.selectors";
 
 export const selectGateway: Selector<CoreState, GatewayState> = state =>
@@ -9,6 +13,15 @@ export const selectGateway: Selector<CoreState, GatewayState> = state =>
 export const selectGatewayModalShow = createSelector(
   selectGateway,
   gateway => gateway.showModal
+);
+export const selectGatewayModalState = createSelector(
+  selectGateway,
+  gateway =>
+    !gateway.showModal && !gateway.showWithdrawModal
+      ? GatewayModalState.Closed
+      : gateway.showWithdrawModal
+      ? GatewayModalState.ShowWithdraw
+      : GatewayModalState.ShowDeposit
 );
 
 const PrimaryCoins = ["USDT", "ETH", "MT", "BTC"];
@@ -48,6 +61,24 @@ export const selectGatewayDepositInfoList = createSelector(
   selectGateway,
   gateway => gateway.depositInfoList
 );
+export const selectGatewayAddressVerifications = createSelector(
+  selectGateway,
+  gateway => gateway.addressVerifyResult
+);
+export const selectGatewayAddressVerification = (
+  coinType: string,
+  address: string
+) =>
+  createSelector(
+    selectGatewayAddressVerifications,
+    results =>
+      results[coinType] === undefined ||
+      results[coinType][address] === undefined
+        ? AddressVerifyState.Verifing
+        : results[coinType][address]
+        ? AddressVerifyState.Valid
+        : AddressVerifyState.Invalid
+  );
 
 export const selectGatewayCurrentDepositInfo = createSelector(
   selectGatewayDepositInfoList,
@@ -59,4 +90,9 @@ export const selectGatewayCurrentDepositInfo = createSelector(
         info.asset === currentAsset &&
         info.accountName === (authSet && authSet.account)
     )
+);
+export const selectGatewayCurrentCoinInfo = createSelector(
+  selectGatewayCoinList,
+  selectGatewayCurrentAsset,
+  (list, currentAsset) => list.find(info => info.asset === currentAsset)
 );

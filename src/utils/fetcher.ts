@@ -413,7 +413,7 @@ export interface GetDepositAddress {
   asset: string;
   type: string;
   createAt: string;
-  projectInfo: ProjectInfo;
+  // projectInfo: ProjectInfo;
 }
 
 export interface ProjectInfo {
@@ -423,47 +423,125 @@ export interface ProjectInfo {
   contractExplorerUrl: null;
 }
 
+export type RawCoinInfoFromGateway = {
+  ID: 2;
+  CreatedAt: "2019-06-16T23:33:45.533157Z";
+  UpdatedAt: "2019-06-16T23:33:45.533157Z";
+  DeletedAt: null;
+  name: "NASH";
+  blockchain: "1";
+  projectname: "NASH";
+  cybname: "JADE.NASH";
+  cybid: "1.3.784";
+  confirmation: "40";
+  smartContract: "";
+  gatewayAccount: "yinnan-test2";
+  withdrawPrefix: "withdraw:CybexGatewayDev";
+  depositSwitch: true;
+  withdrawSwitch: true;
+  minDeposit: "0";
+  minWithdraw: "0.05";
+  withdrawFee: "0.001";
+  depositFee: "0";
+  precision: "18";
+  imgURL: "";
+  hashLink: "";
+  info: {};
+  useMemo: false;
+};
+export type RawDepositInfoFromGateway = {
+  address: "0xCAB495872fC7c5f848e27c9a3Cd7A06cE07470Bf";
+  asset: "ETH";
+  createAt: "2019-07-12T06:32:03.88848Z";
+  cybName: "JADE.ETH";
+};
+
 export interface CoinInfo {
   asset: string;
+  raw: RawCoinInfoFromGateway;
   currency: string;
   isDisabled: boolean;
 }
 
+export type VerifyValidResult = {
+  address: "0xc8A447966372200ba365DB4b6f3C56db99fCCebb";
+  asset: "";
+  timestamp: number;
+  valid: boolean;
+};
+export type VerifyFailedResult = {};
+export type VerifyResult = {
+  address: string;
+  coinType: string;
+  valid: boolean;
+};
+
 export class GatewayFetcher {
   constructor(public gatewayUrl: string) {}
 
-  async fetch<R = any>(path: string, body: any): Promise<R> {
+  async fetch<R = any>(path: string, token?: string): Promise<R> {
     return fetch(resolvePath(this.gatewayUrl, path), {
       headers: {
-        "Content-Type": "application/json"
-      },
-      method: "post",
-      body: JSON.stringify(body)
-    })
-      .then(res => res.json())
-      .then((res: GatewayResponse<R>) => {
-        if (res.data) {
-          return res.data as R;
-        }
-        throw new Error("Fetch Gateway Error");
-      });
+        Authorization: `Bearer ${token}`
+      }
+    }).then(res => res.json());
+    // .then((res: GatewayResponse<R>) => {
+    //   if (res.data) {
+    //     return res.data as R;
+    //   }
+    //   throw new Error("Fetch Gateway Error");
+    // });
   }
 
-  async getCoinList() {
-    return fetch(
-      "https://gateway-query.cybex.io/public/coin-info?currency=1&isDisabled=1&asset=1"
-    ).then(res => res.json());
+  async getCoinList(): Promise<CoinInfo[]> {
+    return this.fetch<RawCoinInfoFromGateway[]>("assets").then(res =>
+      res.map(
+        info =>
+          ({
+            asset: info.cybname,
+            currency: info.name,
+            raw: info,
+            isDisabled: false
+          } as CoinInfo)
+      )
+    );
   }
 
-  async getDepositInto(accountName: string, coinType: string) {
-    let body = {
-      operationName: "GetAddress",
-      variables: { accountName, asset: coinType },
-      query:
-        "query GetAddress($accountName: String!, $asset: String!) {\n  getDepositAddress(accountName: $accountName, asset: $asset) {\n    address\n    accountName\n    asset\n    type\n    createAt\n    projectInfo {\n      projectName\n      logoUrl\n      contractAddress\n      contractExplorerUrl\n      __typename\n    }\n    __typename\n  }\n}\n"
-    };
-
-    return this.fetch<GetDepositAddressRes>("gateway", body);
+  async getDepositInto(
+    accountName: string,
+    coinType: string,
+    privKey: PrivateKey
+  ) {
+    let url = `users/${accountName}/assets/${coinType}/address`;
+    let timeStamp = Math.floor(new Date().getTime() / 1000).toString();
+    let token = Signature.signBuffer(
+      Buffer.from(timeStamp + accountName),
+      privKey
+    ).toHex();
+    return this.fetch<RawDepositInfoFromGateway>(url, token).then(
+      res =>
+        ({
+          createAt: res.createAt,
+          address: res.address,
+          accountName,
+          asset: res.cybName,
+          type: res.asset
+        } as GetDepositAddress)
+    );
+  }
+  async verifyAddress(
+    coinType: string,
+    address: string
+  ): Promise<VerifyResult> {
+    let url = `assets/${coinType}/address/${address}/verify`;
+    return this.fetch<VerifyValidResult>(url).then(
+      res =>
+        ({
+          coinType,
+          address,
+          valid: res.valid
+        } as VerifyResult)
+    );
   }
 }
 export class FaucetFetcher {

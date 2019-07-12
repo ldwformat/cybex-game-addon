@@ -13,7 +13,15 @@ import {
   GatewayLoadDepositInfoFailedAction,
   GatewayLoadGatewayInfoFailedAction,
   GatewaySelectFirstAssetAction,
-  gatewaySelectAsset
+  gatewaySelectAsset,
+  GatewayVerifyAddressAction,
+  gatewayVerifyAddressSuccess,
+  gatewayVerifyAddressFailed,
+  GatewayWithdrawAction,
+  gatewayWithdrawSuccess,
+  gatewayWithdrawFailed,
+  GatewayWithdrawFailedAction,
+  GatewayWithdrawSuccessAction
 } from "./gateway.actions";
 import {
   switchMap,
@@ -21,12 +29,17 @@ import {
   map,
   filter,
   takeLast,
-  take
+  take,
+  debounceTime
 } from "rxjs/operators";
 import { of, from, NEVER } from "rxjs";
 import { IEffectDeps } from "../modes";
 import { CoreState } from "..";
-import { selectAuthSet, selectAuthStatus } from "../auth/auth.selectors";
+import {
+  selectAuthSet,
+  selectAuthStatus,
+  selectCurrentKeystore
+} from "../auth/auth.selectors";
 import {
   authUnauthed,
   AuthLoginSuccessAction,
@@ -37,7 +50,8 @@ import {
 } from "../auth";
 import {
   selectGatewayCoinList,
-  selectGatewayCurrentDepositInfo
+  selectGatewayCurrentDepositInfo,
+  selectGatewayAddressVerification
 } from "./gateway.selectors";
 import { ActionCorePushNoti, corePushNoti } from "../core.actions";
 import { Dict } from "../../providers/i18n";
@@ -164,22 +178,105 @@ export const loadDepsoitInfoEpic: Epic<any, any, CoreState, IEffectDeps> = (
             return NEVER;
           }
           return from(
-            gatewayFetcher.getDepositInto(authSet.account, coinInfo.currency)
-          ).pipe(
-            map(res => {
-              if (res !== null && res.getDepositAddress !== null) {
-                return res.getDepositAddress;
-              }
-              throw new Error("No asset");
-            }),
-            map(gatewayLoadDepositInfoSuccess)
-          );
+            gatewayFetcher.getDepositInto(
+              authSet.account,
+              coinInfo.currency,
+              authSet.key
+            )
+          ).pipe(map(gatewayLoadDepositInfoSuccess));
         })
       )
     ),
     catchError(err => {
       console.error(err);
       return of(gatewayLoadGatewayInfoFailed());
+    })
+  );
+export const verifyAddressEpic: Epic<any, any, CoreState, IEffectDeps> = (
+  action$,
+  state$,
+  { gatewayFetcher }
+) =>
+  action$.pipe(
+    ofType<GatewayVerifyAddressAction>(GatewayActions.VerifyAddress),
+    debounceTime(300),
+    switchMap(action =>
+      state$.pipe(
+        take(1),
+        switchMap(state => {
+          let authSet = selectAuthSet(state);
+          let { coinType, address } = action.payload;
+          if (!authSet) {
+            return of(authUnauthed());
+          }
+          let result = selectGatewayAddressVerification(coinType, address)(
+            state
+          );
+          if (result) {
+            return NEVER;
+          }
+          return from(gatewayFetcher.verifyAddress(coinType, address)).pipe(
+            map(({ coinType, address, valid }) =>
+              valid
+                ? gatewayVerifyAddressSuccess(coinType, address)
+                : gatewayVerifyAddressFailed(coinType, address)
+            ),
+            catchError(err => {
+              console.error(err);
+              return of(gatewayVerifyAddressFailed(coinType, address));
+            })
+          );
+        })
+      )
+    ),
+    catchError(err => {
+      console.error(err);
+      return of(gatewayVerifyAddressFailed("-1", "-1"));
+    })
+  );
+export const withdrawEpic: Epic<any, any, CoreState, IEffectDeps> = (
+  action$,
+  state$,
+  { chainAssisant }
+) =>
+  action$.pipe(
+    ofType<GatewayWithdrawAction>(GatewayActions.Withdraw),
+    debounceTime(300),
+    switchMap(action =>
+      state$.pipe(
+        take(1),
+        switchMap(state => {
+          let authSet = selectAuthSet(state);
+          let keyStore = selectCurrentKeystore(state);
+          if (!authSet || !keyStore) {
+            return of(authUnauthed());
+          }
+          return from(
+            chainAssisant.transfer(
+              {
+                from: authSet.account,
+                to: action.payload.to,
+                asset: action.payload.asset,
+                value: action.payload.value,
+                memo: `"${action.payload.memoPrefix}:${
+                  action.payload.coinType
+                }:${action.payload.address}`
+              },
+              keyStore
+            )
+          ).pipe(
+            map(gatewayWithdrawSuccess),
+            catchError(err => {
+              console.error(err);
+              return of(gatewayWithdrawFailed());
+            })
+          );
+        })
+      )
+    ),
+    catchError(err => {
+      console.error(err);
+      return of(gatewayWithdrawFailed());
     })
   );
 
@@ -199,6 +296,34 @@ export const gatewayFailedEpic: Epic<
     map(action =>
       corePushNoti(Dict.NotiRegWrong_Gateway, {
         variant: "error"
+      })
+    )
+  );
+export const gatewayWithdrawFailedEpic: Epic<
+  any,
+  ActionCorePushNoti,
+  any,
+  IEffectDeps
+> = (action$, state$, { fetcher }) =>
+  action$.pipe(
+    ofType<GatewayWithdrawFailedAction>(GatewayActions.WithdrawFailed),
+    map(action =>
+      corePushNoti(Dict.NotiRegWrong_Gateway_Withdraw, {
+        variant: "error"
+      })
+    )
+  );
+export const gatewayWithdrawSuccessEpic: Epic<
+  any,
+  ActionCorePushNoti,
+  any,
+  IEffectDeps
+> = (action$, state$, { fetcher }) =>
+  action$.pipe(
+    ofType<GatewayWithdrawSuccessAction>(GatewayActions.WithdrawSuccess),
+    map(action =>
+      corePushNoti(Dict.Gateway_Withdraw_Done, {
+        variant: "success"
       })
     )
   );

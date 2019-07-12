@@ -182,13 +182,13 @@ describe("Test class GatewayFetcher", () => {
   beforeAll(() => (fetcher = new GatewayFetcher(config.apiUrl.gateway)));
 
   it("测试获取ETH地址", async done => {
-    let depositRes = await fetcher.getDepositInto(accountName, "ETH");
-    if (depositRes.getDepositAddress !== null) {
-      expect(depositRes.getDepositAddress.accountName).toBe(accountName);
-      expect(depositRes.getDepositAddress.address).toBe(
+    let depositRes = await fetcher.getDepositInto(accountName, "ETH", privKey);
+    if (depositRes !== null) {
+      expect(depositRes.accountName).toBe(accountName);
+      expect(depositRes.address).toBe(
         "0xf204095acc62c5b65e991729417d170512f9c8c8"
       );
-      expect(depositRes.getDepositAddress.asset).toBe("JADE.ETH");
+      expect(depositRes.asset).toBe("JADE.ETH");
       done();
     }
   });
@@ -196,18 +196,20 @@ describe("Test class GatewayFetcher", () => {
   it("测试获取不存在资产地址", async done => {
     let depositRes = await fetcher.getDepositInto(
       accountName,
-      "ETH.NOT.EXISTS"
+      "ETH.NOT.EXISTS",
+      privKey
     );
-    expect(depositRes.getDepositAddress).toBeNull();
+    expect(depositRes).toBeNull();
     done();
   });
 
   it("测试获取不存在用户地址", async done => {
     let depositRes = await fetcher.getDepositInto(
       "ETH.NOT.EXISTS",
-      "ETH.NOT.EXISTS"
+      "ETH.NOT.EXISTS",
+      privKey
     );
-    expect(depositRes.getDepositAddress).toBeNull();
+    expect(depositRes).toBeNull();
     done();
   });
 });
