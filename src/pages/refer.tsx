@@ -502,7 +502,7 @@ export const Refer = connect(
                     <Grid item className={classes.itemH} xs={4}>
                       <InviteCard
                         title={t(Dict.MyRefererCode)}
-                        color={colors.purple[300]}
+                        color={Colors.btnIcon.purple}
                         IconComponent={EmailOpen}
                       >
                         <Typography
@@ -546,7 +546,7 @@ export const Refer = connect(
                     <Grid item className={classes.itemH} xs={4}>
                       <InviteCard
                         title={t(Dict.MyRegisterReferrer)}
-                        color={colors.blue[300]}
+                        color={Colors.btnIcon.blue}
                         IconComponent={Account}
                       >
                         <Typography variant="h4" align="center">
@@ -559,7 +559,7 @@ export const Refer = connect(
                     <Grid item className={classes.itemH} xs={4}>
                       <InviteCard
                         title={t(Dict.MyGameReferrer)}
-                        color={colors.yellow[700]}
+                        color={Colors.btnIcon.yellow}
                         IconComponent={Account}
                       >
                         <Typography variant="h4" align="center">

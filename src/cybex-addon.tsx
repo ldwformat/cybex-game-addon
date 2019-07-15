@@ -71,10 +71,13 @@ export function getTheme() {
     },
     palette: {
       primary: {
-        main: "rgb(255,98,165)"
+        main: "rgb(0,0,0)"
       },
       secondary: {
-        main: "rgb(255,155,85)"
+        main: "rgb(10, 56, 102)"
+      },
+      error: {
+        main: "rgb(239, 69, 69)"
       }
     },
     overrides: {

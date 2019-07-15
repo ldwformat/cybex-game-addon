@@ -114,15 +114,15 @@ export const renderPasswordField = ({
   meta: { touched, invalid, error },
   ...custom
 }) => (
-  <TextField
-    label={label}
-    // placeholder={label}
-    error={touched && invalid}
-    helperText={touched && error}
-    {...input}
-    {...custom}
-  />
-);
+    <TextField
+      label={label}
+      // placeholder={label}
+      error={touched && invalid}
+      helperText={touched && error}
+      {...input}
+      {...custom}
+    />
+  );
 export const renderCheckbox = ({ input, label }) => (
   <div>
     <FormControlLabel
@@ -161,28 +161,29 @@ export const renderSelectField = ({
   children,
   ...custom
 }) => (
-  <FormControl error={touched && error}>
-    <InputLabel htmlFor="age-native-simple">Age</InputLabel>
-    <Select
-      native
-      {...input}
-      {...custom}
-      inputProps={{
-        name: "age",
-        id: "age-native-simple"
-      }}
-    >
-      {children}
-    </Select>
-    {renderFromHelper({ touched, error })}
-  </FormControl>
-);
+    <FormControl error={touched && error}>
+      <InputLabel htmlFor="age-native-simple">Age</InputLabel>
+      <Select
+        native
+        {...input}
+        {...custom}
+        inputProps={{
+          name: "age",
+          id: "age-native-simple"
+        }}
+      >
+        {children}
+      </Select>
+      {renderFromHelper({ touched, error })}
+    </FormControl>
+  );
 
 const ButtonStyles = theme => ({
   root: {
     color: Colors.btnPrimary,
     background: Colors.btnBgPrimary,
     "&:disabled": {
+      color: Colors.btnPrimary,
       background: Colors.btnBgDisabled
     }
   }

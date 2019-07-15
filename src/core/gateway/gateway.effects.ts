@@ -258,9 +258,7 @@ export const withdrawEpic: Epic<any, any, CoreState, IEffectDeps> = (
                 to: action.payload.to,
                 asset: action.payload.asset,
                 value: action.payload.value,
-                memo: `"${action.payload.memoPrefix}:${
-                  action.payload.coinType
-                }:${action.payload.address}`
+                memo: `"${action.payload.memoPrefix}:${action.payload.coinType}:${action.payload.address}`
               },
               keyStore
             )

@@ -8,6 +8,8 @@ import { sha256, sha512 } from "./hash";
 
 /** Provides symetric encrypt and decrypt via AES. */
 class Aes {
+  iv: any;
+  key: any;
   [p: string]: any;
   /**
    * @arg {string} seed - secret seed may be used to encrypt or decrypt.
@@ -27,9 +29,7 @@ class Aes {
     assert.strictEqual(
       hash.length,
       128,
-      `A Sha512 in HEX should be 128 characters long, instead got ${
-        hash.length
-      }`
+      `A Sha512 in HEX should be 128 characters long, instead got ${hash.length}`
     );
     var iv = encHex.parse(hash.substring(64, 96));
     var key = encHex.parse(hash.substring(0, 64));

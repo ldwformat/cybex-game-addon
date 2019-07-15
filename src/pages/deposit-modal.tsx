@@ -127,10 +127,10 @@ export const DepositModal = connect(
     withTranslation()(
       class extends React.Component<
         StyledComponentProps<"root" | "copyCard" | "innerWrapper"> &
-          DepositStateProps &
-          DepositDispatchProps &
-          WithTranslation
-      > {
+        DepositStateProps &
+        DepositDispatchProps &
+        WithTranslation
+        > {
         state = {
           currentTab: 0,
           withValue: 0,
@@ -200,7 +200,7 @@ export const DepositModal = connect(
                 variant="fullWidth"
               >
                 <Tab label={t(Dict.Deposit)} />
-                <Tab label={t(Dict.Withdraw)} />
+                {/* <Tab label={t(Dict.Withdraw)} /> */}
               </Tabs>
               {this.state.currentTab === 0 && (
                 <Paper classes={{ root: classes.root }} square elevation={0}>
@@ -209,7 +209,7 @@ export const DepositModal = connect(
                     container
                     direction="column"
                     alignItems="center"
-                    // justify="space-between"
+                  // justify="space-between"
                   >
                     <FormControl fullWidth>
                       <InputLabel
@@ -303,7 +303,7 @@ export const DepositModal = connect(
                     container
                     direction="column"
                     alignItems="center"
-                    // justify="space-between"
+                  // justify="space-between"
                   >
                     <FormControl fullWidth>
                       <InputLabel
@@ -334,10 +334,11 @@ export const DepositModal = connect(
                         style={{ fontSize: "17.5px" }}
                         htmlFor="withValue"
                       >
-                        Amount
+                        {t(Dict.Amount)}
                       </InputLabel>
                       <Input
                         id="withValue"
+                        placeholder={t(Dict.WithdrawMinimum)} 
                         value={this.state.withValue}
                         style={{ fontSize: "16px" }}
                         onChange={e =>
@@ -353,9 +354,9 @@ export const DepositModal = connect(
                     <FormControl fullWidth>
                       <TextField
                         id="address"
-                        label="Address"
+                        label={t(Dict.WithdrawAddress)}
                         error={addressError}
-                        helperText={(addressError && "地址无效") || " "}
+                        helperText={(addressError && t(Dict.AddressError)) || " "}
                         InputLabelProps={{
                           style: {
                             fontSize: "17.5px"
@@ -381,12 +382,12 @@ export const DepositModal = connect(
                     </FormControl>
                     <div style={{ marginTop: "12px" }} />
                     <Grid container wrap="nowrap">
-                      <FormControl>
+                      {/* <FormControl>
                         <InputLabel
                           style={{ fontSize: "17.5px" }}
                           htmlFor="minWithdraw"
                         >
-                          最小提币金额
+                          {t(Dict.WithdrawMinimum)}
                         </InputLabel>
                         <Input
                           disabled
@@ -397,13 +398,13 @@ export const DepositModal = connect(
                           }
                           style={{ fontSize: "16px" }}
                         />
-                      </FormControl>
+                      </FormControl> */}
                       <FormControl>
                         <InputLabel
                           style={{ fontSize: "17.5px" }}
                           htmlFor="withdrawFee"
                         >
-                          提币手续费
+                          {t(Dict.WithdrawalFee)}
                         </InputLabel>
                         <Input
                           disabled
@@ -420,7 +421,7 @@ export const DepositModal = connect(
                           style={{ fontSize: "17.5px" }}
                           htmlFor="withdrawFee"
                         >
-                          预计到账
+                          {t(Dict.YouWillGet)}
                         </InputLabel>
                         <Input
                           disabled
@@ -429,9 +430,9 @@ export const DepositModal = connect(
                           value={Math.max(
                             0,
                             this.state.withValue -
-                              (currentCoinInfo
-                                ? +currentCoinInfo.raw.withdrawFee
-                                : this.state.withValue)
+                            (currentCoinInfo
+                              ? +currentCoinInfo.raw.withdrawFee
+                              : this.state.withValue)
                           )}
                           style={{ fontSize: "16px" }}
                         />
@@ -459,7 +460,7 @@ export const DepositModal = connect(
                         });
                       }}
                     >
-                      提币
+                      {t(Dict.Withdraw)}
                     </PrimaryButton>
                   </Grid>
                 </Paper>

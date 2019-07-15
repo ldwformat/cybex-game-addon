@@ -59,14 +59,15 @@ function getObservables(domItem) {
   return { starts$, moves$, ends$ };
 }
 
-const menuBtnStyle = (left: number, top: number) => ({
+const menuBtnStyle = (left: number, top: number, bgcolor: string) => ({
   position: "absolute" as PositionProperty,
   width: "52px",
   height: "52px",
   left: left + "px",
   top: top + "px",
   boxShadow: "unset",
-  transition: "0.2s all"
+  transition: "0.2s all",
+  backgroundColor: bgcolor
 });
 
 export const MenuBtn = ({
@@ -78,7 +79,7 @@ export const MenuBtn = ({
 }) => (
   <Fab
     onClick={onClick}
-    style={{ ...menuBtnStyle(0, 0), background: Colors.btnBgPrimary }}
+    style={{ ...menuBtnStyle(0, 0, Colors.btnBgPrimary) }}
   >
     <MoreVert
       style={{
@@ -93,10 +94,10 @@ export const MenuBtn = ({
 
 const helpBtnStyle: StyleRules = {
   root: {
-    backgroundColor: color[700],
-    "&:hover": {
-      backgroundColor: color[900]
-    }
+    backgroundColor: Colors.btnIcon.yellow
+    // "&:hover": {
+    //   backgroundColor: color[900]
+    // }
   }
 };
 export const HelpBtn = withStyles(helpBtnStyle)(
@@ -112,7 +113,7 @@ export const HelpBtn = withStyles(helpBtnStyle)(
     <Fab
       className={classes.root}
       onClick={onClick}
-      style={open ? menuBtnStyle(-104, -0) : menuBtnStyle(0, 0)}
+      style={open ? menuBtnStyle(-104, -0, Colors.btnIcon.yellow) : menuBtnStyle(0, 0, Colors.btnIcon.yellow)}
     >
       <HelpOutline style={{ color: "white" }} fontSize="large" />
     </Fab>
@@ -223,8 +224,8 @@ export class InviteBtnPC extends React.Component<
       >
         <Fab
           onClick={this.handleExpand.bind(this, Panels.QRCode)}
-          color="secondary"
-          style={menuOpen ? menuBtnStyle(-66, -66) : menuBtnStyle(0, 0)}
+          // color="secondary"
+          style={menuOpen ? menuBtnStyle(-66, -66, Colors.btnIcon.blue) : menuBtnStyle(0, 0, Colors.btnIcon.blue)}
         >
           <Image style={{ color: "white" }} fontSize="large" />
         </Fab>
@@ -233,8 +234,8 @@ export class InviteBtnPC extends React.Component<
           onCopy={this.props.onCopyLinkClick}
         >
           <Fab
-            color="primary"
-            style={menuOpen ? menuBtnStyle(-0, -104) : menuBtnStyle(0, 0)}
+            // color="primary"
+            style={menuOpen ? menuBtnStyle(-0, -104, Colors.btnIcon.purple) : menuBtnStyle(0, 0, Colors.btnIcon.purple)}
           >
             <Link style={{ color: "white" }} fontSize="large" />
           </Fab>

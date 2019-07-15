@@ -91,11 +91,17 @@ export const cnDict = {
   Copy: "复制",
   Deposit: "充值",
   Funding: "资金",
-  Withdraw: "提币",
+  Withdraw: "提现",
   Login: "登录",
   Unlock: "解锁",
   Register: "注册",
-  InviteTime: "推荐时间"
+  InviteTime: "推荐时间",
+  Amount: "数量",
+  YouWillGet: "实际到账",
+  WithdrawalFee: "提币手续费",
+  WithdrawMinimum: "最小数量为0",
+  AddressError: "地址无效",
+  WithdrawAddress: "请输入或长按粘贴地址"
 };
 type Dictionary = typeof cnDict;
 
@@ -199,7 +205,13 @@ export const enDict: Dictionary = {
   Unlock: "Unlock",
   Register: "Register",
   ToBeCleard: "Pending release",
-  InviteTime: "Recommended time"
+  InviteTime: "Recommended time",
+  Amount: "Amount",
+  YouWillGet: "You will get",
+  WithdrawalFee: "Withdrawal fee",
+  WithdrawMinimum: "Minimum 0",
+  AddressError: "Address error",
+  WithdrawAddress: "Enter or paste address"
 };
 export const vnDict: Dictionary = {
   LoginSubmit: "Đăng nhập",
@@ -299,7 +311,13 @@ export const vnDict: Dictionary = {
   Unlock: "Mở khóa",
   Register: "Đăng ký",
   ToBeCleard: "Đang chờ phát hành",
-  InviteTime: "Thời gian đề xuất"
+  InviteTime: "Thời gian đề xuất",
+  Amount: "Số lượng",
+  YouWillGet: "Số tiền về tài khoản",
+  WithdrawalFee: "Phí rút tiền",
+  WithdrawMinimum: "Số lượng tối thiểu là 0",
+  AddressError: "Địa chỉ sai",
+  WithdrawAddress: "Vui lòng nhập hoặc giữ chặt để sao chép địa chỉ"
 };
 
 // have a look at the Quick start guide

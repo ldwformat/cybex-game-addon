@@ -1,8 +1,12 @@
 export const Colors = {
-  primary: "rgb(255,98,165)",
-  secondary: "rgb(255,155,85)",
-  btnBgPrimary:
-    "linear-gradient(90deg, rgb(255,137,96) 0%, rgb(255,98,165) 90%)",
+  primary: "rgb(0,0,0)",
+  secondary: "rgb(10, 56, 102)",
+  btnBgPrimary: "rgb(10, 56, 102)",
   btnPrimary: "white",
-  btnBgDisabled: "rgb(179,185,199)"
+  btnBgDisabled: "rgba(155, 155, 155, 0.48)",
+  btnIcon: {
+    purple: "#b692dd",
+    blue: "#54b8e1",
+    yellow: "#fac050"
+  }
 };
