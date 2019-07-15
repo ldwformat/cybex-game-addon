@@ -127,10 +127,10 @@ export const DepositModal = connect(
     withTranslation()(
       class extends React.Component<
         StyledComponentProps<"root" | "copyCard" | "innerWrapper"> &
-        DepositStateProps &
-        DepositDispatchProps &
-        WithTranslation
-        > {
+          DepositStateProps &
+          DepositDispatchProps &
+          WithTranslation
+      > {
         state = {
           currentTab: 0,
           withValue: 0,
@@ -162,10 +162,9 @@ export const DepositModal = connect(
           let currentCoin = coinList.find(
             coin => coin.asset === gateway.currentAsset
           );
-          let balance =
-            currentDeposit && balances
-              ? balances[currentDeposit.asset]
-              : { value: 0 };
+          let balance = (currentDeposit &&
+            balances &&
+            balances[currentDeposit.asset]) || { value: 0 };
           let addressError =
             !!this.state.address &&
             !!currentDeposit &&
@@ -209,7 +208,7 @@ export const DepositModal = connect(
                     container
                     direction="column"
                     alignItems="center"
-                  // justify="space-between"
+                    // justify="space-between"
                   >
                     <FormControl fullWidth>
                       <InputLabel
@@ -303,7 +302,7 @@ export const DepositModal = connect(
                     container
                     direction="column"
                     alignItems="center"
-                  // justify="space-between"
+                    // justify="space-between"
                   >
                     <FormControl fullWidth>
                       <InputLabel
@@ -338,7 +337,7 @@ export const DepositModal = connect(
                       </InputLabel>
                       <Input
                         id="withValue"
-                        placeholder={t(Dict.WithdrawMinimum)} 
+                        placeholder={t(Dict.WithdrawMinimum)}
                         value={this.state.withValue}
                         style={{ fontSize: "16px" }}
                         onChange={e =>
@@ -356,7 +355,9 @@ export const DepositModal = connect(
                         id="address"
                         label={t(Dict.WithdrawAddress)}
                         error={addressError}
-                        helperText={(addressError && t(Dict.AddressError)) || " "}
+                        helperText={
+                          (addressError && t(Dict.AddressError)) || " "
+                        }
                         InputLabelProps={{
                           style: {
                             fontSize: "17.5px"
@@ -430,9 +431,9 @@ export const DepositModal = connect(
                           value={Math.max(
                             0,
                             this.state.withValue -
-                            (currentCoinInfo
-                              ? +currentCoinInfo.raw.withdrawFee
-                              : this.state.withValue)
+                              (currentCoinInfo
+                                ? +currentCoinInfo.raw.withdrawFee
+                                : this.state.withValue)
                           )}
                           style={{ fontSize: "16px" }}
                         />
