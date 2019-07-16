@@ -199,7 +199,7 @@ export const DepositModal = connect(
                 variant="fullWidth"
               >
                 <Tab label={t(Dict.Deposit)} />
-                <Tab label={t(Dict.Withdraw)} />
+                {/* <Tab label={t(Dict.Withdraw)} /> */}
               </Tabs>
               {this.state.currentTab === 0 && (
                 <Paper classes={{ root: classes.root }} square elevation={0}>
