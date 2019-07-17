@@ -3,7 +3,7 @@
     "mallBackend": "http://47.52.92.231:9999/",
     "referBackend": "http://10.18.120.241:8000",
     "backend": "http://10.18.120.241:29999",
-    "gateway": "https://gateway2test.cybex.io/v1",
+    "gateway": "https://gateway.cybex.io/v1/",
     "faucet": "https://faucet.cybex.io/",
     "cybexWs": "wss://hongkong.cybex.io",
     "cybexHttpServer": "https://cybexluck.io"
