@@ -54,9 +54,9 @@ import { CoinInfo, GetDepositAddress } from "../utils/fetcher";
 import { DialogWrapper } from "../components/dialog-wrapper";
 import { PrimaryButton } from "../components/form-utils";
 import { selectBalances, BalanceObj } from "../core/auth";
-import { IEffectDeps } from "src/core/modes";
-import { calcValue } from "src/utils/calc";
-import { withToolset } from "src/providers/toolset";
+import { IEffectDeps } from "../core/modes";
+import { calcValue } from "../utils/calc";
+import { withToolset } from "../providers/toolset";
 import { debounce } from "lodash";
 import BigNumber from "bignumber.js";
 
