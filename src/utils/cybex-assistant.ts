@@ -3,7 +3,8 @@ import assert from "assert";
 import { calcAmount } from "./calc";
 import { KeyStore } from "../core/auth/keystore/keystore";
 import { PrivateKey, Aes } from "../cybex/ecc";
-import { TransactionHelper } from "../cybex/chain";
+import { TransactionHelper, ChainTypes } from "../cybex/chain";
+import { ops } from "../cybex/serializer";
 import Transaction from "./transaction";
 
 type TransferParams = {
@@ -12,6 +13,7 @@ type TransferParams = {
   asset: string;
   value: number;
   memo?: string;
+  fee?: { asset_id: string; amount: string | number };
 };
 
 type MemoContent = {
@@ -98,7 +100,7 @@ export class CybexAssistant {
   };
 
   async transfer(
-    { from, to, asset, value, memo }: TransferParams,
+    { from, to, asset, value, memo, fee }: TransferParams,
     keyStore: KeyStore
   ) {
     assert(keyStore, "No Login");
@@ -142,10 +144,7 @@ export class CybexAssistant {
       {
         from: fromID,
         to: toID,
-        fee: {
-          asset_id: "1.3.0",
-          amount: 0
-        },
+        fee,
         amount: {
           asset_id: assetID,
           amount: assetAmount
@@ -156,11 +155,57 @@ export class CybexAssistant {
     );
   }
 
+  async getFakeTransferFee(asset: string = "1.3.0", memoStr?: string) {
+    let _asset = (await this.getAssets(asset))[0];
+    let assetID = _asset && _asset.id;
+    return this.getFeeOfOp(
+      "transfer",
+      ops.transfer.toObject({
+        from: "1.2.1",
+        to: "1.2.1",
+        fee: {
+          asset_id: assetID,
+          amount: 0
+        },
+        amount: {
+          asset_id: assetID,
+          amount: 0
+        },
+        memo: memoStr
+          ? CybexAssistant.encodeMemo(
+              memoStr,
+              PrivateKey.fromSeed("0000000000000000000000"),
+              PrivateKey.fromSeed("0000000000000000000000")
+                .toPublicKey()
+                .toString()
+            )
+          : undefined
+      }),
+      assetID as string
+    );
+  }
+
+  async getFeeOfOp(
+    opNameOrID: string | number,
+    op: any,
+    asset: string = "1.3.0"
+  ) {
+    let _asset = (await this.getAssets(asset))[0];
+    let assetID = _asset && _asset.id;
+    let opID =
+      typeof opNameOrID !== "number"
+        ? ChainTypes.operations[opNameOrID]
+        : opNameOrID;
+    return (await this.db_api("get_required_fees", [[opID, op]], assetID))[0];
+  }
+
   async performTransaction(opName: string, op: any, privKey: PrivateKey) {
     let tr = new Transaction(this.wsConnect);
     tr.add_type_operation(opName, op);
     await tr.update_head_block();
-    await tr.set_required_fees();
+    if (op && op.fee && !op.fee.amount) {
+      await tr.set_required_fees();
+    }
     await tr.update_head_block();
     tr.add_signer(privKey);
     let retry = 0;

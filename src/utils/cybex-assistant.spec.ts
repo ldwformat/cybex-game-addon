@@ -111,4 +111,20 @@ describe("CybexAssistant类测试", () => {
     },
     NORMAL_TIMEOUT
   );
+
+  test(
+    "Fake Transfer Fee",
+    async done => {
+      let withoutMemoRes = await cybex.getFakeTransferFee("1.3.2");
+      expect(withoutMemoRes.amount).toBe(10);
+      expect(withoutMemoRes.asset_id).toBe("1.3.2");
+      let withMemoRes = await cybex.getFakeTransferFee(
+        "1.3.2",
+        "hereisafakememo"
+      );
+      expect(withMemoRes.amount).toBeGreaterThan(10);
+      done();
+    },
+    NORMAL_TIMEOUT
+  );
 });

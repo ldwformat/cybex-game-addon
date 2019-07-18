@@ -88,6 +88,7 @@ export declare const cnDict: {
     Amount: string;
     YouWillGet: string;
     WithdrawalFee: string;
+    TransferFee: string;
     WithdrawMinimum: string;
     AddressError: string;
     WithdrawAddress: string;
@@ -182,6 +183,7 @@ export declare const Dict: {
     Amount: string;
     YouWillGet: string;
     WithdrawalFee: string;
+    TransferFee: string;
     WithdrawMinimum: string;
     AddressError: string;
     WithdrawAddress: string;

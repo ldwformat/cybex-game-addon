@@ -25,6 +25,10 @@ export interface WithdrawParams {
     coinType: string;
     memoPrefix: string;
     asset: string;
+    fee: {
+        asset_id: string;
+        amount: number | string;
+    };
     value: number;
     to: string;
     address: string;

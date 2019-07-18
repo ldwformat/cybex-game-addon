@@ -99,7 +99,8 @@ export const cnDict = {
   Amount: "数量",
   YouWillGet: "实际到账",
   WithdrawalFee: "提币手续费",
-  WithdrawMinimum: "最小数量为0",
+  TransferFee: "转账手续费",
+  WithdrawMinimum: "最小数量",
   AddressError: "地址无效",
   WithdrawAddress: "请输入或长按粘贴地址"
 };
@@ -209,7 +210,8 @@ export const enDict: Dictionary = {
   Amount: "Amount",
   YouWillGet: "You will get",
   WithdrawalFee: "Withdrawal fee",
-  WithdrawMinimum: "Minimum 0",
+  TransferFee: "Transfer fee",
+  WithdrawMinimum: "Minimum",
   AddressError: "Address error",
   WithdrawAddress: "Enter or paste address"
 };
@@ -315,7 +317,8 @@ export const vnDict: Dictionary = {
   Amount: "Số lượng",
   YouWillGet: "Số tiền về tài khoản",
   WithdrawalFee: "Phí rút tiền",
-  WithdrawMinimum: "Số lượng tối thiểu là 0",
+  TransferFee: "Phí truyền tải",
+  WithdrawMinimum: "Số lượng tối thiểu là",
   AddressError: "Địa chỉ sai",
   WithdrawAddress: "Vui lòng nhập hoặc giữ chặt để sao chép địa chỉ"
 };

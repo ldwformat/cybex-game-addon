@@ -54,6 +54,11 @@ import { CoinInfo, GetDepositAddress } from "../utils/fetcher";
 import { DialogWrapper } from "../components/dialog-wrapper";
 import { PrimaryButton } from "../components/form-utils";
 import { selectBalances, BalanceObj } from "../core/auth";
+import { IEffectDeps } from "src/core/modes";
+import { calcValue } from "src/utils/calc";
+import { withToolset } from "src/providers/toolset";
+import { debounce } from "lodash";
+import BigNumber from "bignumber.js";
 
 type DepositStateProps = {
   modalState: GatewayModalState;
@@ -119,7 +124,7 @@ const styles: StyleRulesCallback = theme => ({
   }
 });
 
-export const DepositModal = connect(
+export const DepositModal = withToolset(connect(
   mapStateToProps,
   mapDispatchToProps
 )(
@@ -127,18 +132,63 @@ export const DepositModal = connect(
     withTranslation()(
       class extends React.Component<
         StyledComponentProps<"root" | "copyCard" | "innerWrapper"> &
-          DepositStateProps &
-          DepositDispatchProps &
-          WithTranslation
-      > {
+        DepositStateProps &
+        DepositDispatchProps &
+        WithTranslation & { toolset: IEffectDeps }
+        > {
         state = {
           currentTab: 0,
           withValue: 0,
-          address: ""
+          address: "",
+          fee: 0,
+          feeAsset: {}
         };
+        verifyAddress = debounce(this.props.verifyAddress, 150);
+
+        updateFee = debounce(() => {
+          let currentAsset = this.props.currentDeposit;
+          if (!currentAsset) {
+            return this.setState({ fee: 0 })
+          }
+          const currentCoinInfo = this.props.currentCoinInfo;
+          let memo = this.state.address;
+          if (currentCoinInfo) {
+            memo = `${currentCoinInfo.raw.withdrawPrefix}:${currentCoinInfo.currency}:${this.state.address}`;
+          }
+          this.props.toolset.chainAssisant.getFakeTransferFee(currentAsset.asset, memo).then(async res => {
+            let currentAsset = this.props.currentDeposit;
+            if (!currentAsset) {
+              return this.setState({ fee: 0 })
+            }
+            let asset = await this.props.toolset.fetcher.fetchAsset(currentAsset.asset);
+            if (!asset) { return; }
+            this.setState({
+              fee: calcValue(res.amount, asset.precision),
+              feeAsset: res
+            });
+          })
+        }, 150)
+        setAddress = (e) => {
+          this.setState({ address: e.target.value }, () => {
+            if (this.state.address && this.props.currentDeposit) {
+              this.verifyAddress(
+                this.props.currentDeposit.type,
+                this.state.address
+              );
+            }
+            this.updateFee();
+          });
+        }
+
         componentDidMount() {
           if (!this.props.currentDeposit) {
             this.props.selectFirstAsset();
+          }
+          this.updateFee();
+        }
+        componentDidUpdate(prevProps) {
+          if (this.props.currentDeposit !== prevProps.currentDeposit) {
+            this.updateFee();
           }
         }
 
@@ -156,6 +206,7 @@ export const DepositModal = connect(
             closeModal,
             balances,
             state,
+            toolset,
             t
           } = this.props;
           let classes = this.props.classes || {};
@@ -179,10 +230,13 @@ export const DepositModal = connect(
               currentDeposit.type,
               this.state.address
             )(state) === AddressVerifyState.Valid;
+          if (currentCoinInfo) {
+          }
           let withdrawValid =
             addressValid &&
             currentCoinInfo &&
-            this.state.withValue >= +currentCoinInfo.raw.minWithdraw;
+            this.state.withValue >= +currentCoinInfo.raw.minWithdraw &&
+            new BigNumber(balance.value).minus(this.state.withValue).minus(this.state.fee).toNumber() >= 0;
           this.state.withValue <= balance.value && this.state.withValue > 0;
           return (
             <DialogWrapper
@@ -199,7 +253,7 @@ export const DepositModal = connect(
                 variant="fullWidth"
               >
                 <Tab label={t(Dict.Deposit)} />
-                {/* <Tab label={t(Dict.Withdraw)} /> */}
+                <Tab label={t(Dict.Withdraw)} />
               </Tabs>
               {this.state.currentTab === 0 && (
                 <Paper classes={{ root: classes.root }} square elevation={0}>
@@ -208,7 +262,7 @@ export const DepositModal = connect(
                     container
                     direction="column"
                     alignItems="center"
-                    // justify="space-between"
+                  // justify="space-between"
                   >
                     <FormControl fullWidth>
                       <InputLabel
@@ -302,8 +356,9 @@ export const DepositModal = connect(
                     container
                     direction="column"
                     alignItems="center"
-                    // justify="space-between"
+                  // justify="space-between"
                   >
+                    {/* coinList */}
                     <FormControl fullWidth>
                       <InputLabel
                         style={{ fontSize: "17.5px" }}
@@ -328,6 +383,7 @@ export const DepositModal = connect(
                         ))}
                       </Select>
                     </FormControl>
+                    {/* amount */}
                     <FormControl fullWidth>
                       <InputLabel
                         style={{ fontSize: "17.5px" }}
@@ -345,11 +401,12 @@ export const DepositModal = connect(
                         }
                         endAdornment={
                           <InputAdornment position="end">
-                            {balance.value}
+                            {"balance:" + balance.value}
                           </InputAdornment>
                         }
                       />
                     </FormControl>
+                    {/* address */}
                     <FormControl fullWidth>
                       <TextField
                         id="address"
@@ -369,21 +426,12 @@ export const DepositModal = connect(
                           }
                         }}
                         value={this.state.address}
-                        onChange={e =>
-                          this.setState({ address: e.target.value }, () => {
-                            if (this.state.address && currentDeposit) {
-                              verifyAddress(
-                                currentDeposit.type,
-                                this.state.address
-                              );
-                            }
-                          })
-                        }
+                        onChange={this.setAddress}
                       />
                     </FormControl>
                     <div style={{ marginTop: "12px" }} />
                     <Grid container wrap="nowrap">
-                      {/* <FormControl>
+                      <FormControl>
                         <InputLabel
                           style={{ fontSize: "17.5px" }}
                           htmlFor="minWithdraw"
@@ -395,11 +443,11 @@ export const DepositModal = connect(
                           disableUnderline
                           id="minWithdraw"
                           value={
-                            currentCoinInfo && currentCoinInfo.raw.minDeposit
+                            currentCoinInfo && currentCoinInfo.raw.minWithdraw
                           }
                           style={{ fontSize: "16px" }}
                         />
-                      </FormControl> */}
+                      </FormControl>
                       <FormControl>
                         <InputLabel
                           style={{ fontSize: "17.5px" }}
@@ -420,6 +468,22 @@ export const DepositModal = connect(
                       <FormControl>
                         <InputLabel
                           style={{ fontSize: "17.5px" }}
+                          htmlFor="transferFee"
+                        >
+                          {t(Dict.TransferFee)}
+                        </InputLabel>
+                        <Input
+                          disabled
+                          disableUnderline
+                          id="transferFee"
+                          value={this.state.fee}
+                          style={{ fontSize: "16px" }}
+                        />
+                      </FormControl>
+                      {/* 实际到账 */}
+                      <FormControl>
+                        <InputLabel
+                          style={{ fontSize: "17.5px" }}
                           htmlFor="withdrawFee"
                         >
                           {t(Dict.YouWillGet)}
@@ -431,9 +495,9 @@ export const DepositModal = connect(
                           value={Math.max(
                             0,
                             this.state.withValue -
-                              (currentCoinInfo
-                                ? +currentCoinInfo.raw.withdrawFee
-                                : this.state.withValue)
+                            (currentCoinInfo
+                              ? +currentCoinInfo.raw.withdrawFee
+                              : this.state.withValue)
                           )}
                           style={{ fontSize: "16px" }}
                         />
@@ -453,11 +517,32 @@ export const DepositModal = connect(
                         }
                         doWithdraw({
                           to: currentCoinInfo.raw.gatewayAccount,
+                          fee: this.state.feeAsset as any,
                           asset: currentCoinInfo.asset,
                           coinType: currentCoinInfo.currency,
                           address: this.state.address,
                           value: this.state.withValue,
                           memoPrefix: currentCoinInfo.raw.withdrawPrefix
+
+                          // this.cybexjs.withdraw,
+                          // this.cointype,
+                          // this.gatewayfee.asset_id,
+                          // this.withdrawAmount,
+                          // this.finalAddress,
+                          // this.cybexfee.asset_id,
+                          // this.assetInfo.gatewayAccount,
+                          // this.assetInfo.withdrawPrefix
+
+
+                          // cointype, 
+                          // gatewayfee.asset_id, 
+                          // withdraw_amount, 
+                          // finalAddress, 
+                          // cybexfee.asset_id, 
+                          // assetInfo.gatewayAccount, 
+                          // assetInfo.withdrawPrefix
+
+
                         });
                       }}
                     >
@@ -472,4 +557,4 @@ export const DepositModal = connect(
       }
     )
   )
-);
+));

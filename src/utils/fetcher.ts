@@ -518,7 +518,10 @@ export class GatewayFetcher {
       Buffer.from(timeStamp + accountName),
       privKey
     ).toHex();
-    return this.fetch<RawDepositInfoFromGateway>(url, token).then(
+    return this.fetch<RawDepositInfoFromGateway>(
+      url,
+      `${timeStamp}.${accountName}.${token}`
+    ).then(
       res =>
         ({
           createAt: res.createAt,
