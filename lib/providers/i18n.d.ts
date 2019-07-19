@@ -81,6 +81,10 @@ export declare const cnDict: {
     Deposit: string;
     Funding: string;
     Withdraw: string;
+    WithdrawImportant: string;
+    WithdrawImportantAddress: string;
+    WithdrawImportantFee: string;
+    Balance: string;
     Login: string;
     Unlock: string;
     Register: string;
@@ -176,6 +180,10 @@ export declare const Dict: {
     Deposit: string;
     Funding: string;
     Withdraw: string;
+    WithdrawImportant: string;
+    WithdrawImportantAddress: string;
+    WithdrawImportantFee: string;
+    Balance: string;
     Login: string;
     Unlock: string;
     Register: string;

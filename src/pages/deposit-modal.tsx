@@ -400,8 +400,8 @@ export const DepositModal = withToolset(connect(
                           this.setState({ withValue: Number(e.target.value) })
                         }
                         endAdornment={
-                          <InputAdornment position="end">
-                            {"balance:" + balance.value}
+                          <InputAdornment position="end" style={{ width: "80px", textAlign: "right" }}>
+                            {t(Dict.Balance) + ": " + balance.value}
                           </InputAdornment>
                         }
                       />
@@ -433,7 +433,7 @@ export const DepositModal = withToolset(connect(
                     <Grid container wrap="nowrap">
                       <FormControl>
                         <InputLabel
-                          style={{ fontSize: "17.5px" }}
+                          style={{ fontSize: "17.5px", lineHeight: "20px" }}
                           htmlFor="minWithdraw"
                         >
                           {t(Dict.WithdrawMinimum)}
@@ -445,12 +445,12 @@ export const DepositModal = withToolset(connect(
                           value={
                             currentCoinInfo && currentCoinInfo.raw.minWithdraw
                           }
-                          style={{ fontSize: "16px" }}
+                          style={{ fontSize: "16px", marginTop: "30px" }}
                         />
                       </FormControl>
                       <FormControl>
                         <InputLabel
-                          style={{ fontSize: "17.5px" }}
+                          style={{ fontSize: "17.5px", lineHeight: "20px" }}
                           htmlFor="withdrawFee"
                         >
                           {t(Dict.WithdrawalFee)}
@@ -462,12 +462,12 @@ export const DepositModal = withToolset(connect(
                           value={
                             currentCoinInfo && currentCoinInfo.raw.withdrawFee
                           }
-                          style={{ fontSize: "16px" }}
+                          style={{ fontSize: "16px", marginTop: "30px" }}
                         />
                       </FormControl>
                       <FormControl>
                         <InputLabel
-                          style={{ fontSize: "17.5px" }}
+                          style={{ fontSize: "17.5px", lineHeight: "20px" }}
                           htmlFor="transferFee"
                         >
                           {t(Dict.TransferFee)}
@@ -477,13 +477,13 @@ export const DepositModal = withToolset(connect(
                           disableUnderline
                           id="transferFee"
                           value={this.state.fee}
-                          style={{ fontSize: "16px" }}
+                          style={{ fontSize: "16px", marginTop: "30px" }}
                         />
                       </FormControl>
                       {/* 实际到账 */}
                       <FormControl>
                         <InputLabel
-                          style={{ fontSize: "17.5px" }}
+                          style={{ fontSize: "17.5px", lineHeight: "20px" }}
                           htmlFor="withdrawFee"
                         >
                           {t(Dict.YouWillGet)}
@@ -499,14 +499,20 @@ export const DepositModal = withToolset(connect(
                               ? +currentCoinInfo.raw.withdrawFee
                               : this.state.withValue)
                           )}
-                          style={{ fontSize: "16px" }}
+                          style={{ fontSize: "16px", marginTop: "30px" }}
                         />
                       </FormControl>
                     </Grid>
+                    <div style={{ display: "flex", flexDirection: "column", fontSize: "14px", lineHeight: "22px" }}>
+                      <p style={{ margin: 0, color: "#000000" }}>{t(Dict.WithdrawImportant)}：</p>
+                      <p style={{ margin: 0, color: "#9b9b9b" }}>{t(Dict.WithdrawImportantAddress)}</p>
+                      <p style={{ margin: 0, color: "#9b9b9b" }}>{t(Dict.WithdrawImportantFee)}</p>
+                    </div>
                     <PrimaryButton
                       fullWidth
                       disabled={!withdrawValid}
                       style={{
+                        display: "flex", 
                         height: "48px",
                         marginTop: "24px",
                         fontSize: "16px"
@@ -523,26 +529,6 @@ export const DepositModal = withToolset(connect(
                           address: this.state.address,
                           value: this.state.withValue,
                           memoPrefix: currentCoinInfo.raw.withdrawPrefix
-
-                          // this.cybexjs.withdraw,
-                          // this.cointype,
-                          // this.gatewayfee.asset_id,
-                          // this.withdrawAmount,
-                          // this.finalAddress,
-                          // this.cybexfee.asset_id,
-                          // this.assetInfo.gatewayAccount,
-                          // this.assetInfo.withdrawPrefix
-
-
-                          // cointype, 
-                          // gatewayfee.asset_id, 
-                          // withdraw_amount, 
-                          // finalAddress, 
-                          // cybexfee.asset_id, 
-                          // assetInfo.gatewayAccount, 
-                          // assetInfo.withdrawPrefix
-
-
                         });
                       }}
                     >
