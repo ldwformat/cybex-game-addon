@@ -10,6 +10,7 @@ export declare class GatewayState {
             [address: string]: boolean;
         };
     };
+    withdrawSuccess: boolean;
 }
 export declare enum AddressVerifyState {
     Verifing = 0,
