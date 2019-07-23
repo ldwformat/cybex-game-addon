@@ -86,7 +86,7 @@ export const PosterDisplay = withTranslation()(
         posterCtx,
         posterCanvas.width,
         posterCanvas.height,
-        50
+        100
       );
       if (!posterSpace) {
         if (this.qrcode && this.qrcodeImg) {
