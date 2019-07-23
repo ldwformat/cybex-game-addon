@@ -8,7 +8,7 @@
     "cybexWs": "wss://hongkong.cybex.io",
     "cybexHttpServer": "https://cybexluck.io"
   },
-  "game": "cybexbet",
+  "game": "alltokenbet",
   "lockupTime": 300000,
   "lang": "vn",
   "referUrl": "http://localhost:5560"

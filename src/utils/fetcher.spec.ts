@@ -118,7 +118,7 @@ describe("Test class ReferFetcher", () => {
     const setRefer = fetcher.setRefer(
       accountName,
       "harley",
-      "cybexbet",
+      "alltokenbet",
       privKey
     );
     try {
@@ -133,7 +133,7 @@ describe("Test class ReferFetcher", () => {
     let setRefer = fetcher.setRegisterRefer(
       accountNameOne,
       "harley",
-      "cybexbet",
+      "alltokenbet",
       privKeyOne
     );
     try {
@@ -147,14 +147,14 @@ describe("Test class ReferFetcher", () => {
     let refer = fetcher.getRefer(accountName);
     await expect(refer).resolves.toMatchObject({
       referrals: [],
-      referrers: [{ action: "cybexbet", referrer: "harley" }]
+      referrers: [{ action: "alltokenbet", referrer: "harley" }]
     });
 
     let referOne = fetcher.getRefer(accountNameOne);
     await expect(referOne).resolves.toMatchObject({
       referrals: [],
       referrers: [
-        { action: "cybexbet", referrer: "harley" },
+        { action: "alltokenbet", referrer: "harley" },
         {
           action: "register",
           referrer: "harley"

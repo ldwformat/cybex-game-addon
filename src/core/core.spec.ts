@@ -108,7 +108,7 @@ describe("LoginRefer引荐人测试", () => {
   const loginAccountName = "create-test8";
   const loginAccountPassword = "qwer1234qwer1234";
   beforeAll(async done => {
-    store = (await configureStore(config)({ game: "cybexbet" })).store;
+    store = (await configureStore(config)({ game: "alltokenbet" })).store;
     done();
   });
   it(
@@ -130,7 +130,7 @@ describe("LoginRefer引荐人测试", () => {
       let stateAfterLogin = store.getState();
       expect(stateAfterLogin.refer).toMatchObject({
         referrals: [],
-        referrers: [{ action: "cybexbet", referrer: "create-test12" }]
+        referrers: [{ action: "alltokenbet", referrer: "create-test12" }]
       });
 
       done();

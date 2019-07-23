@@ -73,6 +73,16 @@ export const gateway: Reducer<GatewayState, GatewayAction | AuthAction> = (
         ...state,
         showWithdrawModal: false
       };
+    case GatewayActions.Withdraw:
+      return {
+        ...state,
+        withdrawSuccess: false
+      };
+    case GatewayActions.WithdrawSuccess:
+      return {
+        ...state,
+        withdrawSuccess: true
+      };
     default:
       return state;
   }

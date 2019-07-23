@@ -187,6 +187,12 @@ export const DepositModal = withToolset(connect(
           this.updateFee();
         }
         componentDidUpdate(prevProps) {
+          if (this.props.state.gateway.withdrawSuccess && this.props.state.gateway.withdrawSuccess !== prevProps.state.gateway.withdrawSuccess) {
+            this.setState({
+              withValue: 0,
+              address: "",
+            })
+          }
           if (this.props.currentDeposit !== prevProps.currentDeposit) {
             this.updateFee();
           }
@@ -396,8 +402,10 @@ export const DepositModal = withToolset(connect(
                         placeholder={t(Dict.WithdrawMinimum)}
                         value={this.state.withValue}
                         style={{ fontSize: "16px" }}
-                        onChange={e =>
-                          this.setState({ withValue: Number(e.target.value) })
+                        type="number"
+                        onChange={e => {
+                            this.setState({ withValue: e.target.value })
+                          }
                         }
                         endAdornment={
                           <InputAdornment position="end" style={{ width: "80px", textAlign: "right" }}>

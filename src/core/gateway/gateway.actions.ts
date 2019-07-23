@@ -184,4 +184,6 @@ export type GatewayAction =
   | GatewayLoadGatewayInfoFailedAction
   | GatewayLoadDepositInfoAction
   | GatewayLoadDepositInfoFailedAction
-  | GatewayLoadDepositInfoSuccessAction;
+  | GatewayLoadDepositInfoSuccessAction
+  | GatewayWithdrawAction
+  | GatewayWithdrawSuccessAction;

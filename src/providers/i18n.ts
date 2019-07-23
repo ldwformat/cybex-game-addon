@@ -48,7 +48,7 @@ export const cnDict = {
     "您可以在<strong>【奖励发放】</strong>里看到各个资产的返现金额，包含<strong>【待发放】</strong>和<strong>【已发放】</strong>",
   RefererRuleContent_1: "您只需复制您的邀请码链接并分享给您的所有朋友！",
   RefererRuleContent_2:
-    "<strong>【返现总额】</strong>将显示您所有返现的总额，并折合成USDT方便显示计算，数据会进行实时更新，如您有任何问题，请及时反馈给CybexBet小助手（微信号：cybexgame-1)。",
+    "<strong>【返现总额】</strong>将显示您所有返现的总额，并折合成USDT方便显示计算，数据会进行实时更新，如您有任何问题，请及时反馈给AllTokenBet小助手。",
   PeopleUnit: "人",
   CopyAddress: "复制地址",
   AddressCopied: "充值地址已复制到剪贴板",
@@ -146,7 +146,7 @@ export const enDict: Dictionary = {
   RefererRuleContent_0: "",
   RefererRuleContent_1: `You can see cash return of each asset in Bonus Release including Pending and Distributed;`,
   RefererRuleContent_2:
-    "<strong>Total Return Cash</strong> will show the total amount of your all asset cash backs converted into USDT for the convenience. The data will be updated in real time. Any questions, please give feedback to CybexBet assistant. (Wechat: cybexgame-1)",
+    "<strong>Total Return Cash</strong> will show the total amount of your all asset cash backs converted into USDT for the convenience. The data will be updated in real time. Any questions, please give feedback to alltokenbet assistant. (Wechat: cybexgame-1)",
   PasswordBackupTip:
     "I confirm I have properly backed up the name and password of the account to be created. I know once the password is forgotten, it cannot be retrieved, and I cannot log in the account or use the funds in it.",
   PatchReferrer: "Add Inviter",
@@ -254,7 +254,7 @@ export const vnDict: Dictionary = {
   RefererRuleContent_0:
     "Bạn có thể thấy số tiền rút tiền mặt của từng tài sản trong <strong>Phát tiền thưởng</strong>, bao gồm <strong>Đang chờ xử lý</strong> và <strong>Đã phát</strong>.",
   RefererRuleContent_1:
-    "<strong>Tổng tiền hoàn lại</strong> sẽ hiển thị tổng số tiền hoàn lại của bạn và chuyển đổi thành USDT để tính toán hiển thị. Dữ liệu sẽ được cập nhật theo thời gian thực. Nếu bạn có bất kỳ câu hỏi nào khác, xin vui lòng gửi phản hồi cho các trợ lý CybexBet (Wechat: cybexgame-1).",
+    "<strong>Tổng tiền hoàn lại</strong> sẽ hiển thị tổng số tiền hoàn lại của bạn và chuyển đổi thành USDT để tính toán hiển thị. Dữ liệu sẽ được cập nhật theo thời gian thực. Nếu bạn có bất kỳ câu hỏi nào khác, xin vui lòng gửi phản hồi cho các trợ lý alltokenbet (Wechat: cybexgame-1).",
   RefererRuleContent_2: "",
   PasswordBackupTip:
     "Tôi xác nhận rằng tôi đã sao lưu đúng tên tài khoản và mật khẩu mà tôi sắp tạo. Tôi biết rằng một khi quên mật khẩu, tôi sẽ không thể lấy lại được và tôi sẽ không thể đăng nhập vào tài khoản hoặc sử dụng tiền trong tài khoản đó nữa.",

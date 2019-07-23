@@ -10,6 +10,7 @@ export class GatewayState {
   addressVerifyResult: {
     [coinType: string]: { [address: string]: boolean };
   } = {};
+  withdrawSuccess = false;
 }
 
 // 地址簿
