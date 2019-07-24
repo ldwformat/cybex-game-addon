@@ -222,14 +222,14 @@ let LoginClass = withStyles(styles)(
                       bottom: "-8px"
                     }}
                   >
-                    <Typography
+                    {/* <Typography
                       style={{ display: "inline", fontSize: "14px" }}
                       component="span"
                     >
                       {currentPanel === LoginPanel.Login
                         ? t(Dict.HasNoAccountYet)
                         : t(Dict.HasAccountAlready)}
-                    </Typography>
+                    </Typography> */}
 
                     <a
                       href="javascript:;"

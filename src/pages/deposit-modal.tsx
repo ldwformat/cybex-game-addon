@@ -102,7 +102,7 @@ const mapDispatchToProps: MapDispatchToProps<DepositDispatchProps, {}> = {
 
 const styles: StyleRulesCallback = theme => ({
   root: {
-    height: "470px"
+    // height: "470px"
   },
   innerWrapper: {
     margin: `${theme.spacing.unit * 2}px 0`,
@@ -438,78 +438,86 @@ export const DepositModal = withToolset(connect(
                       />
                     </FormControl>
                     <div style={{ marginTop: "12px" }} />
-                    <Grid container wrap="nowrap">
-                      <FormControl>
-                        <InputLabel
-                          style={{ fontSize: "17.5px", lineHeight: "20px" }}
-                          htmlFor="minWithdraw"
-                        >
-                          {t(Dict.WithdrawMinimum)}
-                        </InputLabel>
-                        <Input
-                          disabled
-                          disableUnderline
-                          id="minWithdraw"
-                          value={
-                            currentCoinInfo && currentCoinInfo.raw.minWithdraw
-                          }
-                          style={{ fontSize: "16px", marginTop: "30px" }}
-                        />
-                      </FormControl>
-                      <FormControl>
-                        <InputLabel
-                          style={{ fontSize: "17.5px", lineHeight: "20px" }}
-                          htmlFor="withdrawFee"
-                        >
-                          {t(Dict.WithdrawalFee)}
-                        </InputLabel>
-                        <Input
-                          disabled
-                          disableUnderline
-                          id="withdrawFee"
-                          value={
-                            currentCoinInfo && currentCoinInfo.raw.withdrawFee
-                          }
-                          style={{ fontSize: "16px", marginTop: "30px" }}
-                        />
-                      </FormControl>
-                      <FormControl>
-                        <InputLabel
-                          style={{ fontSize: "17.5px", lineHeight: "20px" }}
-                          htmlFor="transferFee"
-                        >
-                          {t(Dict.TransferFee)}
-                        </InputLabel>
-                        <Input
-                          disabled
-                          disableUnderline
-                          id="transferFee"
-                          value={this.state.fee}
-                          style={{ fontSize: "16px", marginTop: "30px" }}
-                        />
-                      </FormControl>
-                      {/* 实际到账 */}
-                      <FormControl>
-                        <InputLabel
-                          style={{ fontSize: "17.5px", lineHeight: "20px" }}
-                          htmlFor="withdrawFee"
-                        >
-                          {t(Dict.YouWillGet)}
-                        </InputLabel>
-                        <Input
-                          disabled
-                          disableUnderline
-                          id="withdrawFee"
-                          value={Math.max(
-                            0,
-                            this.state.withValue -
-                            (currentCoinInfo
-                              ? +currentCoinInfo.raw.withdrawFee
-                              : this.state.withValue)
-                          )}
-                          style={{ fontSize: "16px", marginTop: "30px" }}
-                        />
-                      </FormControl>
+                    <Grid container>
+                      <Grid item xs={6} sm={3}>
+                        <FormControl>
+                          <InputLabel
+                            style={{ fontSize: "17.5px", lineHeight: "20px" }}
+                            htmlFor="minWithdraw"
+                          >
+                            {t(Dict.WithdrawMinimum)}
+                          </InputLabel>
+                          <Input
+                            disabled
+                            disableUnderline
+                            id="minWithdraw"
+                            value={
+                              currentCoinInfo && currentCoinInfo.raw.minWithdraw
+                            }
+                            style={{ fontSize: "16px", marginTop: "30px" }}
+                          />
+                        </FormControl>
+                      </Grid>
+                      <Grid item xs={6} sm={3}>
+                        <FormControl>
+                          <InputLabel
+                            style={{ fontSize: "17.5px", lineHeight: "20px" }}
+                            htmlFor="withdrawFee"
+                          >
+                            {t(Dict.WithdrawalFee)}
+                          </InputLabel>
+                          <Input
+                            disabled
+                            disableUnderline
+                            id="withdrawFee"
+                            value={
+                              currentCoinInfo && currentCoinInfo.raw.withdrawFee
+                            }
+                            style={{ fontSize: "16px", marginTop: "30px" }}
+                          />
+                        </FormControl>
+                      </Grid>
+                      <Grid item xs={6} sm={3}>
+                        <FormControl>
+                          <InputLabel
+                            style={{ fontSize: "17.5px", lineHeight: "20px" }}
+                            htmlFor="transferFee"
+                          >
+                            {t(Dict.TransferFee)}
+                          </InputLabel>
+                          <Input
+                            disabled
+                            disableUnderline
+                            id="transferFee"
+                            value={this.state.fee}
+                            style={{ fontSize: "16px", marginTop: "30px" }}
+                          />
+                        </FormControl>
+                      </Grid>
+                      <Grid item xs={6} sm={3}>
+                        {/* 实际到账 */}
+                        <FormControl>
+                          <InputLabel
+                            style={{ fontSize: "17.5px", lineHeight: "20px" }}
+                            htmlFor="withdrawFee"
+                          >
+                            {t(Dict.YouWillGet)}
+                          </InputLabel>
+                          <Input
+                            disabled
+                            disableUnderline
+                            id="withdrawFee"
+                            value={Math.max(
+                              0,
+                              this.state.withValue -
+                              (currentCoinInfo
+                                ? +currentCoinInfo.raw.withdrawFee
+                                : this.state.withValue)
+                            )}
+                            style={{ fontSize: "16px", marginTop: "30px" }}
+                          />
+                        </FormControl>
+                       </Grid>
                     </Grid>
                     <div style={{ display: "flex", flexDirection: "column", fontSize: "14px", lineHeight: "22px" }}>
                       <p style={{ margin: 0, color: "#000000" }}>{t(Dict.WithdrawImportant)}：</p>

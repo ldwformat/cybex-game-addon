@@ -336,7 +336,7 @@ export const vnDict: Dictionary = {
   TransferFee: "Phí truyền tải",
   WithdrawMinimum: "Số lượng tối thiểu là",
   AddressError: "Địa chỉ sai",
-  WithdrawAddress: "Vui lòng nhập hoặc giữ chặt để sao chép địa chỉ"
+  WithdrawAddress: "Nhập địa chỉ"
 };
 
 // have a look at the Quick start guide
