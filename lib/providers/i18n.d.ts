@@ -96,6 +96,8 @@ export declare const cnDict: {
     WithdrawMinimum: string;
     AddressError: string;
     WithdrawAddress: string;
+    withValueErrorMsgLess: string;
+    withValueErrorMsgOver: string;
 };
 declare type Dictionary = typeof cnDict;
 export declare const Dict: {
@@ -195,6 +197,8 @@ export declare const Dict: {
     WithdrawMinimum: string;
     AddressError: string;
     WithdrawAddress: string;
+    withValueErrorMsgLess: string;
+    withValueErrorMsgOver: string;
 };
 export declare const enDict: Dictionary;
 export declare const vnDict: Dictionary;
