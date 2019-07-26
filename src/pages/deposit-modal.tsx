@@ -224,6 +224,10 @@ export const DepositModal = withToolset(connect(
               address: "",
             })
           }
+
+          if (!prevProps.balances && this.props.balances) {
+            this.updateFee();
+          }
         }
 
         render() {
