@@ -106,8 +106,10 @@ export const cnDict = {
   WithdrawalFee: "提币手续费",
   TransferFee: "转账手续费",
   WithdrawMinimum: "最小数量",
-  AddressError: "地址无效",
-  WithdrawAddress: "请输入或长按粘贴地址"
+  AddressError: "非法{symbol}地址格式，请检查",
+  WithdrawAddress: "请输入或长按粘贴地址",
+  withValueErrorMsgLess: "小于最小金额",
+  withValueErrorMsgOver: "数量超限"
 };
 type Dictionary = typeof cnDict;
 
@@ -222,8 +224,10 @@ export const enDict: Dictionary = {
   WithdrawalFee: "Withdrawal fee",
   TransferFee: "Transfer fee",
   WithdrawMinimum: "Minimum",
-  AddressError: "Address error",
-  WithdrawAddress: "Enter or paste address"
+  AddressError: "Illegal Format for {symbol} Address, please check",
+  WithdrawAddress: "Enter or paste address",
+  withValueErrorMsgLess: "Less than the minimum amount",
+  withValueErrorMsgOver: "Overlimit"
 };
 export const vnDict: Dictionary = {
   LoginSubmit: "Đăng nhập",
@@ -335,8 +339,10 @@ export const vnDict: Dictionary = {
   WithdrawalFee: "Phí rút tiền",
   TransferFee: "Phí truyền tải",
   WithdrawMinimum: "Số lượng tối thiểu là",
-  AddressError: "Địa chỉ sai",
-  WithdrawAddress: "Nhập địa chỉ"
+  AddressError: "Định dạng địa chỉ {symbol} bất hợp pháp, vui lòng kiểm tra",
+  WithdrawAddress: "Nhập địa chỉ",
+  withValueErrorMsgLess: "Ít hơn số tiền tối thiểu",
+  withValueErrorMsgOver: "Số lượng vượt quá giới hạn"
 };
 
 // have a look at the Quick start guide

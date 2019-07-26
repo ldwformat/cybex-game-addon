@@ -138,35 +138,50 @@ export const DepositModal = withToolset(connect(
         > {
         state = {
           currentTab: 0,
-          withValue: 0,
+          withValue: "",
           address: "",
           fee: 0,
+          feeCurrency: "",
           feeAsset: {}
         };
         verifyAddress = debounce(this.props.verifyAddress, 150);
 
-        updateFee = debounce(() => {
+        updateFee = debounce(async () => {
+          if (!this.props.balances) {
+            return
+          }
+
           let currentAsset = this.props.currentDeposit;
           if (!currentAsset) {
             return this.setState({ fee: 0 })
           }
+
           const currentCoinInfo = this.props.currentCoinInfo;
           let memo = this.state.address;
           if (currentCoinInfo) {
             memo = `${currentCoinInfo.raw.withdrawPrefix}:${currentCoinInfo.currency}:${this.state.address}`;
           }
-          this.props.toolset.chainAssisant.getFakeTransferFee(currentAsset.asset, memo).then(async res => {
-            let currentAsset = this.props.currentDeposit;
-            if (!currentAsset) {
-              return this.setState({ fee: 0 })
-            }
-            let asset = await this.props.toolset.fetcher.fetchAsset(currentAsset.asset);
-            if (!asset) { return; }
+
+          let res = await this.props.toolset.chainAssisant.getFakeTransferFee("CYB", memo)
+          let asset = await this.props.toolset.fetcher.fetchAsset("CYB");
+
+          if (this.props.balances["CYB"]["value"] >= calcValue(res.amount, asset.precision)) {
             this.setState({
               fee: calcValue(res.amount, asset.precision),
+              feeCurrency: "CYB",
               feeAsset: res
             });
-          })
+          } else {
+            res = await this.props.toolset.chainAssisant.getFakeTransferFee(currentAsset.asset, memo)
+            asset = await this.props.toolset.fetcher.fetchAsset(currentAsset.asset);
+            if (!asset) { return; }
+
+            this.setState({
+              fee: calcValue(res.amount, asset.precision),
+              feeCurrency: currentCoinInfo && currentCoinInfo.currency,
+              feeAsset: res
+            });
+          }
         }, 150)
         setAddress = (e) => {
           this.setState({ address: e.target.value }, () => {
@@ -180,6 +195,12 @@ export const DepositModal = withToolset(connect(
           });
         }
 
+        setWithValue = (e) => {
+          this.setState({
+            withValue: e.target.value
+          })
+        }
+
         componentDidMount() {
           if (!this.props.currentDeposit) {
             this.props.selectFirstAsset();
@@ -189,12 +210,19 @@ export const DepositModal = withToolset(connect(
         componentDidUpdate(prevProps) {
           if (this.props.state.gateway.withdrawSuccess && this.props.state.gateway.withdrawSuccess !== prevProps.state.gateway.withdrawSuccess) {
             this.setState({
-              withValue: 0,
+              withValue: "",
               address: "",
             })
           }
           if (this.props.currentDeposit !== prevProps.currentDeposit) {
             this.updateFee();
+          }
+
+          if (this.props.modalState != prevProps.modalState && this.props.modalState == GatewayModalState.Closed) {
+            this.setState({
+              withValue: "",
+              address: "",
+            })
           }
         }
 
@@ -222,6 +250,7 @@ export const DepositModal = withToolset(connect(
           let balance = (currentDeposit &&
             balances &&
             balances[currentDeposit.asset]) || { value: 0 };
+          
           let addressError =
             !!this.state.address &&
             !!currentDeposit &&
@@ -229,6 +258,7 @@ export const DepositModal = withToolset(connect(
               currentDeposit.type,
               this.state.address
             )(state) === AddressVerifyState.Invalid;
+
           let addressValid =
             !!this.state.address &&
             !!currentDeposit &&
@@ -236,14 +266,43 @@ export const DepositModal = withToolset(connect(
               currentDeposit.type,
               this.state.address
             )(state) === AddressVerifyState.Valid;
-          if (currentCoinInfo) {
+
+
+          let withValueError = false
+          let withValueErrorMsg = ""
+
+          if (this.state.withValue !== "") {
+            if (currentCoinInfo &&
+              Number(this.state.withValue) < +currentCoinInfo.raw.minWithdraw) {
+                withValueErrorMsg = t(Dict.withValueErrorMsgLess)
+                withValueError = true
+            }
+  
+            if (Number(this.state.withValue) > balance.value) {
+              withValueErrorMsg = t(Dict.withValueErrorMsgOver)
+              withValueError = true
+            }
           }
+
           let withdrawValid =
             addressValid &&
             currentCoinInfo &&
-            this.state.withValue >= +currentCoinInfo.raw.minWithdraw &&
-            new BigNumber(balance.value).minus(this.state.withValue).minus(this.state.fee).toNumber() >= 0;
-          this.state.withValue <= balance.value && this.state.withValue > 0;
+            Number(this.state.withValue) >= +currentCoinInfo.raw.minWithdraw &&
+            (new BigNumber(balance.value).minus(Number(this.state.withValue)).toNumber() >= 0);
+
+          let willGet = ""
+
+          if (this.state.feeCurrency == "CYB") {
+            willGet = Math.max(new BigNumber(this.state.withValue || 0).minus(Number(currentCoinInfo ? currentCoinInfo.raw.withdrawFee : 0)).toNumber(), 0) + " " + (currentCoinInfo && currentCoinInfo.currency)
+          } else {
+            if (new BigNumber(balance.value).minus(this.state.withValue || 0).toNumber() >= this.state.fee) {
+              willGet = Math.max(new BigNumber(this.state.withValue || 0).minus(Number(currentCoinInfo ? currentCoinInfo.raw.withdrawFee : 0)).toNumber(), 0) + " " + (currentCoinInfo && currentCoinInfo.currency)
+            } else {
+              let left = new BigNumber(balance.value).minus(this.state.withValue || 0).toNumber()
+              willGet = Math.max(new BigNumber(this.state.withValue || 0).minus(Number(currentCoinInfo ? currentCoinInfo.raw.withdrawFee : 0)).minus(this.state.fee).plus(left).toNumber(), 0) + " " + (currentCoinInfo && currentCoinInfo.currency)
+            }
+          }
+
           return (
             <DialogWrapper
               open={modalState !== GatewayModalState.Closed}
@@ -391,27 +450,30 @@ export const DepositModal = withToolset(connect(
                     </FormControl>
                     {/* amount */}
                     <FormControl fullWidth>
-                      <InputLabel
-                        style={{ fontSize: "17.5px" }}
-                        htmlFor="withValue"
-                      >
-                        {t(Dict.Amount)}
-                      </InputLabel>
-                      <Input
+                      <TextField
                         id="withValue"
-                        placeholder={t(Dict.WithdrawMinimum)}
-                        value={this.state.withValue}
-                        style={{ fontSize: "16px" }}
-                        type="number"
-                        onChange={e => {
-                            this.setState({ withValue: e.target.value })
-                          }
+                        label={t(Dict.Amount)}
+                        error={withValueError}
+                        helperText={
+                          (withValueError && withValueErrorMsg || " ")
                         }
-                        endAdornment={
-                          <InputAdornment position="end" style={{ width: "80px", textAlign: "right" }}>
+                        InputLabelProps={{
+                          style: {
+                            fontSize: "17.5px"
+                          }
+                        }}
+                        InputProps={{
+                          style: {
+                            fontSize: "16px"
+                          },
+                          placeholder: t(Dict.WithdrawMinimum),
+                          type: "number",
+                          endAdornment: <InputAdornment position="end" style={{ width: "80px", textAlign: "right" }}>
                             {t(Dict.Balance) + ": " + balance.value}
                           </InputAdornment>
-                        }
+                        }}
+                        value={this.state.withValue}
+                        onChange={this.setWithValue}
                       />
                     </FormControl>
                     {/* address */}
@@ -421,14 +483,14 @@ export const DepositModal = withToolset(connect(
                         label={t(Dict.WithdrawAddress)}
                         error={addressError}
                         helperText={
-                          (addressError && t(Dict.AddressError)) || " "
+                          (addressError && t(Dict.AddressError).replace("{symbol}", currentCoinInfo ? currentCoinInfo.currency : "")) || " "
                         }
                         InputLabelProps={{
                           style: {
                             fontSize: "17.5px"
                           }
                         }}
-                        inputProps={{
+                        InputProps={{
                           style: {
                             fontSize: "16px"
                           }
@@ -452,9 +514,9 @@ export const DepositModal = withToolset(connect(
                             disableUnderline
                             id="minWithdraw"
                             value={
-                              currentCoinInfo && currentCoinInfo.raw.minWithdraw
+                              currentCoinInfo && (currentCoinInfo.raw.minWithdraw + " " + currentCoinInfo.currency)
                             }
-                            style={{ fontSize: "16px", marginTop: "30px" }}
+                            style={{ fontSize: "14px", marginTop: "30px" }}
                           />
                         </FormControl>
                       </Grid>
@@ -471,9 +533,9 @@ export const DepositModal = withToolset(connect(
                             disableUnderline
                             id="withdrawFee"
                             value={
-                              currentCoinInfo && currentCoinInfo.raw.withdrawFee
+                              currentCoinInfo && (currentCoinInfo.raw.withdrawFee + " " + currentCoinInfo.currency)
                             }
-                            style={{ fontSize: "16px", marginTop: "30px" }}
+                            style={{ fontSize: "14px", marginTop: "30px" }}
                           />
                         </FormControl>
                       </Grid>
@@ -489,8 +551,8 @@ export const DepositModal = withToolset(connect(
                             disabled
                             disableUnderline
                             id="transferFee"
-                            value={this.state.fee}
-                            style={{ fontSize: "16px", marginTop: "30px" }}
+                            value={this.state.fee + " " + this.state.feeCurrency}
+                            style={{ fontSize: "14px", marginTop: "30px" }}
                           />
                         </FormControl>
                       </Grid>
@@ -499,22 +561,16 @@ export const DepositModal = withToolset(connect(
                         <FormControl>
                           <InputLabel
                             style={{ fontSize: "17.5px", lineHeight: "20px" }}
-                            htmlFor="withdrawFee"
+                            htmlFor="willGet"
                           >
                             {t(Dict.YouWillGet)}
                           </InputLabel>
                           <Input
                             disabled
                             disableUnderline
-                            id="withdrawFee"
-                            value={Math.max(
-                              0,
-                              this.state.withValue -
-                              (currentCoinInfo
-                                ? +currentCoinInfo.raw.withdrawFee
-                                : this.state.withValue)
-                            )}
-                            style={{ fontSize: "16px", marginTop: "30px" }}
+                            id="willGet"
+                            value={willGet}
+                            style={{ fontSize: "14px", marginTop: "30px" }}
                           />
                         </FormControl>
                        </Grid>
@@ -537,13 +593,26 @@ export const DepositModal = withToolset(connect(
                         if (!currentCoinInfo) {
                           return;
                         }
+
+                        let value = 0;
+                        if (this.state.feeCurrency == "CYB") {
+                          value = Number(this.state.withValue)
+                        } else {
+                          if (new BigNumber(balance.value).minus(this.state.withValue || 0).toNumber() < this.state.fee) {
+                            let left = new BigNumber(balance.value).minus(this.state.withValue || 0).toNumber()
+                            value = new BigNumber(this.state.withValue || 0).minus(this.state.fee).plus(left).toNumber()
+                          } else {
+                            value = Number(this.state.withValue)
+                          }
+                        }
+
                         doWithdraw({
                           to: currentCoinInfo.raw.gatewayAccount,
                           fee: this.state.feeAsset as any,
                           asset: currentCoinInfo.asset,
                           coinType: currentCoinInfo.currency,
                           address: this.state.address,
-                          value: this.state.withValue,
+                          value,
                           memoPrefix: currentCoinInfo.raw.withdrawPrefix
                         });
                       }}
