@@ -295,17 +295,23 @@ export const DepositModal = withToolset(connect(
             (new BigNumber(balance.value).minus(Number(this.state.withValue)).toNumber() >= 0);
 
           let willGet = ""
-
-          if (this.state.feeCurrency == "CYB") {
-            willGet = Math.max(new BigNumber(this.state.withValue || 0).minus(Number(currentCoinInfo ? currentCoinInfo.raw.withdrawFee : 0)).toNumber(), 0) + " " + (currentCoinInfo && currentCoinInfo.currency)
+          
+          if (withValueError) {
+            willGet = "0 " + (currentCoinInfo && currentCoinInfo.currency)
           } else {
-            if (new BigNumber(balance.value).minus(this.state.withValue || 0).toNumber() >= this.state.fee) {
+            if (this.state.feeCurrency == "CYB") {
               willGet = Math.max(new BigNumber(this.state.withValue || 0).minus(Number(currentCoinInfo ? currentCoinInfo.raw.withdrawFee : 0)).toNumber(), 0) + " " + (currentCoinInfo && currentCoinInfo.currency)
             } else {
-              let left = new BigNumber(balance.value).minus(this.state.withValue || 0).toNumber()
-              willGet = Math.max(new BigNumber(this.state.withValue || 0).minus(Number(currentCoinInfo ? currentCoinInfo.raw.withdrawFee : 0)).minus(this.state.fee).plus(left).toNumber(), 0) + " " + (currentCoinInfo && currentCoinInfo.currency)
+              if (new BigNumber(balance.value).minus(this.state.withValue || 0).toNumber() >= this.state.fee) {
+                willGet = Math.max(new BigNumber(this.state.withValue || 0).minus(Number(currentCoinInfo ? currentCoinInfo.raw.withdrawFee : 0)).toNumber(), 0) + " " + (currentCoinInfo && currentCoinInfo.currency)
+              } else {
+                let left = new BigNumber(balance.value).minus(this.state.withValue || 0).toNumber()
+                willGet = Math.max(new BigNumber(this.state.withValue || 0).minus(Number(currentCoinInfo ? currentCoinInfo.raw.withdrawFee : 0)).minus(this.state.fee).plus(left).toNumber(), 0) + " " + (currentCoinInfo && currentCoinInfo.currency)
+              }
             }
           }
+
+          
 
           return (
             <DialogWrapper
