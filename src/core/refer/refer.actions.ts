@@ -15,7 +15,8 @@ export enum ReferActions {
   LoadRebate = "[Refer] LoadRebate",
   Add = "[Refer] Add",
   AddSuccess = "[Refer] AddSuccess",
-  AddFailed = "[Refer] AddFailed"
+  AddFailed = "[Refer] AddFailed",
+  HidePoster = "[Refer] HidePoster"
 }
 
 export class ReferLoadReferInfoAction implements Action {
@@ -51,6 +52,10 @@ export class ReferAddFailedAction implements Action {
   constructor(public payload: WithNotiOptions = withNotiOptions()) {}
 }
 
+export class ReferHidePosterAction implements Action {
+  readonly type = ReferActions.HidePoster;
+  constructor(public payload: boolean) {}
+}
 export const referLoadReferInfo: () => ReferLoadReferInfoAction = () => ({
   type: ReferActions.LoadReferInfo
 });
@@ -92,6 +97,12 @@ export const referAddFailed: (withNoti?: boolean) => ReferAddFailedAction = (
   type: ReferActions.AddFailed,
   payload: withNotiOptions(withNoti)
 });
+export const referHidePoster: (
+  isShowPoster: boolean
+) => ReferHidePosterAction = (isShowPoster = false) => ({
+  type: ReferActions.HidePoster,
+  payload: isShowPoster
+});
 
 export type ReferAction =
   | ReferLoadReferInfoAction
@@ -102,4 +113,5 @@ export type ReferAction =
   | ReferLoadRebateFailedAction
   | ReferAddAction
   | ReferAddFailedAction
-  | ReferAddSuccessAction;
+  | ReferAddSuccessAction
+  | ReferHidePosterAction;

@@ -66,7 +66,7 @@ import { Account, EmailOpen, ContentCopy } from "mdi-material-ui";
 import { InviteSummary } from "../components/invite-summary";
 import { normalizeAssetName } from "../utils/asset-name";
 import { Colors } from "../components/colors";
-import { InviteBtnPC } from "../components/invite-btn-pc";
+import { MapInviteBtnPC } from "../components/invite-btn-pc";
 import { selectReferUrl } from "../core/core.selectors";
 import { TextAlignProperty } from "csstype";
 
@@ -189,10 +189,10 @@ export const Refer = connect(
           | "itemV"
           | "summary"
         > &
-          StateProps &
-          DispatchProps &
-          WithTranslation
-      > {
+        StateProps &
+        DispatchProps &
+        WithTranslation
+        > {
         static Panels = {
           RegisterRef: "RegisterRef",
           GameRegisterRef: "GameRegisterRef",
@@ -256,8 +256,8 @@ export const Refer = connect(
                     {this.state[Refer.Panels.Rebates] ? (
                       <ExpandLess />
                     ) : (
-                      <ExpandMore />
-                    )}
+                        <ExpandMore />
+                      )}
                   </ListItem>
                   <Collapse
                     in={this.state[Refer.Panels.Rebates]}
@@ -330,23 +330,23 @@ export const Refer = connect(
                       <Typography
                         className={`${classes.textRight} ${
                           classes.accountText
-                        }`}
+                          }`}
                         variant="body1"
                       >
                         {myGameReferrer && myGameReferrer.referrer}
                       </Typography>
                     )) || (
-                      <Button
-                        color="secondary"
-                        style={{ padding: 0 }}
-                        onClick={this.handleExpand.bind(
-                          this,
-                          Refer.Panels.ReferModal
-                        )}
-                      >
-                        {t(Dict.PatchReferrer)}
-                      </Button>
-                    )}
+                        <Button
+                          color="secondary"
+                          style={{ padding: 0 }}
+                          onClick={this.handleExpand.bind(
+                            this,
+                            Refer.Panels.ReferModal
+                          )}
+                        >
+                          {t(Dict.PatchReferrer)}
+                        </Button>
+                      )}
                   </ListItem>
                   <ListItem
                     button
@@ -364,8 +364,8 @@ export const Refer = connect(
                     {this.state[Refer.Panels.RegisterRef] ? (
                       <ExpandLess />
                     ) : (
-                      <ExpandMore />
-                    )}
+                        <ExpandMore />
+                      )}
                   </ListItem>
                   <Collapse
                     in={this.state[Refer.Panels.RegisterRef]}
@@ -405,8 +405,8 @@ export const Refer = connect(
                     {this.state[Refer.Panels.GameRegisterRef] ? (
                       <ExpandLess />
                     ) : (
-                      <ExpandMore />
-                    )}
+                        <ExpandMore />
+                      )}
                   </ListItem>
                   <Collapse
                     in={this.state[Refer.Panels.GameRegisterRef]}
@@ -456,7 +456,7 @@ export const Refer = connect(
             <>
               <Hidden smUp>
                 {/* for Mobile */
-                this._renderMobile()}
+                  this._renderMobile()}
               </Hidden>
               <Hidden xsDown>
                 <Grid
@@ -617,7 +617,7 @@ export const Refer = connect(
                           Dict.MyRegisterReferral
                         )} (${(myRegisterReferral &&
                           myRegisterReferral.referrals.length) ||
-                          0}${t(Dict.PeopleUnit)})`}
+                        0}${t(Dict.PeopleUnit)})`}
                       />
                     </Grid>
                     <Grid item className={classes.itemH} container xs={6}>
@@ -651,7 +651,7 @@ export const Refer = connect(
                     </Grid>
                   </Grid>
                 </Grid>
-                <InviteBtnPC
+                <MapInviteBtnPC
                   copyText={`${t(Dict.CopyShareLinkPrefix)} ${accountReferUrl}`}
                   accountName={accountName}
                   accountReferUrl={accountReferUrl}

@@ -40,7 +40,7 @@ import {
   gatewayLoadDepositInfo
 } from "./core/gateway";
 
-import { referLoadReferInfo, referAdd } from "./core/refer";
+import { referLoadReferInfo, referAdd, referHidePoster } from "./core/refer";
 import { CybexAddon } from "./cybex-addon";
 export const Actions = {
   authLogin,
@@ -53,7 +53,8 @@ export const Actions = {
   gatewaySelectAsset,
   gatewayLoadDepositInfo,
   referLoadReferInfo,
-  referAdd
+  referAdd,
+  referHidePoster
 };
 
 const Selectors = {

@@ -42,6 +42,7 @@ export interface Referrer {
 }
 export class ReferState {
   isLoading = false;
+  isShowPoster = false;
   referrers: Referrer[] = [];
   referrals: TypesReferral[] = [];
   rebates: ReferSingleRebateWithValue[] = [];

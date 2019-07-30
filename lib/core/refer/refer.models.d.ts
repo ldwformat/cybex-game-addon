@@ -33,6 +33,7 @@ export interface Referrer {
 }
 export declare class ReferState {
     isLoading: boolean;
+    isShowPoster: boolean;
     referrers: Referrer[];
     referrals: TypesReferral[];
     rebates: ReferSingleRebateWithValue[];

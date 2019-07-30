@@ -19,9 +19,20 @@ export const refer: Reducer<ReferState, ReferAction> = (
         isLoading: false
       };
     case ReferActions.LoadReferInfoSuccess:
-      return { ...state, ...action.payload };
+      return {
+        ...state,
+        ...action.payload
+      };
     case ReferActions.LoadRebateSuccess:
-      return { ...state, rebates: action.payload };
+      return {
+        ...state,
+        rebates: action.payload
+      };
+    case ReferActions.HidePoster:
+      return {
+        ...state,
+        isShowPoster: action.payload
+      };
     default:
       return state;
   }

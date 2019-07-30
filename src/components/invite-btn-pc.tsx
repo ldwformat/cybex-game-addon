@@ -13,6 +13,8 @@ import { Poster } from "./poster";
 import { ShareButton, Panels } from "./share-btn";
 import { DialogWrapper } from "./dialog-wrapper";
 import { Paragraph, Rules } from "../pages/refer-rule";
+import { referHidePoster } from "../core/refer";
+import { connect } from "react-redux";
 
 function getObservables(domItem) {
   const mouseEventToCoordinate = mouseEvent => {
@@ -77,20 +79,20 @@ export const MenuBtn = ({
   onClick: (e: React.MouseEvent<HTMLElement, MouseEvent>) => any;
   open: boolean;
 }) => (
-  <Fab
-    onClick={onClick}
-    style={{ ...menuBtnStyle(0, 0, Colors.btnBgPrimary) }}
-  >
-    <MoreVert
-      style={{
-        transform: `rotate(${open ? -90 : 0}deg)`,
-        transition: "transform 0.2s",
-        color: "white"
-      }}
-      fontSize="large"
-    />
-  </Fab>
-);
+    <Fab
+      onClick={onClick}
+      style={{ ...menuBtnStyle(0, 0, Colors.btnBgPrimary) }}
+    >
+      <MoreVert
+        style={{
+          transform: `rotate(${open ? -90 : 0}deg)`,
+          transition: "transform 0.2s",
+          color: "white"
+        }}
+        fontSize="large"
+      />
+    </Fab>
+  );
 
 const helpBtnStyle: StyleRules = {
   root: {
@@ -110,32 +112,49 @@ export const HelpBtn = withStyles(helpBtnStyle)(
     open: boolean;
     classes?;
   }) => (
-    <Fab
-      className={classes.root}
-      onClick={onClick}
-      style={open ? menuBtnStyle(-104, -0, Colors.btnIcon.yellow) : menuBtnStyle(0, 0, Colors.btnIcon.yellow)}
-    >
-      <HelpOutline style={{ color: "white" }} fontSize="large" />
-    </Fab>
-  )
+      <Fab
+        className={classes.root}
+        onClick={onClick}
+        style={open ? menuBtnStyle(-104, -0, Colors.btnIcon.yellow) : menuBtnStyle(0, 0, Colors.btnIcon.yellow)}
+      >
+        <HelpOutline style={{ color: "white" }} fontSize="large" />
+      </Fab>
+    )
 );
 
-export class InviteBtnPC extends React.Component<
+
+const mapPropsToState = state => {
+  return {
+    isShowPoster: state.refer.isShowPoster
+  }
+}
+
+const mapDispatchToAction = dispatch => {
+  return {
+    postChange: (isShowPoster: boolean) => {
+      dispatch(referHidePoster(isShowPoster))
+    }
+  }
+}
+
+class InviteBtnPC extends React.Component<
   {
     onCopyLinkClick;
     onHelpClick;
     copyText;
     accountName;
     accountReferUrl;
+    isShowPoster,
+    postChange
   },
   { [menuOpen: string]: boolean }
-> {
+  > {
   wrapper: HTMLDivElement | null = null;
   subscription: Subscription | null = null;
 
   state = {
     [Panels.Drawer]: false,
-    [Panels.QRCode]: false,
+    // [Panels.QRCode]: false,
     [Panels.RefReadme]: false
   };
 
@@ -148,7 +167,7 @@ export class InviteBtnPC extends React.Component<
         Math.floor((window.innerHeight - height) * 0.75) + "px";
 
       let closeSub = fromEvent(window, "click").subscribe(e => {
-        console.debug("Close: ", e);
+        // console.debug("Close: ", e);
         if (this.state[Panels.Drawer]) {
           this.setState({
             [Panels.Drawer]: false
@@ -198,7 +217,7 @@ export class InviteBtnPC extends React.Component<
   }
 
   switchMenu = e => {
-    console.debug("E: ", e);
+    // console.debug("E: ", e);
     e.stopPropagation();
     this.handleExpand(Panels.Drawer);
   };
@@ -223,7 +242,7 @@ export class InviteBtnPC extends React.Component<
         }}
       >
         <Fab
-          onClick={this.handleExpand.bind(this, Panels.QRCode)}
+          onClick={this.props.postChange.bind(this, !this.props.isShowPoster)}
           // color="secondary"
           style={menuOpen ? menuBtnStyle(-66, -66, Colors.btnIcon.blue) : menuBtnStyle(0, 0, Colors.btnIcon.blue)}
         >
@@ -253,8 +272,8 @@ export class InviteBtnPC extends React.Component<
           <Rules />
         </DialogWrapper>
         <Poster
-          open={this.state[Panels.QRCode]}
-          onClose={this.handleExpand.bind(this, Panels.QRCode)}
+          open={this.props.isShowPoster}
+          onClose={this.props.postChange.bind(this, !this.props.isShowPoster)}
           posterLink={accountReferUrl}
           filename={`cybex_invite_${accountName}.png`}
         />
@@ -262,3 +281,6 @@ export class InviteBtnPC extends React.Component<
     );
   }
 }
+
+const MapInviteBtnPC = connect(mapPropsToState, mapDispatchToAction)(InviteBtnPC);
+export { MapInviteBtnPC };

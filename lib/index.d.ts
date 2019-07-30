@@ -12,6 +12,7 @@ export declare const Actions: {
     gatewayLoadDepositInfo: (asset: string) => import("./core/gateway").GatewayLoadDepositInfoAction;
     referLoadReferInfo: () => import("./core/refer").ReferLoadReferInfoAction;
     referAdd: (form: import("./core/refer").SetReferForm & import("./core").WithNotiOptions) => import("./core/refer").ReferAddAction;
+    referHidePoster: (isShowPoster: boolean) => import("./core/refer").ReferHidePosterAction;
 };
 declare const Selectors: {
     selectAuth: (state: import("./core").CoreState) => import("./core/auth").AuthState;

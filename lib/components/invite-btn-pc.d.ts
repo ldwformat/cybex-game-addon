@@ -10,12 +10,14 @@ export declare const HelpBtn: React.ComponentType<Pick<{
     open: boolean;
     classes?: any;
 }, "open" | "onClick"> & import("@material-ui/core").StyledComponentProps<string>>;
-export declare class InviteBtnPC extends React.Component<{
+declare class InviteBtnPC extends React.Component<{
     onCopyLinkClick: any;
     onHelpClick: any;
     copyText: any;
     accountName: any;
     accountReferUrl: any;
+    isShowPoster: any;
+    postChange: any;
 }, {
     [menuOpen: string]: boolean;
 }> {
@@ -23,7 +25,6 @@ export declare class InviteBtnPC extends React.Component<{
     subscription: Subscription | null;
     state: {
         [Panels.Drawer]: boolean;
-        [Panels.QRCode]: boolean;
         [Panels.RefReadme]: boolean;
     };
     componentDidMount(): void;
@@ -32,3 +33,13 @@ export declare class InviteBtnPC extends React.Component<{
     handleExpand: (panel: Panels) => void;
     render(): JSX.Element;
 }
+declare const MapInviteBtnPC: import("react-redux").ConnectedComponentClass<typeof InviteBtnPC, Pick<{
+    onCopyLinkClick: any;
+    onHelpClick: any;
+    copyText: any;
+    accountName: any;
+    accountReferUrl: any;
+    isShowPoster: any;
+    postChange: any;
+}, "accountName" | "accountReferUrl" | "onCopyLinkClick" | "onHelpClick" | "copyText">>;
+export { MapInviteBtnPC };
